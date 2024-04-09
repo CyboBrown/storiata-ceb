@@ -36,3 +36,6 @@ yarn-error.*
 
 # hidden files
 hidden/
+
+# VSCode artifacts
+.vscode
