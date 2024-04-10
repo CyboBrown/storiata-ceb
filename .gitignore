@@ -39,3 +39,6 @@ hidden/
 
 # VSCode artifacts
 .vscode
+
+# Others
+%ProgramData%/
