@@ -9,7 +9,7 @@ export default function Exercises({ session }: { session: Session }) {
         Exercises
       </Paragraph>
       <H5> </H5>
-      <Button>Useless Button</Button>
+      <Button size="$4">Useless Button</Button>
     </YStack>
   );
 }

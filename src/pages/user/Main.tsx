@@ -1,6 +1,7 @@
 import { Session } from "@supabase/supabase-js";
 import type { TabsContentProps } from "tamagui";
 import { H5, ScrollView, Separator, SizableText, Tabs, YStack } from "tamagui";
+import { LayoutDashboard } from "@tamagui/lucide-icons";
 import Account from "./Account";
 import Dashboard from "./Dashboard";
 import Exercises from "./Exercises";
@@ -9,7 +10,7 @@ import Dictionary from "./Dictionary";
 export default function Main({ session }: { session: Session }) {
   return (
     <Tabs
-      fullscreen={true}
+      fullscreen
       defaultValue="tab1"
       orientation="horizontal"
       flexDirection="column"
@@ -36,7 +37,7 @@ export default function Main({ session }: { session: Session }) {
       <Tabs.List
         separator={<Separator vertical />}
         disablePassBorderRadius="top"
-        aria-label="Manage your account"
+        aria-label="NavBar"
       >
         <Tabs.Tab flex={1} value="tab1">
           <SizableText fontFamily="$body" fontSize={10}>
@@ -69,12 +70,9 @@ const TabsContent = (props: TabsContentProps) => {
       backgroundColor="$background"
       key="tab3"
       padding="$2"
-      alignItems="center"
+      alignItems="stretch"
       justifyContent="center"
       flex={1}
-      borderColor="$background"
-      //   borderRadius="$2"
-      borderWidth="$0"
       {...props}
     >
       {props.children}
