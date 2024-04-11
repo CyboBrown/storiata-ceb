@@ -21,16 +21,15 @@ export default function Dictionary({ session }: { session: Session }) {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<WordParams[]>([]);
 
-  // useEffect(() => {
-  //   console.log("pressed!");
-  //   console.log(value);
-  // }, [value]);
-
-  async function search() {
+  async function search(text: string) {
     try {
-      console.log("search_click");
+      console.log(text);
       setLoading(true);
-      const { data, error, status } = await supabase.from("words").select("*");
+      const { data, error, status } = await supabase
+        .from("words")
+        .select(`*, translations(word)`)
+        .ilike("normal_form", "%" + text + "%")
+        .order("normal_form");
       if (error && status !== 406) {
         console.log("error");
         throw error;
@@ -58,56 +57,24 @@ export default function Dictionary({ session }: { session: Session }) {
     >
       {/* <StatusBar style="auto" /> */}
       <XStack alignItems="center" gap="$2">
-        <Input flex={1} size="$4" placeholder={`Enter Word...`} />
-        <Button size="$4" onPress={() => search()}>
-          Search
-        </Button>
+        <Input
+          flex={1}
+          size="$4"
+          placeholder={`Enter Word...`}
+          onChangeText={(input) => search(input)}
+        />
+        <Button size="$4">Search</Button>
       </XStack>
       <ScrollView>
         <YGroup alignSelf="center" bordered size="$5" separator={<Separator />}>
           {results.map((result) => (
-            <Entry title={result.normal_form} subTitle={result.phonetic_form} />
+            <Entry
+              title={result.normal_form}
+              subTitle={result.translations
+                .reduce((acc, translation) => acc + translation.word + ", ", "")
+                .slice(0, -2)}
+            />
           ))}
-          {/* <YGroup.Item>
-            <ListItem
-              hoverTheme
-              pressTheme
-              title="bituon"
-              subTitle="star"
-              icon={Star}
-              iconAfter={ChevronRight}
-            />
-          </YGroup.Item>
-          <YGroup.Item>
-            <ListItem
-              hoverTheme
-              pressTheme
-              title="bulan"
-              subTitle="moon"
-              icon={Moon}
-              iconAfter={ChevronRight}
-            />
-          </YGroup.Item>
-          <YGroup.Item>
-            <ListItem
-              hoverTheme
-              pressTheme
-              title="panganod"
-              subTitle="cloud"
-              icon={Cloud}
-              iconAfter={ChevronRight}
-            />
-          </YGroup.Item>
-          <YGroup.Item>
-            <ListItem
-              hoverTheme
-              pressTheme
-              title="adlaw"
-              subTitle="sun"
-              icon={Sun}
-              iconAfter={ChevronRight}
-            />
-          </YGroup.Item> */}
         </YGroup>
       </ScrollView>
     </YStack>
@@ -117,6 +84,7 @@ export default function Dictionary({ session }: { session: Session }) {
 interface WordParams {
   normal_form: string;
   phonetic_form: string;
+  translations: Array<{ word: string }>;
 }
 
 const Entry = ({ title, subTitle }: { title: string; subTitle: string }) => {
