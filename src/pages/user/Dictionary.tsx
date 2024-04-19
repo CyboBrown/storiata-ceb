@@ -10,16 +10,31 @@ import {
   XStack,
   YGroup,
   YStack,
+  Sheet,
+  SizableText,
 } from "tamagui";
-import { ChevronRight, Cloud, Moon, Star, Sun } from "@tamagui/lucide-icons";
-// import { StatusBar } from "expo-status-bar";
+import {
+  ChevronRight,
+  ChevronDown,
+  ChevronUp,
+  Cloud,
+  Moon,
+  Star,
+  Sun,
+} from "@tamagui/lucide-icons";
 import { useState, useEffect } from "react";
 import { supabase } from "../../utils/supabase";
 import { Alert } from "react-native";
 
+import type { SheetProps } from "@tamagui/sheet";
+import { useSheet } from "@tamagui/sheet";
+
 export default function Dictionary({ session }: { session: Session }) {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<WordParams[]>([]);
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState(-1);
+  const [position, setPosition] = useState(0);
 
   async function search(text: string) {
     try {
@@ -48,56 +63,150 @@ export default function Dictionary({ session }: { session: Session }) {
   }
 
   return (
-    <YStack
-      f={1}
-      jc="flex-start"
-      ai="stretch"
-      gap="$2"
-      backgroundColor={"$backgroundSoft"}
-    >
-      {/* <StatusBar style="auto" /> */}
-      <XStack alignItems="center" gap="$2">
-        <Input
-          flex={1}
-          size="$4"
-          placeholder={`Enter Word...`}
-          onChangeText={(input) => search(input)}
+    <>
+      <YStack
+        f={1}
+        jc="flex-start"
+        ai="stretch"
+        gap="$2"
+        backgroundColor={"$backgroundSoft"}
+      >
+        <XStack alignItems="center" gap="$2">
+          <Input
+            flex={1}
+            size="$4"
+            placeholder={`Enter Word...`}
+            onChangeText={(input) => search(input)}
+          />
+          <Button size="$4">Search</Button>
+        </XStack>
+        <ScrollView>
+          <YGroup
+            alignSelf="center"
+            bordered
+            size="$5"
+            separator={<Separator />}
+          >
+            {results.map((result, index) => (
+              <Entry
+                title={result.normal_form}
+                subTitle={result.translations
+                  .reduce(
+                    (acc, translation) => acc + translation.word + ", ",
+                    ""
+                  )
+                  .slice(0, -2)}
+                index={index}
+                setSelected={setSelected}
+                setOpen={setOpen}
+              />
+            ))}
+          </YGroup>
+        </ScrollView>
+      </YStack>
+      <Sheet
+        forceRemoveScrollEnabled={open}
+        modal={true}
+        open={open}
+        onOpenChange={setOpen}
+        snapPoints={[30, 50]}
+        snapPointsMode={"percent"}
+        dismissOnSnapToBottom
+        position={position}
+        onPositionChange={setPosition}
+        zIndex={100_000}
+        animation="medium"
+      >
+        <Sheet.Overlay
+          animation="lazy"
+          enterStyle={{ opacity: 0 }}
+          exitStyle={{ opacity: 0 }}
         />
-        <Button size="$4">Search</Button>
-      </XStack>
-      <ScrollView>
-        <YGroup alignSelf="center" bordered size="$5" separator={<Separator />}>
-          {results.map((result) => (
-            <Entry
-              title={result.normal_form}
-              subTitle={result.translations
-                .reduce((acc, translation) => acc + translation.word + ", ", "")
-                .slice(0, -2)}
-            />
-          ))}
-        </YGroup>
-      </ScrollView>
-    </YStack>
+        <Sheet.Handle />
+        <Sheet.Frame
+          padding="$4"
+          justifyContent="flex-start"
+          alignItems="stretch"
+          space="$5"
+        >
+          <YStack space="$2" jc="center" alignItems="center">
+            <XStack space="$4" jc="center" alignItems="center">
+              <SizableText size="$10" fontWeight="800">
+                {results[selected] ? results[selected].representation : "none"}
+              </SizableText>
+              <YStack space="$2" alignItems="center">
+                <Paragraph size="$3" fontWeight="800">
+                  {results[selected] ? results[selected].normal_form : "none"}
+                </Paragraph>
+                <SizableText size="$2" fontStyle="italic">
+                  {results[selected] ? results[selected].phonetic_form : "none"}
+                </SizableText>
+              </YStack>
+            </XStack>
+            <XStack space>
+              {results[selected]
+                ? results[selected].translations.map((translation) => (
+                    <SizableText theme="alt1" size="$3">
+                      {translation.word}
+                    </SizableText>
+                  ))
+                : null}
+            </XStack>
+            {/* <SizableText size="$2" fontWeight="800">
+              {results[selected]
+                ? results[selected].suffix_form + "an"
+                : "none"}
+            </SizableText> */}
+          </YStack>
+          {/* <Button
+            size="$6"
+            circular
+            icon={ChevronDown}
+            onPress={() => setOpen(false)}
+          /> */}
+          {/* <Input width={200} value="Hello" /> */}
+        </Sheet.Frame>
+      </Sheet>
+    </>
   );
 }
 
 interface WordParams {
   normal_form: string;
   phonetic_form: string;
+  suffix_form: string;
   translations: Array<{ word: string }>;
+  description: string;
+  representation: string;
 }
 
-const Entry = ({ title, subTitle }: { title: string; subTitle: string }) => {
+const Entry = ({
+  title,
+  subTitle,
+  index,
+  setSelected,
+  setOpen,
+}: {
+  title: string;
+  subTitle: string;
+  index: number;
+  setSelected: React.Dispatch<React.SetStateAction<number>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   return (
     <YGroup.Item>
       <ListItem
-        key={0}
+        key={index}
         hoverTheme
         pressTheme
         title={title}
         subTitle={subTitle}
         icon={Star}
         iconAfter={ChevronRight}
+        onPress={() => {
+          setSelected(index);
+          setOpen(true);
+        }}
       />
     </YGroup.Item>
   );

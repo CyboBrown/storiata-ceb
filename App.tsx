@@ -4,7 +4,7 @@ import { supabase } from "./src/utils/supabase";
 import Auth from "./src/pages/Auth";
 
 import Main from "./src/pages/user/Main";
-import { View } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import { Session } from "@supabase/supabase-js";
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme } from "react-native";
