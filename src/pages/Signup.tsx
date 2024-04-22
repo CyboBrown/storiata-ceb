@@ -17,20 +17,11 @@ AppState.addEventListener("change", (state) => {
 });
 
 export default function Auth() {
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function signInWithEmail() {
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-
-    if (error) Alert.alert(error.message);
-    setLoading(false);
-  }
 
   async function signUpWithEmail() {
     setLoading(true);
@@ -58,9 +49,7 @@ export default function Auth() {
         <SizableText fontFamily="$body" color="black"> Password </SizableText>
         <Input size="$4" placeholder="Password" secureTextEntry onChangeText={(text) => setPassword(text)}/>
       </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button size="$4" disabled={loading} onPress={() => signInWithEmail()}>Sign in</Button>
-      </View>
+    
       <View style={[styles.verticallySpaced]}>
         <Button size="$4" disabled={loading} onPress={() => signUpWithEmail()}>Sign up</Button>
       </View>
