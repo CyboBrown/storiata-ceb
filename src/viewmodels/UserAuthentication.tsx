@@ -9,13 +9,40 @@ export function userAuthentication() {
 
     const signInWithEmail = async () => {
         setLoading(true);
-        const { error } = await supabase.auth.signInWithPassword({
+        const {error } = await supabase.auth.signInWithPassword({
             email: email,
             password: password,
         });
+        // supabase
+        // if (user) {
+        //     const { data: userData, error: userError } = await supabase
+                
 
-        if (error) Alert.alert(error.message);
+        //     if (userError) {
+        //         Alert.alert(userError.message);
+        //         setLoading(false);
+        //         return;
+        //     }
+
+        //     if (userData) {
+        //         const userType = userData.user_type;
+        //         switch (userType) {
+        //             case "contributer":
+                        
+        //                 break;
+        //             case "user":
+                        
+        //                 break;
+        //         }
+        //     } else {
+        //         Alert.alert("User data not found");
+        //     }
+        // } else {
+        //     Alert.alert("User not found");
+        // }
+
         setLoading(false);
+    };
     };
 
     const signUpWithEmail = async () => {
