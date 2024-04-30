@@ -8,7 +8,6 @@ import config from "../tamagui.config";
 export default function Login() {
   const { email, setEmail, password, setPassword, loading, signInWithEmail } =
     userAuthentication();
-
   return (
     <TamaguiProvider config={config}>
       <View style={styles.container}>
