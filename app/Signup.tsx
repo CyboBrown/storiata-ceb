@@ -1,14 +1,22 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import { Button, Input, SizableText } from "tamagui";
+import React, { useState } from "react";
+import { GestureResponderEvent, StyleSheet, View } from "react-native";
+import { Button, Checkbox, CheckboxProps, Input, Label, SizableText,  SizeTokens,  TamaguiProvider, Text, Theme, XStack } from "tamagui";
 import { userAuthentication } from "../src/viewmodels/UserAuthentication";
+import { Check } from '@tamagui/lucide-icons'
+import config from "../tamagui.config";
+import { Link } from "expo-router";
+import CheckBoxIcon from "react-native-elements/dist/checkbox/CheckBoxIcon";
 
 export default function SignUp() {
-  const { email, setEmail, password, setPassword, loading, signUpWithEmail } =
+  const { email, setEmail, password, setPassword, loading, signUpWithEmail, isContributor, setIsContributor} =
     userAuthentication();
-
+  const handleContributorChange = () => {
+    setIsContributor(!isContributor);
+  };
+  
   return (
-    <View style={styles.container}>
+    <TamaguiProvider config={config}>
+      <View style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <SizableText fontFamily="$body" color="black">
           {" "}
@@ -35,11 +43,26 @@ export default function SignUp() {
         />
       </View>
       <View style={[styles.verticallySpaced]}>
+        <XStack width={300} alignItems="center">
+          <Checkbox size="$4" onPress={() => handleContributorChange()}>
+            <Checkbox.Indicator>
+              <Check/>
+            </Checkbox.Indicator>
+          </Checkbox>
+          <Text color='black'>Register as a Contributor?</Text>
+        </XStack>
+        
+      </View>
+      <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button size="$4" disabled={loading} onPress={signUpWithEmail}>
           Sign up
         </Button>
       </View>
+      <View style={[styles.verticallySpaced, styles.mt20]}>
+        <Text color="black"> Already have an account? <Link href="/login"> Sign In </Link></Text> 
+      </View>
     </View>
+    </TamaguiProvider>
   );
 }
 

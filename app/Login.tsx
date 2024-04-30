@@ -1,14 +1,17 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Input, SizableText } from "tamagui";
+import { Link } from "expo-router";
+import { Button, Input, SizableText, TamaguiProvider, Text } from "tamagui";
 import { userAuthentication } from "../src/viewmodels/UserAuthentication";
+import config from "../tamagui.config";
 
 export default function Login() {
   const { email, setEmail, password, setPassword, loading, signInWithEmail } =
     userAuthentication();
 
   return (
-    <View style={styles.container}>
+    <TamaguiProvider config={config}>
+      <View style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <SizableText fontFamily="$body" color="black">
           {" "}
@@ -39,7 +42,11 @@ export default function Login() {
           Sign in
         </Button>
       </View>
+      <View style={[styles.verticallySpaced, styles.mt20]}>
+        <Text color="black">Don't have an account? <Link href="/signup"> Sign Up </Link></Text> 
+      </View>
     </View>
+    </TamaguiProvider>    
   );
 }
 
