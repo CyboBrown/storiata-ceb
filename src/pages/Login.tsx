@@ -3,8 +3,8 @@ import { StyleSheet, View } from "react-native";
 import { Button, Input, SizableText } from "tamagui";
 import { userAuthentication } from "../viewmodels/UserAuthentication";
 
-export default function SignUp() {
-    const { email, setEmail, password, setPassword, loading, signUpWithEmail } = userAuthentication();
+export default function Login() {
+    const { email, setEmail, password, setPassword, loading, signInWithEmail } = userAuthentication();
 
     return (
         <View style={styles.container}>
@@ -27,8 +27,8 @@ export default function SignUp() {
                     onChangeText={(text) => setPassword(text)}
                 />
             </View>
-            <View style={[styles.verticallySpaced]}>
-                <Button size="$4" disabled={loading} onPress={signUpWithEmail}>Sign up</Button>
+            <View style={[styles.verticallySpaced, styles.mt20]}>
+                <Button size="$4" disabled={loading} onPress={signInWithEmail}>Sign in</Button>
             </View>
         </View>
     );
