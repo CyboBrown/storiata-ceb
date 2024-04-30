@@ -1,8 +1,8 @@
 import "react-native-url-polyfill/auto";
 import { useState, useEffect } from "react";
 import { supabase } from "../src/utils/supabase";
-import Auth from "./Auth";
-import Main from "./Main";
+import Login from "./login";
+import Main from "./main";
 import { Session } from "@supabase/supabase-js";
 import { useColorScheme } from "react-native";
 import { TamaguiProvider, Theme } from "tamagui";
@@ -30,7 +30,7 @@ export default function Page() {
   return (
     <TamaguiProvider config={config}>
       <Theme name={colorScheme === "dark" ? "dark" : "light"}>
-        {session && session.user ? <Main session={session} /> : <Auth />}
+        {session && session.user ? <Main session={session} /> : <Login />}
       </Theme>
     </TamaguiProvider>
   );

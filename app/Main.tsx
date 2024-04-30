@@ -2,10 +2,10 @@ import { Session } from "@supabase/supabase-js";
 import type { TabsContentProps } from "tamagui";
 import { H5, ScrollView, Separator, SizableText, Tabs, YStack } from "tamagui";
 import { LayoutDashboard } from "@tamagui/lucide-icons";
-import Account from "./Account";
-import Dashboard from "./Dashboard";
-import Exercises from "./Exercises";
-import Dictionary from "./Dictionary";
+import Account from "./account";
+import Dashboard from "./dashboard";
+import Exercises from "./exercises";
+import Dictionary from "./dictionary";
 import { StatusBar } from "expo-status-bar";
 
 export default function Main({ session }: { session: Session }) {
