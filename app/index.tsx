@@ -1,8 +1,8 @@
 import "react-native-url-polyfill/auto";
 import { useState, useEffect } from "react";
 import { supabase } from "../src/utils/supabase";
-import Auth from "../src/pages/Auth";
-import Main from "../src/pages/user/Main";
+import Auth from "./Auth";
+import Main from "./Main";
 import { Session } from "@supabase/supabase-js";
 import { useColorScheme } from "react-native";
 import { TamaguiProvider, Theme } from "tamagui";

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet, View, AppState } from "react-native";
-import { Button, Image, Input, SizableText} from "tamagui";
-import { supabase } from "../utils/supabase";
-
+import { Button, Image, Input, SizableText } from "tamagui";
+import { supabase } from "../src/utils/supabase";
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -51,20 +50,38 @@ export default function Auth() {
   return (
     <View style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <SizableText fontFamily="$body" color="black"> Email </SizableText>
-        <Input size="$4" placeholder="email@gmail.com" onChangeText={(text) => setEmail(text)}/>
+        <SizableText fontFamily="$body" color="black">
+          {" "}
+          Email{" "}
+        </SizableText>
+        <Input
+          size="$4"
+          placeholder="email@gmail.com"
+          onChangeText={(text) => setEmail(text)}
+        />
       </View>
       <View style={[styles.verticallySpaced]}>
-        <SizableText fontFamily="$body" color="black"> Password </SizableText>
-        <Input size="$4" placeholder="Password" secureTextEntry onChangeText={(text) => setPassword(text)}/>
+        <SizableText fontFamily="$body" color="black">
+          {" "}
+          Password{" "}
+        </SizableText>
+        <Input
+          size="$4"
+          placeholder="Password"
+          secureTextEntry
+          onChangeText={(text) => setPassword(text)}
+        />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button size="$4" disabled={loading} onPress={() => signInWithEmail()}>Sign in</Button>
+        <Button size="$4" disabled={loading} onPress={() => signInWithEmail()}>
+          Sign in
+        </Button>
       </View>
       <View style={[styles.verticallySpaced]}>
-        <Button size="$4" disabled={loading} onPress={() => signUpWithEmail()}>Sign up</Button>
+        <Button size="$4" disabled={loading} onPress={() => signUpWithEmail()}>
+          Sign up
+        </Button>
       </View>
-    
     </View>
   );
 }
@@ -82,5 +99,4 @@ const styles = StyleSheet.create({
   mt20: {
     marginTop: 20,
   },
-
 });

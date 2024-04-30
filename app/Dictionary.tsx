@@ -23,7 +23,7 @@ import {
   Sun,
 } from "@tamagui/lucide-icons";
 import { useState, useEffect } from "react";
-import { supabase } from "../../utils/supabase";
+import { supabase } from "../src/utils/supabase";
 import { Alert } from "react-native";
 
 import type { SheetProps } from "@tamagui/sheet";
