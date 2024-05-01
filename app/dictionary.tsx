@@ -28,10 +28,11 @@ import { Alert } from "react-native";
 
 import type { SheetProps } from "@tamagui/sheet";
 import { useSheet } from "@tamagui/sheet";
+import { Word } from "../src/models/Word";
 
 export default function Dictionary({ session }: { session: Session }) {
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<WordParams[]>([]);
+  const [results, setResults] = useState<Word[]>([]);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(-1);
   const [position, setPosition] = useState(0);
@@ -169,15 +170,6 @@ export default function Dictionary({ session }: { session: Session }) {
       </Sheet>
     </>
   );
-}
-
-interface WordParams {
-  normal_form: string;
-  phonetic_form: string;
-  suffix_form: string;
-  translations: Array<{ word: string }>;
-  description: string;
-  representation: string;
 }
 
 const Entry = ({

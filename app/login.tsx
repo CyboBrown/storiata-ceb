@@ -1,66 +1,85 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Link, Redirect, router } from "expo-router";
 import { Button, Input, SizableText, TamaguiProvider, Text } from "tamagui";
-import { userAuthentication } from "../src/viewmodels/UserAuthentication";
+import { UserAuthentication } from "../src/services/UserAuthentication";
 import config from "../tamagui.config";
+import { Session, User } from "@supabase/supabase-js";
 
 export default function Login() {
-  const { email, setEmail, password, setPassword, loading, signInWithEmail, user, isContributor} =
-    userAuthentication();
-    
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isContributor, setIsContributor] = useState(false);
+  const [userID, setUserID] = useState("");
+  const [user, setUser] = useState<User>();
+  const [session, setSession] = useState<Session>();
+
   const signin = async () => {
-     await signInWithEmail()
-     console.log(user)
-     if (user){
+    setLoading(true);
+    const data = await UserAuthentication.signInWithEmail(email, password);
+    if (data?.user) setUser(data.user);
+    setLoading(false);
+    console.log(user);
+    if (data?.user?.id) {
+      setSession(data.session);
+      setUser(data.user);
+      setUserID(data.user.id);
+    }
+    const user_type = await UserAuthentication.getUserType(userID);
+    setIsContributor(user_type == "contributor");
+    if (user) {
       const path = isContributor ? "/contributor" : "/";
-      console.log(path)
+      console.log(path);
       router.push(path);
     }
-  }
+  };
 
-  if (user){
+  if (user) {
     const path = isContributor ? "/contributor" : "/";
     router.push(path);
   }
+
   return (
     <TamaguiProvider config={config}>
       <View style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <SizableText fontFamily="$body" color="black">
-          {" "}
-          Email{" "}
-        </SizableText>
-        <Input
-          size="$4"
-          placeholder="email@gmail.com"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-        />
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+          <SizableText fontFamily="$body" color="black">
+            {" "}
+            Email{" "}
+          </SizableText>
+          <Input
+            size="$4"
+            placeholder="email@gmail.com"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+          />
+        </View>
+        <View style={[styles.verticallySpaced]}>
+          <SizableText fontFamily="$body" color="black">
+            {" "}
+            Password{" "}
+          </SizableText>
+          <Input
+            size="$4"
+            placeholder="Password"
+            secureTextEntry
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+          />
+        </View>
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+          <Button size="$4" disabled={loading} onPress={signin}>
+            Sign in
+          </Button>
+        </View>
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+          <Text color="black">
+            Don't have an account? <Link href="/signup"> Sign Up </Link>
+          </Text>
+        </View>
       </View>
-      <View style={[styles.verticallySpaced]}>
-        <SizableText fontFamily="$body" color="black">
-          {" "}
-          Password{" "}
-        </SizableText>
-        <Input
-          size="$4"
-          placeholder="Password"
-          secureTextEntry
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button size="$4" disabled={loading} onPress={signin}>
-          Sign in
-        </Button>
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Text color="black">Don't have an account? <Link href="/signup"> Sign Up </Link></Text> 
-      </View>
-    </View>
-    </TamaguiProvider>    
+    </TamaguiProvider>
   );
 }
 

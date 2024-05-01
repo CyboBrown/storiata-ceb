@@ -13,23 +13,29 @@ import {
   XStack,
   View,
 } from "tamagui";
-import { userAuthentication } from "../src/viewmodels/UserAuthentication";
+import { UserAuthentication } from "../src/services/UserAuthentication";
 import { Check } from "@tamagui/lucide-icons";
 import config from "../tamagui.config";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import CheckBoxIcon from "react-native-elements/dist/checkbox/CheckBoxIcon";
+import { Session, User } from "@supabase/supabase-js";
 
 export default function SignUp() {
-  const {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    loading,
-    signUpWithEmail,
-    isContributor,
-    setIsContributor,
-  } = userAuthentication();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isContributor, setIsContributor] = useState(false);
+  const [userID, setUserID] = useState("");
+  const [user, setUser] = useState<User>();
+  const [session, setSession] = useState<Session>();
+
+  const signup = async () => {
+    setLoading(true);
+    const data = await UserAuthentication.signUpWithEmail(email, password);
+    setLoading(false);
+    router.push("/login");
+  };
+
   const handleContributorChange = () => {
     setIsContributor(!isContributor);
   };
@@ -77,7 +83,7 @@ export default function SignUp() {
           </XStack>
         </View>
         <View>
-          <Button size="$4" disabled={loading} onPress={signUpWithEmail}>
+          <Button size="$4" disabled={loading} onPress={signup}>
             Sign up
           </Button>
         </View>
