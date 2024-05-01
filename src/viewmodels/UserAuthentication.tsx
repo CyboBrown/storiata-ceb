@@ -55,14 +55,14 @@ export function userAuthentication() {
       password: password,
     });
     console.log(user)
+    console.log(session)
     if (error) Alert.alert(error.message);
     if (!user)
       Alert.alert("Please check your inbox for email verification!");
     setLoading(false);
-    if(user?.id && session){
+    if(user?.id){
       setUser(user);
-      setSession(session);
-      insertUser(user?.id, isContributor);
+      await insertUser(user?.id, isContributor);
     }
 
   };

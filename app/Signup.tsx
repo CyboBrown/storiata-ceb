@@ -44,7 +44,7 @@ export default function SignUp() {
       </View>
       <View style={[styles.verticallySpaced]}>
         <XStack width={300} alignItems="center">
-          <Checkbox size="$4" onPress={() => handleContributorChange()}>
+          <Checkbox size="$4" checked={isContributor} onPress={() => handleContributorChange()}>
             <Checkbox.Indicator>
               <Check/>
             </Checkbox.Indicator>
