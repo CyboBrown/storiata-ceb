@@ -1,13 +1,27 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Link } from "expo-router";
+import { Link, Redirect, router } from "expo-router";
 import { Button, Input, SizableText, TamaguiProvider, Text } from "tamagui";
 import { userAuthentication } from "../src/viewmodels/UserAuthentication";
 import config from "../tamagui.config";
 
 export default function Login() {
-  const { email, setEmail, password, setPassword, loading, signInWithEmail } =
+  const { email, setEmail, password, setPassword, loading, signInWithEmail, user, isContributor} =
     userAuthentication();
+  const signin = async () => {
+     await signInWithEmail()
+     console.log(user)
+     if (user){
+      const path = isContributor ? "/contributor" : "/";
+      console.log(path)
+      router.push(path);
+    }
+  }
+
+  if (user){
+    const path = isContributor ? "/contributor" : "/";
+    router.push(path);
+  }
   return (
     <TamaguiProvider config={config}>
       <View style={styles.container}>
@@ -37,7 +51,7 @@ export default function Login() {
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button size="$4" disabled={loading} onPress={signInWithEmail}>
+        <Button size="$4" disabled={loading} onPress={signin}>
           Sign in
         </Button>
       </View>
