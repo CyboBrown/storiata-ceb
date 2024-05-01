@@ -8,6 +8,7 @@ import config from "../tamagui.config";
 export default function Login() {
   const { email, setEmail, password, setPassword, loading, signInWithEmail, user, isContributor} =
     userAuthentication();
+    
   const signin = async () => {
      await signInWithEmail()
      console.log(user)

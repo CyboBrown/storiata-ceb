@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { GestureResponderEvent, StyleSheet, View } from "react-native";
-import { Button, Checkbox, CheckboxProps, Input, Label, SizableText,  SizeTokens,  TamaguiProvider, Text, Theme, XStack } from "tamagui";
+import { Button, Checkbox, CheckboxProps, Input, Label, SizableText,  SizeTokens,  TamaguiProvider, Text, Theme, XStack, View} from "tamagui";
 import { userAuthentication } from "../src/viewmodels/UserAuthentication";
 import { Check } from '@tamagui/lucide-icons'
 import config from "../tamagui.config";
@@ -16,8 +15,8 @@ export default function SignUp() {
   
   return (
     <TamaguiProvider config={config}>
-      <View style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View>
+      <View justifyContent="center" alignContent="center" gap="2" >
         <SizableText fontFamily="$body" color="black">
           {" "}
           Email{" "}
@@ -29,7 +28,7 @@ export default function SignUp() {
           onChangeText={(text) => setEmail(text)}
         />
       </View>
-      <View style={[styles.verticallySpaced]}>
+      <View>
         <SizableText fontFamily="$body" color="black">
           {" "}
           Password{" "}
@@ -42,7 +41,7 @@ export default function SignUp() {
           onChangeText={(text) => setPassword(text)}
         />
       </View>
-      <View style={[styles.verticallySpaced]}>
+      <View>
         <XStack width={300} alignItems="center">
           <Checkbox size="$4" checked={isContributor} onPress={() => handleContributorChange()}>
             <Checkbox.Indicator>
@@ -53,30 +52,15 @@ export default function SignUp() {
         </XStack>
         
       </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View>
         <Button size="$4" disabled={loading} onPress={signUpWithEmail}>
           Sign up
         </Button>
       </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View>
         <Text color="black"> Already have an account? <Link href="/login"> Sign In </Link></Text> 
       </View>
     </View>
     </TamaguiProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch",
-  },
-  mt20: {
-    marginTop: 20,
-  },
-});
