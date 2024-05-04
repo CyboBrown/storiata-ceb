@@ -31,7 +31,10 @@ export default function SignUp() {
 
   const signup = async () => {
     setLoading(true);
-    const data = await UserAuthentication.signUpWithEmail(email, password);
+    const data: any = await UserAuthentication.signUpWithEmail(email, password);
+    if (data?.user?.id && isContributor) {
+      UserAuthentication.requestContributor(data.user.id);
+    }
     setLoading(false);
     router.push("/login");
   };
@@ -41,59 +44,57 @@ export default function SignUp() {
   };
 
   return (
-    <TamaguiProvider config={config}>
-      <View>
-        <View justifyContent="center" alignContent="center" gap={2}>
-          <SizableText fontFamily="$body" color="black">
-            {" "}
-            Email{" "}
-          </SizableText>
-          <Input
-            size="$4"
-            placeholder="email@gmail.com"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-          />
-        </View>
-        <View>
-          <SizableText fontFamily="$body" color="black">
-            {" "}
-            Password{" "}
-          </SizableText>
-          <Input
-            size="$4"
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          />
-        </View>
-        <View>
-          <XStack width={300} alignItems="center">
-            <Checkbox
-              size="$4"
-              checked={isContributor}
-              onPress={() => handleContributorChange()}
-            >
-              <Checkbox.Indicator>
-                <Check />
-              </Checkbox.Indicator>
-            </Checkbox>
-            <Text color="black">Register as a Contributor?</Text>
-          </XStack>
-        </View>
-        <View>
-          <Button size="$4" disabled={loading} onPress={signup}>
-            Sign up
-          </Button>
-        </View>
-        <View>
-          <Text color="black">
-            {" "}
-            Already have an account? <Link href="/login"> Sign In </Link>
-          </Text>
-        </View>
+    <View>
+      <View justifyContent="center" alignContent="center" gap={2}>
+        <SizableText fontFamily="$body" color="black">
+          {" "}
+          Email{" "}
+        </SizableText>
+        <Input
+          size="$4"
+          placeholder="email@gmail.com"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+        />
       </View>
-    </TamaguiProvider>
+      <View>
+        <SizableText fontFamily="$body" color="black">
+          {" "}
+          Password{" "}
+        </SizableText>
+        <Input
+          size="$4"
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+        />
+      </View>
+      <View>
+        <XStack width={300} alignItems="center">
+          <Checkbox
+            size="$4"
+            checked={isContributor}
+            onPress={() => handleContributorChange()}
+          >
+            <Checkbox.Indicator>
+              <Check />
+            </Checkbox.Indicator>
+          </Checkbox>
+          <Text color="black">Register as a Contributor?</Text>
+        </XStack>
+      </View>
+      <View>
+        <Button size="$4" disabled={loading} onPress={signup}>
+          Sign up
+        </Button>
+      </View>
+      <View>
+        <Text color="black">
+          {" "}
+          Already have an account? <Link href="/login"> Sign In </Link>
+        </Text>
+      </View>
+    </View>
   );
 }

@@ -26,8 +26,8 @@ export default function Login() {
       setUser(data.user);
       setUserID(data.user.id);
     }
-    const user_type = await UserAuthentication.getUserType(userID);
-    setIsContributor(user_type == "contributor");
+    const isContrib: any = await UserAuthentication.getUserType(userID);
+    setIsContributor(isContrib == true);
     if (user) {
       const path = isContributor ? "/contributor" : "/";
       console.log(path);
@@ -41,45 +41,43 @@ export default function Login() {
   }
 
   return (
-    <TamaguiProvider config={config}>
-      <View style={styles.container}>
-        <View style={[styles.verticallySpaced, styles.mt20]}>
-          <SizableText fontFamily="$body" color="black">
-            {" "}
-            Email{" "}
-          </SizableText>
-          <Input
-            size="$4"
-            placeholder="email@gmail.com"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-          />
-        </View>
-        <View style={[styles.verticallySpaced]}>
-          <SizableText fontFamily="$body" color="black">
-            {" "}
-            Password{" "}
-          </SizableText>
-          <Input
-            size="$4"
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          />
-        </View>
-        <View style={[styles.verticallySpaced, styles.mt20]}>
-          <Button size="$4" disabled={loading} onPress={signin}>
-            Sign in
-          </Button>
-        </View>
-        <View style={[styles.verticallySpaced, styles.mt20]}>
-          <Text color="black">
-            Don't have an account? <Link href="/signup"> Sign Up </Link>
-          </Text>
-        </View>
+    <View style={styles.container}>
+      <View style={[styles.verticallySpaced, styles.mt20]}>
+        <SizableText fontFamily="$body" color="black">
+          {" "}
+          Email{" "}
+        </SizableText>
+        <Input
+          size="$4"
+          placeholder="email@gmail.com"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+        />
       </View>
-    </TamaguiProvider>
+      <View style={[styles.verticallySpaced]}>
+        <SizableText fontFamily="$body" color="black">
+          {" "}
+          Password{" "}
+        </SizableText>
+        <Input
+          size="$4"
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+        />
+      </View>
+      <View style={[styles.verticallySpaced, styles.mt20]}>
+        <Button size="$4" disabled={loading} onPress={signin}>
+          Sign in
+        </Button>
+      </View>
+      <View style={[styles.verticallySpaced, styles.mt20]}>
+        <Text color="black">
+          Don't have an account? <Link href="/signup"> Sign Up </Link>
+        </Text>
+      </View>
+    </View>
   );
 }
 
