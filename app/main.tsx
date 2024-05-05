@@ -1,6 +1,6 @@
 import { Session } from "@supabase/supabase-js";
 import type { TabsContentProps } from "tamagui";
-import { H5, ScrollView, Separator, SizableText, Tabs, YStack } from "tamagui";
+import { ScrollView, Separator, SizableText, Tabs } from "tamagui";
 // import { LayoutDashboard } from "@tamagui/lucide-icons";
 import Dashboard from "./dashboard";
 import ContributorDashbaord from "./dashboard_contributor";
@@ -40,7 +40,7 @@ export default function Main({
           <Exercises session={session}></Exercises>
         </TabsContent>
         <TabsContent value="tab3">
-          <Dictionary session={session}></Dictionary>
+          <Dictionary session={session} contribMode={contribMode}></Dictionary>
         </TabsContent>
         <TabsContent value="tab4">
           <ScrollView>
@@ -55,7 +55,7 @@ export default function Main({
         >
           <Tabs.Tab flex={1} value="tab1">
             <SizableText fontFamily="$body" fontSize={10}>
-              {contribMode ? "Dashbaord" : "Home"}
+              {contribMode ? "Dashboard" : "Home"}
             </SizableText>
           </Tabs.Tab>
           <Tabs.Tab flex={1} value="tab2">

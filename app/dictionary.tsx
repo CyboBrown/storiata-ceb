@@ -12,25 +12,31 @@ import {
   YStack,
   Sheet,
   SizableText,
+  ZStack,
+  Dialog,
+  Adapt,
+  Fieldset,
+  Label,
+  TooltipSimple,
+  Unspaced,
 } from "tamagui";
-import {
-  ChevronRight,
-  ChevronDown,
-  ChevronUp,
-  Cloud,
-  Moon,
-  Star,
-  Sun,
-} from "@tamagui/lucide-icons";
-import { useState, useEffect } from "react";
+import { ChevronRight, Star, Plus, X } from "@tamagui/lucide-icons";
+import React, { useState, useEffect } from "react";
 import { supabase } from "../src/utils/supabase";
 import { Alert } from "react-native";
 
 import type { SheetProps } from "@tamagui/sheet";
 import { useSheet } from "@tamagui/sheet";
 import { Word } from "../src/models/Word";
+import AddWordDialog from "../src/components/AddWordDialog";
 
-export default function Dictionary({ session }: { session: Session }) {
+export default function Dictionary({
+  session,
+  contribMode,
+}: {
+  session: Session;
+  contribMode: boolean;
+}) {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<Word[]>([]);
   const [open, setOpen] = useState(false);
@@ -65,46 +71,66 @@ export default function Dictionary({ session }: { session: Session }) {
 
   return (
     <>
-      <YStack
+      <ZStack
         f={1}
         jc="flex-start"
         ai="stretch"
         gap="$2"
         backgroundColor={"$backgroundSoft"}
       >
-        <XStack alignItems="center" gap="$2">
-          <Input
-            flex={1}
-            size="$4"
-            placeholder={`Enter Word...`}
-            onChangeText={(input) => search(input)}
-          />
-          <Button size="$4">Search</Button>
-        </XStack>
-        <ScrollView>
-          <YGroup
-            alignSelf="center"
-            bordered
-            size="$5"
-            separator={<Separator />}
+        <YStack
+          f={1}
+          jc="flex-start"
+          ai="stretch"
+          gap="$2"
+          backgroundColor={"$backgroundSoft"}
+        >
+          <XStack alignItems="center" gap="$2">
+            <Input
+              flex={1}
+              size="$4"
+              placeholder={`Enter Word...`}
+              onChangeText={(input) => search(input)}
+            />
+            <Button size="$4">Search</Button>
+          </XStack>
+          <ScrollView>
+            <YGroup
+              alignSelf="center"
+              bordered
+              size="$5"
+              separator={<Separator />}
+            >
+              {results.map((result, index) => (
+                <Entry
+                  title={result.normal_form}
+                  subTitle={result.translations
+                    .reduce(
+                      (acc, translation) => acc + translation.word + ", ",
+                      ""
+                    )
+                    .slice(0, -2)}
+                  index={index}
+                  setSelected={setSelected}
+                  setOpen={setOpen}
+                />
+              ))}
+            </YGroup>
+          </ScrollView>
+        </YStack>
+        {contribMode && (
+          <YStack
+            f={1}
+            jc="flex-end"
+            ai="flex-end"
+            gap="$2"
+            backgroundColor={"$backgroundSoft"}
+            m="$2"
           >
-            {results.map((result, index) => (
-              <Entry
-                title={result.normal_form}
-                subTitle={result.translations
-                  .reduce(
-                    (acc, translation) => acc + translation.word + ", ",
-                    ""
-                  )
-                  .slice(0, -2)}
-                index={index}
-                setSelected={setSelected}
-                setOpen={setOpen}
-              />
-            ))}
-          </YGroup>
-        </ScrollView>
-      </YStack>
+            <AddWordDialog />
+          </YStack>
+        )}
+      </ZStack>
       <Sheet
         forceRemoveScrollEnabled={open}
         modal={true}
