@@ -1,14 +1,21 @@
 import { Session } from "@supabase/supabase-js";
 import type { TabsContentProps } from "tamagui";
 import { H5, ScrollView, Separator, SizableText, Tabs, YStack } from "tamagui";
-import { LayoutDashboard } from "@tamagui/lucide-icons";
-import Account from "./account";
+// import { LayoutDashboard } from "@tamagui/lucide-icons";
 import Dashboard from "./dashboard";
+import ContributorDashbaord from "./dashboard_contributor";
 import Exercises from "./exercises";
 import Dictionary from "./dictionary";
+import Account from "./account";
 import { StatusBar } from "expo-status-bar";
 
-export default function Main({ session }: { session: Session }) {
+export default function Main({
+  session,
+  contribMode,
+}: {
+  session: Session;
+  contribMode: boolean;
+}) {
   return (
     <>
       <StatusBar translucent hidden style="auto" />
@@ -23,7 +30,11 @@ export default function Main({ session }: { session: Session }) {
         borderColor="$borderColor"
       >
         <TabsContent value="tab1">
-          <Dashboard session={session}></Dashboard>
+          {contribMode ? (
+            <ContributorDashbaord session={session}></ContributorDashbaord>
+          ) : (
+            <Dashboard session={session}></Dashboard>
+          )}
         </TabsContent>
         <TabsContent value="tab2">
           <Exercises session={session}></Exercises>
@@ -44,7 +55,7 @@ export default function Main({ session }: { session: Session }) {
         >
           <Tabs.Tab flex={1} value="tab1">
             <SizableText fontFamily="$body" fontSize={10}>
-              Dashboard
+              {contribMode ? "Dashbaord" : "Home"}
             </SizableText>
           </Tabs.Tab>
           <Tabs.Tab flex={1} value="tab2">

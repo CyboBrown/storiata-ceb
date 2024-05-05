@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Link, Redirect, router } from "expo-router";
 import { Button, Input, SizableText, TamaguiProvider, Text } from "tamagui";
@@ -6,39 +6,32 @@ import { UserAuthentication } from "../src/services/UserAuthentication";
 import config from "../tamagui.config";
 import { Session, User } from "@supabase/supabase-js";
 
-export default function Login() {
+export default function Login({
+  setContrib,
+}: {
+  setContrib: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isContributor, setIsContributor] = useState(false);
-  const [userID, setUserID] = useState("");
-  const [user, setUser] = useState<User>();
+  // const [isContributor, setIsContributor] = useState(false);
+  // const [userID, setUserID] = useState("");
+  // const [user, setUser] = useState<User>();
   const [session, setSession] = useState<Session>();
 
   const signin = async () => {
     setLoading(true);
     const data = await UserAuthentication.signInWithEmail(email, password);
-    if (data?.user) setUser(data.user);
-    setLoading(false);
-    console.log(user);
     if (data?.user?.id) {
+      const isContrib: boolean = await UserAuthentication.getUserType(
+        data.user.id
+      );
+      console.log(isContrib);
+      setContrib(isContrib);
       setSession(data.session);
-      setUser(data.user);
-      setUserID(data.user.id);
     }
-    const isContrib: any = await UserAuthentication.getUserType(userID);
-    setIsContributor(isContrib == true);
-    if (user) {
-      const path = isContributor ? "/contributor" : "/";
-      console.log(path);
-      router.push(path);
-    }
+    setLoading(false);
   };
-
-  if (user) {
-    const path = isContributor ? "/contributor" : "/";
-    router.push(path);
-  }
 
   return (
     <View style={styles.container}>

@@ -10,10 +10,13 @@ export class UserAuthentication {
     const { data, error } = await supabase
       .from("profiles")
       .select("is_contributor")
-      .eq("id", user_id);
+      .eq("id", user_id)
+      .single();
     console.log(error, data);
     if (data) {
-      return data;
+      return data.is_contributor === true;
+    } else {
+      return false;
     }
   };
 

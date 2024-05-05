@@ -159,13 +159,6 @@ export default function Dictionary({ session }: { session: Session }) {
                 : "none"}
             </SizableText> */}
           </YStack>
-          {/* <Button
-            size="$6"
-            circular
-            icon={ChevronDown}
-            onPress={() => setOpen(false)}
-          /> */}
-          {/* <Input width={200} value="Hello" /> */}
         </Sheet.Frame>
       </Sheet>
     </>

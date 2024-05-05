@@ -11,6 +11,7 @@ import config from "../tamagui.config";
 
 export default function Page() {
   const [session, setSession] = useState<Session | null>(null);
+  const [isContributor, setIsContributor] = useState(false);
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -30,7 +31,11 @@ export default function Page() {
   return (
     <TamaguiProvider config={config}>
       <Theme name={colorScheme === "dark" ? "dark" : "light"}>
-        {session && session.user ? <Main session={session} /> : <Login />}
+        {session && session.user ? (
+          <Main session={session} contribMode={isContributor} />
+        ) : (
+          <Login setContrib={setIsContributor} />
+        )}
         {/* Dont use ternary, use router.push for Redirect */}
       </Theme>
     </TamaguiProvider>
