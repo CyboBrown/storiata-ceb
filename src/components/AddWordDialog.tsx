@@ -15,6 +15,12 @@ import {
 import { SelectItem } from "./SelectItem";
 
 export default function AddWordDialog() {
+  const parts_of_speech = [
+    { name: "adjective" },
+    { name: "noun" },
+    { name: "verb" },
+  ];
+
   return (
     <Dialog>
       <Dialog.Trigger asChild>
@@ -75,7 +81,7 @@ export default function AddWordDialog() {
                 Part of Speech
               </TooltipSimple>
             </Label>
-            <SelectItem id="select-demo-1" />
+            <SelectItem label={"Part of Speech"} items={parts_of_speech} />
           </Fieldset>
 
           <XStack alignSelf="flex-end" gap="$4">
