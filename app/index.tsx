@@ -8,6 +8,7 @@ import { useColorScheme } from "react-native";
 import { TamaguiProvider, Theme } from "tamagui";
 import { useFonts } from "expo-font";
 import config from "../tamagui.config";
+import { UserAuthentication } from "../src/services/UserAuthentication";
 
 export default function Page() {
   const [session, setSession] = useState<Session | null>(null);
@@ -20,6 +21,17 @@ export default function Page() {
       setSession(session);
     });
   }, []);
+  useEffect(() => {
+    if (session?.user?.id) {
+      async () => {
+        const isContrib: boolean = await UserAuthentication.getUserType(
+          session.user.id
+        );
+        setIsContributor(isContrib);
+        console.log(isContrib);
+      };
+    }
+  }, [session]);
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
@@ -32,11 +44,7 @@ export default function Page() {
     <TamaguiProvider config={config}>
       <Theme name={colorScheme === "dark" ? "dark" : "light"}>
         {session && session.user ? (
-          <Main
-            session={session}
-            contribMode={isContributor}
-            setContrib={setIsContributor}
-          />
+          <Main session={session} contribMode={isContributor} />
         ) : (
           <Login setContrib={setIsContributor} />
         )}

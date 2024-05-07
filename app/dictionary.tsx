@@ -1,9 +1,7 @@
 import { Session } from "@supabase/supabase-js";
 import {
   Button,
-  H5,
   Input,
-  ListItem,
   Paragraph,
   ScrollView,
   Separator,
@@ -13,22 +11,13 @@ import {
   Sheet,
   SizableText,
   ZStack,
-  Dialog,
-  Adapt,
-  Fieldset,
-  Label,
-  TooltipSimple,
-  Unspaced,
 } from "tamagui";
-import { ChevronRight, Star, Plus, X } from "@tamagui/lucide-icons";
 import React, { useState, useEffect } from "react";
 import { supabase } from "../src/utils/supabase";
 import { Alert } from "react-native";
-
-import type { SheetProps } from "@tamagui/sheet";
-import { useSheet } from "@tamagui/sheet";
 import { Word } from "../src/models/Word";
 import AddWordDialog from "../src/components/AddWordDialog";
+import { WordSearchResult } from "../src/components/WordSearchResult";
 
 export default function Dictionary({
   session,
@@ -38,6 +27,7 @@ export default function Dictionary({
   contribMode: boolean;
 }) {
   const [loading, setLoading] = useState(false);
+  const [input, setInput] = useState("");
   const [results, setResults] = useState<Word[]>([]);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(-1);
@@ -52,6 +42,7 @@ export default function Dictionary({
     try {
       console.log(text);
       setLoading(true);
+      setInput(text);
       const { data, error, status } = await supabase
         .from("words")
         .select(`*, translations(word)`)
@@ -99,6 +90,28 @@ export default function Dictionary({
             />
             <Button size="$4">Search</Button>
           </XStack>
+          {results.length == 0 &&
+            (input === "" ? (
+              <SizableText
+                size="$4"
+                fontWeight="200"
+                color="$color10"
+                p="$3"
+                alignSelf="center"
+              >
+                Search na ta!
+              </SizableText>
+            ) : (
+              <Paragraph
+                size="$4"
+                fontWeight="200"
+                color="$color10"
+                p="$3"
+                alignSelf="center"
+              >
+                No results found for "{input}".
+              </Paragraph>
+            ))}
           <ScrollView>
             <YGroup
               alignSelf="center"
@@ -107,7 +120,7 @@ export default function Dictionary({
               separator={<Separator />}
             >
               {results.map((result, index) => (
-                <Entry
+                <WordSearchResult
                   title={result.normal_form}
                   subTitle={result.translations
                     .reduce(
@@ -195,35 +208,3 @@ export default function Dictionary({
     </>
   );
 }
-
-const Entry = ({
-  title,
-  subTitle,
-  index,
-  setSelected,
-  setOpen,
-}: {
-  title: string;
-  subTitle: string;
-  index: number;
-  setSelected: React.Dispatch<React.SetStateAction<number>>;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
-  return (
-    <YGroup.Item>
-      <ListItem
-        key={index}
-        hoverTheme
-        pressTheme
-        title={title}
-        subTitle={subTitle}
-        icon={Star}
-        iconAfter={ChevronRight}
-        onPress={() => {
-          setSelected(index);
-          setOpen(true);
-        }}
-      />
-    </YGroup.Item>
-  );
-};
