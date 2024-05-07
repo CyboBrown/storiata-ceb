@@ -19,6 +19,11 @@ export default function Login({
   // const [user, setUser] = useState<User>();
   const [session, setSession] = useState<Session>();
 
+  // DO NOT DELETE: FOR TESTING AND INITIALIZATION
+  useEffect(() => {
+    console.log("LOGIN page loaded.");
+  }, []);
+
   const signin = async () => {
     setLoading(true);
     const data = await UserAuthentication.signInWithEmail(email, password);

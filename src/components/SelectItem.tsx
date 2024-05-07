@@ -11,8 +11,13 @@ import {
   getFontSize,
 } from "tamagui";
 
-export function SelectItem(props: SelectProps) {
-  const [val, setVal] = useState("apple");
+export interface SelectItemProps extends SelectProps {
+  label: string;
+  items: { name: string }[];
+}
+
+export function SelectItem(props: SelectItemProps) {
+  const [val, setVal] = useState(props.items[0].name);
 
   return (
     <Select
@@ -79,11 +84,11 @@ export function SelectItem(props: SelectProps) {
           minWidth={200}
         >
           <Select.Group>
-            <Select.Label>Parts of Speech</Select.Label>
+            <Select.Label>{props.label}</Select.Label>
             {/* for longer lists memoizing these is useful */}
             {useMemo(
               () =>
-                items.map((item, i) => {
+                props.items.map((item, i) => {
                   return (
                     <Select.Item
                       index={i}
@@ -97,7 +102,7 @@ export function SelectItem(props: SelectProps) {
                     </Select.Item>
                   );
                 }),
-              [items]
+              [props.items]
             )}
           </Select.Group>
           {/* Native gets an extra icon */}
@@ -141,5 +146,3 @@ export function SelectItem(props: SelectProps) {
     </Select>
   );
 }
-
-const items = [{ name: "Adjective" }, { name: "Verb" }, { name: "Noun" }];

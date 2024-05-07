@@ -1,12 +1,9 @@
-import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { supabase } from "../utils/supabase";
-import { Session, User } from "@supabase/supabase-js";
-import Main from "../../app/main";
 
 export class UserAuthentication {
   public static getUserType = async (user_id: string) => {
-    console.log(user_id);
+    // console.log(user_id);
     const { data, error } = await supabase
       .from("profiles")
       .select("is_contributor")

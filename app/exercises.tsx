@@ -1,8 +1,13 @@
 import { Session } from "@supabase/supabase-js";
 import { Button, H5, Paragraph, YStack, Accordion, Square } from "tamagui";
 import { ChevronDown } from "@tamagui/lucide-icons";
+import { useEffect } from "react";
 
 export default function Exercises({ session }: { session: Session }) {
+  // DO NOT DELETE: FOR TESTING AND INITIALIZATION
+  useEffect(() => {
+    console.log("EXERCISES page loaded.");
+  }, []);
   return (
     <YStack
       f={1}

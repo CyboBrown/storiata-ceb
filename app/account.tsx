@@ -11,6 +11,11 @@ export default function Account({ session }: { session: Session }) {
   const [website, setWebsite] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
 
+  // DO NOT DELETE: FOR TESTING AND INITIALIZATION
+  useEffect(() => {
+    console.log("ACCOUNT page loaded.");
+  }, []);
+
   useEffect(() => {
     if (session) getProfile();
   }, [session]);

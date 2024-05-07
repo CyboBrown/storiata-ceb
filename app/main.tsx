@@ -8,6 +8,7 @@ import Exercises from "./exercises";
 import Dictionary from "./dictionary";
 import Account from "./account";
 import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from "react";
 
 export default function Main({
   session,
@@ -16,6 +17,11 @@ export default function Main({
   session: Session;
   contribMode: boolean;
 }) {
+  // DO NOT DELETE: FOR TESTING AND INITIALIZATION
+  useEffect(() => {
+    console.log("MAIN page loaded.");
+  }, []);
+
   return (
     <>
       <StatusBar translucent hidden style="auto" />
@@ -83,7 +89,7 @@ const TabsContent = (props: TabsContentProps) => {
   return (
     <Tabs.Content
       backgroundColor="$background"
-      key="tab3"
+      key={props.value}
       padding="$2"
       alignItems="stretch"
       justifyContent="center"
