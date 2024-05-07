@@ -23,6 +23,7 @@ import { Session, User } from "@supabase/supabase-js";
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isContributor, setIsContributor] = useState(false);
   const [userID, setUserID] = useState("");
@@ -39,12 +40,17 @@ export default function SignUp() {
     router.push("/login");
   };
 
+  const confirmPass = () => {
+
+  }
+
   const handleContributorChange = () => {
     setIsContributor(!isContributor);
   };
 
   return (
-    <View>
+    <TamaguiProvider config={config}>
+      <View>
       <View justifyContent="center" alignContent="center" gap={2}>
         <SizableText fontFamily="$body" color="black">
           {" "}
@@ -71,6 +77,19 @@ export default function SignUp() {
         />
       </View>
       <View>
+        <SizableText fontFamily="$body" color="black">
+          {" "}
+          Confirm Password{" "}
+        </SizableText>
+        <Input
+          size="$4"
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={(text) => setConfirmPassword(text)}
+        />
+      </View>
+      <View>
         <XStack width={300} alignItems="center">
           <Checkbox
             size="$4"
@@ -92,9 +111,10 @@ export default function SignUp() {
       <View>
         <Text color="black">
           {" "}
-          Already have an account? <Link href="/login"> Sign In </Link>
+          Already have an account? <Link href="/"> Sign In </Link>
         </Text>
       </View>
     </View>
+    </TamaguiProvider>
   );
 }

@@ -61,6 +61,16 @@ export class UserAuthentication {
       Alert.alert("Please check your inbox for email verification!");
   };
 
+  public static confirmPassword = (password: string, confirmpassword: string) => {
+    if(password == confirmpassword){
+      return true;
+    }else{
+      return false;
+
+      
+    }
+  }
+
   // const signOut = async () => {
   //   setUser(undefined);
   //   setSession(undefined);
