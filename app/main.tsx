@@ -8,14 +8,30 @@ import Exercises from "./exercises";
 import Dictionary from "./dictionary";
 import Account from "./account";
 import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from "react";
+import { UserAuthentication } from "../src/services/UserAuthentication";
 
 export default function Main({
   session,
   contribMode,
+  setContrib,
 }: {
   session: Session;
   contribMode: boolean;
+  setContrib: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  // DO NOT DELETE: FOR TESTING AND INITIALIZATION
+  useEffect(() => {
+    async () => {
+      const isContrib: boolean = await UserAuthentication.getUserType(
+        session.user.id
+      );
+      setContrib(isContrib);
+      console.log(isContrib);
+    };
+    console.log("MAIN page loaded.");
+  }, []);
+
   return (
     <>
       <StatusBar translucent hidden style="auto" />

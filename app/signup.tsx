@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -28,6 +28,11 @@ export default function SignUp() {
   const [userID, setUserID] = useState("");
   const [user, setUser] = useState<User>();
   const [session, setSession] = useState<Session>();
+
+  // DO NOT DELETE: FOR TESTING AND INITIALIZATION
+  useEffect(() => {
+    console.log("SIGNUP page loaded.");
+  }, []);
 
   const signup = async () => {
     setLoading(true);

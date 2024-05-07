@@ -32,7 +32,11 @@ export default function Page() {
     <TamaguiProvider config={config}>
       <Theme name={colorScheme === "dark" ? "dark" : "light"}>
         {session && session.user ? (
-          <Main session={session} contribMode={isContributor} />
+          <Main
+            session={session}
+            contribMode={isContributor}
+            setContrib={setIsContributor}
+          />
         ) : (
           <Login setContrib={setIsContributor} />
         )}

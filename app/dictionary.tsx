@@ -43,6 +43,11 @@ export default function Dictionary({
   const [selected, setSelected] = useState(-1);
   const [position, setPosition] = useState(0);
 
+  // DO NOT DELETE: FOR TESTING AND INITIALIZATION
+  useEffect(() => {
+    console.log("DICTIONARY page loaded.");
+  }, []);
+
   async function search(text: string) {
     try {
       console.log(text);
