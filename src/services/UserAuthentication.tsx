@@ -58,15 +58,10 @@ export class UserAuthentication {
       Alert.alert("Please check your inbox for email verification!");
   };
 
-  public static confirmPassword = (password: string, confirmpassword: string) => {
-    if(password == confirmpassword){
-      return true;
-    }else{
-      return false;
-
-      
-    }
-  }
+  public static checkPassword = ( password: string, confirmPassword: string
+  ): boolean => {
+    return password === confirmPassword;
+  };
 
   // const signOut = async () => {
   //   setUser(undefined);

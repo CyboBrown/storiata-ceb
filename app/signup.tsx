@@ -13,7 +13,7 @@ import {
   XStack,
   View,
 } from "tamagui";
-import { UserAuthentication } from "../src/services/UserAuthentication";
+import { UserAuthentication} from "../src/services/UserAuthentication";
 import { Check } from "@tamagui/lucide-icons";
 import config from "../tamagui.config";
 import { Link, router } from "expo-router";
@@ -23,7 +23,7 @@ import { Session, User } from "@supabase/supabase-js";
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmpassword, setConfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isContributor, setIsContributor] = useState(false);
   const [userID, setUserID] = useState("");
@@ -37,6 +37,8 @@ export default function SignUp() {
 
   const signup = async () => {
     setLoading(true);
+    const result = UserAuthentication.checkPassword(password, confirmPassword)
+    result ? "" : alert("Password not correct");
     const data: any = await UserAuthentication.signUpWithEmail(email, password);
     if (data?.user?.id && isContributor) {
       UserAuthentication.requestContributor(data.user.id);
@@ -44,10 +46,6 @@ export default function SignUp() {
     setLoading(false);
     router.push("/login");
   };
-
-  const confirmPass = () => {
-
-  }
 
   const handleContributorChange = () => {
     setIsContributor(!isContributor);
@@ -88,9 +86,9 @@ export default function SignUp() {
         </SizableText>
         <Input
           size="$4"
-          placeholder="Password"
+          placeholder="ConfirmPassword"
           secureTextEntry
-          value={password}
+          value={confirmPassword}
           onChangeText={(text) => setConfirmPassword(text)}
         />
       </View>
@@ -123,3 +121,7 @@ export default function SignUp() {
     </TamaguiProvider>
   );
 }
+function verifyPassword(password: string, confirmpassword: string) {
+  throw new Error("Function not implemented.");
+}
+
