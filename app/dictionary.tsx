@@ -129,6 +129,7 @@ export default function Dictionary({
                     )
                     .slice(0, -2)}
                   index={index}
+                  key={index}
                   setSelected={setSelected}
                   setOpen={setOpen}
                 />

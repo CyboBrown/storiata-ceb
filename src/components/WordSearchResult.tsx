@@ -17,6 +17,7 @@ export const WordSearchResult = ({
   return (
     <YGroup.Item key={index}>
       <ListItem
+        key={index}
         hoverTheme
         pressTheme
         title={title}
