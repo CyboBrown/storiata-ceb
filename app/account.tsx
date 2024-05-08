@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../src/utils/supabase";
 import { StyleSheet, View, Alert } from "react-native";
-import { Button, Input } from "react-native-elements";
+import { Button, Input, SizableText, Text } from "tamagui";
 import { Session } from "@supabase/supabase-js";
 import Avatar from "./avatar";
 
@@ -34,10 +34,14 @@ export default function Account({ session }: { session: Session }) {
         throw error;
       }
 
-      if (data) {
-        setUsername(data.username);
-        setWebsite(data.website);
+      if (data?.avatar_url) {
         setAvatarUrl(data.avatar_url);
+      }
+      if (data?.username) {
+        setUsername(data.username);
+      }
+      if (data?.website) {
+        setWebsite(data.website);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -96,18 +100,14 @@ export default function Account({ session }: { session: Session }) {
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Input label="Email" value={session?.user?.email} disabled />
+        <Input placeholder="Email" value={session?.user?.email} disabled />
+      </View>
+      <View style={styles.verticallySpaced}>
+        <Input placeholder="Username" value={username || ""} onChangeText={(text) => setUsername(text)}/>
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          label="Username"
-          value={username || ""}
-          onChangeText={(text) => setUsername(text)}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Input
-          label="Website"
+          placeholder="Website"
           value={website || ""}
           onChangeText={(text) => setWebsite(text)}
         />
@@ -115,16 +115,14 @@ export default function Account({ session }: { session: Session }) {
 
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button
-          title={loading ? "Loading ..." : "Update"}
           onPress={() =>
             updateProfile({ username, website, avatar_url: avatarUrl })
           }
-          disabled={loading}
-        />
+          disabled={loading}> Update </Button>
       </View>
 
       <View style={styles.verticallySpaced}>
-        <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
+        <Button onPress={() => supabase.auth.signOut()}> Sign Out</Button>
       </View>
     </View>
   );
