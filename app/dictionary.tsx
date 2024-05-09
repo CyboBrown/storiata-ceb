@@ -18,6 +18,7 @@ import { Alert } from "react-native";
 import { Word } from "../src/models/Word";
 import AddWordDialog from "../src/components/AddWordDialog";
 import { WordSearchResult } from "../src/components/WordSearchResult";
+import { DictionaryService } from "../src/services/DictionaryService";
 
 export default function Dictionary({
   session,
@@ -43,15 +44,7 @@ export default function Dictionary({
       console.log(text);
       setLoading(true);
       setInput(text);
-      const { data, error, status } = await supabase
-        .from("words")
-        .select(`*, translations(word)`)
-        .ilike("normal_form", "%" + text + "%")
-        .order("normal_form");
-      if (error && status !== 406) {
-        console.log("error");
-        throw error;
-      }
+      let data = await DictionaryService.searchWord(text);
       if (data) {
         setResults(data);
         console.log(results);
