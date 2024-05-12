@@ -41,7 +41,7 @@ export default function SignUp() {
       UserAuthentication.requestContributor(data.user.id);
     }
     setLoading(false);
-    router.push("/login");
+    router.push("/");
   };
 
   const handleContributorChange = () => {

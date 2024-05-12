@@ -4,6 +4,7 @@ import { Alert } from "react-native";
 import { Button, Input, SizableText, Text, View} from "tamagui";
 import { Session } from "@supabase/supabase-js";
 import Avatar from "./avatar";
+import { router } from "expo-router";
 
 export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
@@ -99,46 +100,42 @@ export default function Account({ session }: { session: Session }) {
           }}/>
       </View>
       <View>
-        <Text color={"$background"} fontFamily={"$heading"} fontSize={20}> User Details</Text>
+        <Text color={"$black"} fontFamily={"$heading"} fontSize={20} marginTop="$2"> User Details</Text>
       </View>
-      <View>
+      <View marginTop="$3">
         <Input
           placeholder="Email"
           value={session?.user?.email}
           disabled/>
       </View>
-      <View>
+      <View marginTop="$3">
         <Input
           placeholder="Username"
           value={username || ""}
           onChangeText={(text) => setUsername(text)}/>
       </View>
-      <View>
+      <View marginTop="$3">
         <Input
           placeholder="Website"
           value={website || ""}
           onChangeText={(text) => setWebsite(text)}/>
       </View>
-      <View
-        marginTop="$5"
-        space="$4"
-      >
+      <View marginTop="$5">
         <Button
           onPress={() =>
-            updateProfile({ username, website, avatar_url: avatarUrl })
-          }
-          disabled={loading}
-        >
+            updateProfile({ username, website, avatar_url: avatarUrl }) }
+          disabled={loading}>
           Update
         </Button>
       </View>
-      <View
-        space="$4"
-      >
-        <Button
-          onPress={() => supabase.auth.signOut()}
-        >
+      <View marginTop="$3">
+        <Button onPress={() => supabase.auth.signOut()}>
           Sign Out
+        </Button>
+      </View>
+      <View marginTop="$3">
+        <Button onPress={() => router.push("/settings")}>
+          App Settings
         </Button>
       </View>
     </View>
