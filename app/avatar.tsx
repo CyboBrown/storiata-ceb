@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../src/utils/supabase";
-import { StyleSheet, View, Alert, Image} from "react-native";
-import { Button } from "tamagui"
+import { Alert} from "react-native";
+import { Button, Image, View } from "tamagui"
 import * as ImagePicker from "expo-image-picker";
 
 interface Props {
@@ -94,41 +94,36 @@ export default function Avatar({ url, size = 150, onUpload }: Props) {
   }
 
   return (
-    <View>
-      {avatarUrl ? (
-        <Image
-          source={{ uri: avatarUrl }}
-          accessibilityLabel="Avatar"
-          style={[avatarSize, styles.avatar, styles.image]}
-        />
-      ) : (
-        <View style={[avatarSize, styles.avatar, styles.noImage]} />
-      )}
-      <View>
+    <View flex={1} alignItems="center" justifyContent="center">
+      <View 
+        width={size}
+        height={size}
+        borderRadius={5}
+        overflow="hidden"
+        maxWidth="100%"
+        backgroundColor={avatarUrl ? undefined : "#333"}
+        borderWidth={avatarUrl ? undefined : 1}
+        borderStyle={avatarUrl ? undefined : "solid"}
+        borderColor={avatarUrl ? undefined : "rgb(200, 200, 200)"}
+      >
+        {avatarUrl && (
+          <Image
+            source={{ uri: avatarUrl }}
+            accessibilityLabel="Avatar"
+            width="100%"
+            height="100%"/>
+        )}
+      </View>
+      <View marginTop="$4">
         <Button
           onPress={uploadAvatar}
           disabled={uploading}
-          color='white'> {uploading ? "Uploading ..." : "Upload"} </Button>
+          width={200}
+        >
+          {uploading ? "Uploading ..." : "Upload"}
+        </Button>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  avatar: {
-    borderRadius: 5,
-    overflow: "hidden",
-    maxWidth: "100%",
-  },
-  image: {
-    objectFit: "cover",
-    paddingTop: 0,
-  },
-  noImage: {
-    backgroundColor: "#333",
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "rgb(200, 200, 200)",
-    borderRadius: 5,
-  },
-});
