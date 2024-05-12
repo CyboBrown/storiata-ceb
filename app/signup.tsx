@@ -53,8 +53,8 @@ export default function SignUp() {
 
   return (
     <TamaguiProvider config={config}>
-      <View borderTopWidth="$-10">
-      <View justifyContent="center" alignContent="center" gap={2}>
+      <View flex={1} padding="$4" marginTop="$10">
+      <View justifyContent="center" alignContent="center">
         <SizableText fontFamily="$body" color="black">
           {" "}
           Email{" "}
@@ -65,59 +65,59 @@ export default function SignUp() {
           value={email}
           onChangeText={(text) => setEmail(text)}
         />
-      </View>
-      <View>
-        <SizableText fontFamily="$body" color="black">
-          {" "}
-          Password{" "}
-        </SizableText>
-        <Input
-          size="$4"
-          placeholder="Password"
-          secureTextEntry
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-      </View>
-      <View>
-        <SizableText fontFamily="$body" color="black">
-          {" "}
-          Confirm Password{" "}
-        </SizableText>
-        <Input
-          size="$4"
-          placeholder="ConfirmPassword"
-          secureTextEntry
-          value={confirmPassword}
-          onChangeText={(text) => setConfirmPassword(text)}
-        />
-      </View>
-      <View>
-        <XStack width={300} alignItems="center">
-          <Checkbox
+        </View>
+        <View>
+          <SizableText fontFamily="$body" color="black">
+            {" "}
+            Password{" "}
+          </SizableText>
+          <Input
             size="$4"
-            checked={isContributor}
-            onPress={() => handleContributorChange()}
-          >
-            <Checkbox.Indicator>
-              <Check />
-            </Checkbox.Indicator>
-          </Checkbox>
-          <Text color="black">Register as a Contributor?</Text>
-        </XStack>
+            placeholder="Password"
+            secureTextEntry
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+          />
+        </View>
+        <View>
+          <SizableText fontFamily="$body" color="black">
+            {" "}
+            Confirm Password{" "}
+          </SizableText>
+          <Input
+            size="$4"
+            placeholder="ConfirmPassword"
+            secureTextEntry
+            value={confirmPassword}
+            onChangeText={(text) => setConfirmPassword(text)}
+          />
+        </View>
+        <View>
+          <XStack width={300} alignItems="center">
+            <Checkbox
+              size="$4"
+              checked={isContributor}
+              onPress={() => handleContributorChange()}
+            >
+              <Checkbox.Indicator>
+                <Check />
+              </Checkbox.Indicator>
+            </Checkbox>
+            <Text color="black">Register as a Contributor?</Text>
+          </XStack>
+        </View>
+        <View>
+          <Button size="$4" disabled={loading} onPress={signup}>
+            Sign up
+          </Button>
+        </View>
+        <View>
+          <Text color="black">
+            {" "}
+            Already have an account? <Link href="/"> Sign In </Link>
+          </Text>
+        </View>
       </View>
-      <View>
-        <Button size="$4" disabled={loading} onPress={signup}>
-          Sign up
-        </Button>
-      </View>
-      <View>
-        <Text color="black">
-          {" "}
-          Already have an account? <Link href="/"> Sign In </Link>
-        </Text>
-      </View>
-    </View>
     </TamaguiProvider>
   );
 }
