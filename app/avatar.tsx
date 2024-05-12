@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../src/utils/supabase";
-import { StyleSheet, View, Alert, Image, Button } from "react-native";
+import { StyleSheet, View, Alert, Image} from "react-native";
+import { Button } from "tamagui"
 import * as ImagePicker from "expo-image-picker";
 
 interface Props {
@@ -105,10 +106,9 @@ export default function Avatar({ url, size = 150, onUpload }: Props) {
       )}
       <View>
         <Button
-          title={uploading ? "Uploading ..." : "Upload"}
           onPress={uploadAvatar}
           disabled={uploading}
-        />
+          color='white'> {uploading ? "Uploading ..." : "Upload"} </Button>
       </View>
     </View>
   );

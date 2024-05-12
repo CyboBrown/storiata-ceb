@@ -107,9 +107,7 @@ export default function Account({ session }: { session: Session }) {
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          placeholder="Website"
-          value={website || ""}
-          onChangeText={(text) => setWebsite(text)}
+          placeholder="Website" value={website || ""} onChangeText={(text) => setWebsite(text)}
         />
       </View>
 

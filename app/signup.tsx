@@ -53,7 +53,7 @@ export default function SignUp() {
 
   return (
     <TamaguiProvider config={config}>
-      <View>
+      <View borderTopWidth="$-10">
       <View justifyContent="center" alignContent="center" gap={2}>
         <SizableText fontFamily="$body" color="black">
           {" "}
@@ -121,7 +121,5 @@ export default function SignUp() {
     </TamaguiProvider>
   );
 }
-function verifyPassword(password: string, confirmpassword: string) {
-  throw new Error("Function not implemented.");
-}
+
 
