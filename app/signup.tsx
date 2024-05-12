@@ -2,23 +2,20 @@ import React, { useEffect, useState } from "react";
 import {
   Button,
   Checkbox,
-  CheckboxProps,
   Input,
-  Label,
   SizableText,
-  SizeTokens,
   TamaguiProvider,
   Text,
-  Theme,
   XStack,
   View,
+  Image
 } from "tamagui";
 import { UserAuthentication} from "../src/services/UserAuthentication";
 import { Check } from "@tamagui/lucide-icons";
 import config from "../tamagui.config";
 import { Link, router } from "expo-router";
-import CheckBoxIcon from "react-native-elements/dist/checkbox/CheckBoxIcon";
 import { Session, User } from "@supabase/supabase-js";
+import logo from '../src/assets/logo.svg';
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -54,6 +51,9 @@ export default function SignUp() {
   return (
     <TamaguiProvider config={config}>
       <View flex={1} padding="$4" marginTop="$10">
+        <View justifyContent="center" alignItems="center">
+          <Image source={logo} width="$15" height="$15" />
+        </View>
       <View justifyContent="center" alignContent="center">
         <SizableText fontFamily="$body" color="black">
           {" "}
@@ -66,7 +66,7 @@ export default function SignUp() {
           onChangeText={(text) => setEmail(text)}
         />
         </View>
-        <View>
+        <View marginTop={10}>
           <SizableText fontFamily="$body" color="black">
             {" "}
             Password{" "}
@@ -79,7 +79,7 @@ export default function SignUp() {
             onChangeText={(text) => setPassword(text)}
           />
         </View>
-        <View>
+        <View marginTop={10}>
           <SizableText fontFamily="$body" color="black">
             {" "}
             Confirm Password{" "}
@@ -92,30 +92,36 @@ export default function SignUp() {
             onChangeText={(text) => setConfirmPassword(text)}
           />
         </View>
-        <View>
-          <XStack width={300} alignItems="center">
+        <View marginTop="$5"
+          flexDirection="row"
+          justifyContent="center"
+          alignItems="center">
+          <XStack width={300} alignItems="center" justifyContent="center" gap={20}>
             <Checkbox
-              size="$4"
+              size="$5"
               checked={isContributor}
-              onPress={() => handleContributorChange()}
-            >
+              onPress={() => handleContributorChange()}>
               <Checkbox.Indicator>
                 <Check />
               </Checkbox.Indicator>
             </Checkbox>
-            <Text color="black">Register as a Contributor?</Text>
+            <Text color="black" fontFamily={"$body"}>Register as a Contributor?</Text>
           </XStack>
         </View>
-        <View>
+        <View marginTop={15}>
           <Button size="$4" disabled={loading} onPress={signup}>
             Sign up
           </Button>
         </View>
-        <View>
-          <Text color="black">
-            {" "}
-            Already have an account? <Link href="/"> Sign In </Link>
+        <View marginTop={20} flexDirection="row" alignItems="center" justifyContent="center">
+          <Text color="$background" fontFamily={"$body"}>
+            Already have an account? {" "}
           </Text>
+          <Link href="/">
+            <Text color="$background" fontFamily={"$body"} fontSize={16} fontWeight="bold">
+              Sign In
+            </Text>
+          </Link>
         </View>
       </View>
     </TamaguiProvider>

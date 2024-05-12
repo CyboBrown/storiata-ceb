@@ -4,7 +4,7 @@ import { Button, Image, Input, SizableText, TamaguiProvider, Text, View, XStack}
 import { UserAuthentication } from "../src/services/UserAuthentication";
 import config from "../tamagui.config";
 import { Session, User } from "@supabase/supabase-js";
-import logo from '../src/assets/logo.svg'
+import logo from '../src/assets/logo.svg';
 
 export default function Login({
   setContrib,
@@ -77,12 +77,12 @@ export default function Login({
         flexDirection="row"
         justifyContent="center"
         alignItems="center">
-        <Text color="$background" fontSize={16}>Don't have an account?  </Text>
-        <Text fontSize={16}>
-          <Link href="/signup" >
+        <Text color="$background" fontSize={16} fontFamily={"$body"}>Don't have an account? </Text>
+        <Link href="/signup" >
+          <Text fontSize={16} color={"$background"} fontFamily={"$body"} fontWeight={"bold"}>
             Sign Up
-          </Link>
-        </Text>
+          </Text>
+        </Link>
       </View>
     </View>
   );
