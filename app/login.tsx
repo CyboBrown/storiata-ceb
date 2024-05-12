@@ -46,9 +46,9 @@ export default function Login({
       <View justifyContent="center" alignItems="center">
         <Text color="$background" fontSize={30} fontFamily={"$heading"}> Welcome to StoriaTa</Text>
       </View>
-      <View gap="$4" marginTop="$5">
+      <View marginTop="$5" gap={2}>
         <Text fontFamily="$body" color="$background">
-          Email
+          {" "}Email
         </Text>
         <Input
           size="$4"
@@ -56,9 +56,9 @@ export default function Login({
           value={email}
           onChangeText={(text) => setEmail(text)}/>
       </View>
-      <View gap="$4" marginTop="$3">
+      <View marginTop="$3" gap={2}>
         <Text fontFamily="$body" color="$background">
-          Password
+          {" "}Password
         </Text>
         <Input
           size="$4"

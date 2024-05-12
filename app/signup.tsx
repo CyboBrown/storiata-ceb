@@ -54,11 +54,13 @@ export default function SignUp() {
         <View justifyContent="center" alignItems="center">
           <Image source={logo} width="$15" height="$15" />
         </View>
-      <View justifyContent="center" alignContent="center">
-        <SizableText fontFamily="$body" color="black">
-          {" "}
-          Email{" "}
-        </SizableText>
+        <View justifyContent="center" alignItems="center">
+          <Text color={"$background"} fontFamily={"$heading"} fontSize={30}> Create your Account </Text>
+        </View>
+      <View justifyContent="center" alignContent="center" gap={2} marginTop={15}>
+        <Text fontFamily="$body" color="$background">
+          {" "}Email
+        </Text>
         <Input
           size="$4"
           placeholder="email@gmail.com"
@@ -66,10 +68,9 @@ export default function SignUp() {
           onChangeText={(text) => setEmail(text)}
         />
         </View>
-        <View marginTop={10}>
-          <SizableText fontFamily="$body" color="black">
-            {" "}
-            Password{" "}
+        <View marginTop={10} gap={2}>
+          <SizableText fontFamily="$body" color="$background">
+            {" "}Password
           </SizableText>
           <Input
             size="$4"
@@ -79,10 +80,10 @@ export default function SignUp() {
             onChangeText={(text) => setPassword(text)}
           />
         </View>
-        <View marginTop={10}>
-          <SizableText fontFamily="$body" color="black">
+        <View marginTop={10} gap={2}>
+          <SizableText fontFamily="$body" color="$background">
             {" "}
-            Confirm Password{" "}
+            Confirm Password
           </SizableText>
           <Input
             size="$4"
@@ -94,6 +95,7 @@ export default function SignUp() {
         </View>
         <View marginTop="$5"
           flexDirection="row"
+          gap={2}
           justifyContent="center"
           alignItems="center">
           <XStack width={300} alignItems="center" justifyContent="center" gap={20}>
