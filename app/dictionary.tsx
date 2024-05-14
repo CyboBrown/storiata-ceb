@@ -11,6 +11,8 @@ import {
   Sheet,
   SizableText,
   ZStack,
+  Text,
+  Spinner,
 } from "tamagui";
 import React, { useState, useEffect } from "react";
 import { supabase } from "../src/utils/supabase";
@@ -19,6 +21,8 @@ import { Word } from "../src/models/Word";
 import AddWordDialog from "../src/components/AddWordDialog";
 import { WordSearchResult } from "../src/components/WordSearchResult";
 import { DictionaryService } from "../src/services/DictionaryService";
+import { Link } from "expo-router";
+import EditWordDialog from "../src/components/EditWordDialog";
 
 export default function Dictionary({
   session,
@@ -83,7 +87,10 @@ export default function Dictionary({
             />
             <Button size="$4">Search</Button>
           </XStack>
-          {results.length == 0 &&
+          {loading ? (
+            <Spinner size="large" color="$blue9" m="$2" />
+          ) : (
+            results.length == 0 &&
             (input === "" ? (
               <SizableText
                 size="$4"
@@ -104,7 +111,8 @@ export default function Dictionary({
               >
                 No results found for "{input}".
               </Paragraph>
-            ))}
+            ))
+          )}
           <ScrollView>
             <YGroup
               alignSelf="center"
@@ -191,11 +199,53 @@ export default function Dictionary({
                   ))
                 : null}
             </XStack>
-            {/* <SizableText size="$2" fontWeight="800">
+
+            {contribMode && (
+              <XStack gap="$4">
+                <Link
+                  href={{
+                    pathname: "/add_translation/[id]",
+                    params: {
+                      id: results[selected] ? results[selected].id : "",
+                    },
+                  }}
+                >
+                  <Text
+                    fontSize="$2"
+                    color={"$color10"}
+                    fontFamily={"$body"}
+                    fontWeight={"bold"}
+                  >
+                    + Edit Translations
+                  </Text>
+                </Link>
+                <EditWordDialog
+                  selected_word={
+                    results[selected]
+                      ? results[selected]
+                      : {
+                          added_by: null,
+                          created_at: "",
+                          description: null,
+                          id: -1,
+                          normal_form: "",
+                          part_of_speech: "",
+                          phonetic_form: "",
+                          representation: null,
+                          suffix_form: null,
+                          translations: null,
+                        }
+                  }
+                />
+              </XStack>
+            )}
+            <SizableText size="$2" fontWeight="800">
               {results[selected]
-                ? results[selected].suffix_form + "an"
+                ? results[selected].suffix_form
+                  ? results[selected].suffix_form + "an"
+                  : results[selected].normal_form + "an"
                 : "none"}
-            </SizableText> */}
+            </SizableText>
           </YStack>
         </Sheet.Frame>
       </Sheet>

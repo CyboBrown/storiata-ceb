@@ -5,3 +5,11 @@ export enum PartsOfSpeech {
   "number" = "num",
   "verb" = "v",
 }
+
+export enum RevPartsOfSpeech {
+  " " = "uncategorized",
+  "adj" = "adjective",
+  "n" = "noun",
+  "num" = "number",
+  "v" = "verb",
+}

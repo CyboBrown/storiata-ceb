@@ -11,15 +11,21 @@ import {
   Paragraph,
   XStack,
   Unspaced,
+  Text,
 } from "tamagui";
 
 import { SelectItem } from "./SelectItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Word } from "../models/Word";
 import { DictionaryService } from "../services/DictionaryService";
-import { PartsOfSpeech } from "../utils/enums";
+import { PartsOfSpeech, RevPartsOfSpeech } from "../utils/enums";
+import { Pressable } from "react-native";
 
-export default function AddWordDialog() {
+export default function EditWordDialog({
+  selected_word,
+}: {
+  selected_word: Word;
+}) {
   const parts_of_speech = [
     { name: "uncategorized" },
     { name: "adjective" },
@@ -28,48 +34,45 @@ export default function AddWordDialog() {
     { name: "verb" },
   ];
 
-  const [word, setWord] = useState<Word>({
-    added_by: null,
-    created_at: "",
-    description: null,
-    id: -1,
-    normal_form: "",
-    part_of_speech: "",
-    phonetic_form: "",
-    representation: null,
-    suffix_form: null,
-    translations: null,
-  });
+  const [word, setWord] = useState<Word>(selected_word);
   const [loading, setLoading] = useState(false);
+  const [clicked, setClicked] = useState(false);
+
+  useEffect(() => {
+    // setWord(selected_word);
+    console.log("Initial Selected:");
+    console.log(selected_word);
+    setWord(selected_word);
+    console.log("Initial Set:");
+    console.log(word);
+  }, [clicked]);
 
   async function save() {
     console.log(word);
     setLoading(true);
     if (word) {
-      let data = await DictionaryService.createWord(word);
+      let data = await DictionaryService.editWord(word);
       if (data) {
         console.log(data);
       }
     }
     setLoading(false);
-    setWord({
-      added_by: null,
-      created_at: "",
-      description: null,
-      id: -1,
-      normal_form: "",
-      part_of_speech: "",
-      phonetic_form: "",
-      representation: null,
-      suffix_form: null,
-      translations: null,
-    });
+    setClicked(!clicked);
   }
 
   return (
     <Dialog>
       <Dialog.Trigger asChild>
-        <Button icon={Plus} size="$6" circular></Button>
+        <Pressable onPress={() => setClicked(!clicked)}>
+          <Text
+            fontSize="$2"
+            color={"$color10"}
+            fontFamily={"$body"}
+            fontWeight={"bold"}
+          >
+            + Edit Word
+          </Text>
+        </Pressable>
       </Dialog.Trigger>
       <Adapt when="sm" platform="touch">
         <Sheet animation="medium" zIndex={200000} modal dismissOnSnapToBottom>
@@ -110,9 +113,9 @@ export default function AddWordDialog() {
           exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
           gap="$4"
         >
-          <Dialog.Title>Add New Word</Dialog.Title>
+          <Dialog.Title>Edit Word</Dialog.Title>
           <Dialog.Description>
-            Create a new word here. Click save when you're done.
+            Edit word here. Click save when you're done.
           </Dialog.Description>
           <Fieldset gap="$1" horizontal>
             <Label width={120} jc="flex-end" htmlFor="part_of_speech_input">
@@ -123,7 +126,11 @@ export default function AddWordDialog() {
             <SelectItem
               label={"Part of Speech"}
               items={parts_of_speech}
-              value={word.part_of_speech}
+              value={
+                RevPartsOfSpeech[
+                  `${word.part_of_speech}` as keyof typeof RevPartsOfSpeech
+                ]
+              }
               onValueChange={(text) => {
                 let updated_word = { ...word };
                 updated_word.part_of_speech =
