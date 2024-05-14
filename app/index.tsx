@@ -9,6 +9,7 @@ import { TamaguiProvider, Theme } from "tamagui";
 import { useFonts } from "expo-font";
 import config from "../tamagui.config";
 import { UserAuthentication } from "../src/services/UserAuthentication";
+import { ToastProvider, ToastViewport } from "@tamagui/toast";
 
 export default function Page() {
   const [session, setSession] = useState<Session | null>(null);

@@ -12,14 +12,48 @@ import {
   XStack,
   Unspaced,
 } from "tamagui";
+import { Toast, useToastController, useToastState } from "@tamagui/toast";
+
 import { SelectItem } from "./SelectItem";
+import { useState } from "react";
+import { Word } from "../models/Word";
+import { DictionaryService } from "../services/DictionaryService";
+import { PartsOfSpeech } from "../utils/enums";
 
 export default function AddWordDialog() {
   const parts_of_speech = [
+    { name: "uncategorized" },
     { name: "adjective" },
     { name: "noun" },
+    { name: "number" },
     { name: "verb" },
   ];
+
+  const [word, setWord] = useState<Word>({
+    added_by: null,
+    created_at: "",
+    description: null,
+    id: -1,
+    normal_form: "",
+    part_of_speech: "",
+    phonetic_form: "",
+    representation: null,
+    suffix_form: null,
+    translations: null,
+  });
+  const [loading, setLoading] = useState(false);
+
+  async function save() {
+    console.log(word);
+    setLoading(true);
+    if (word) {
+      let data = await DictionaryService.createWord(word);
+      if (data) {
+        console.log(data);
+      }
+    }
+    setLoading(false);
+  }
 
   return (
     <Dialog>
@@ -69,27 +103,100 @@ export default function AddWordDialog() {
           <Dialog.Description>
             Create a new word here. Click save when you're done.
           </Dialog.Description>
-          <Fieldset gap="$4" horizontal>
-            <Label width={160} jc="flex-end" htmlFor="normal_form_input">
-              Cebuano word
-            </Label>
-            <Input flex={1} id="normal_form_input" defaultValue="pulong" />
-          </Fieldset>
-          <Fieldset gap="$4" horizontal>
-            <Label width={160} jc="flex-end" htmlFor="part_of_speech_input">
+          <Fieldset gap="$1" horizontal>
+            <Label width={120} jc="flex-end" htmlFor="part_of_speech_input">
               <TooltipSimple label="Choose type..." placement="bottom-start">
                 Part of Speech
               </TooltipSimple>
             </Label>
-            <SelectItem label={"Part of Speech"} items={parts_of_speech} />
+            <SelectItem
+              label={"Part of Speech"}
+              items={parts_of_speech}
+              value={word.part_of_speech}
+              onValueChange={(text) => {
+                let updated_word = { ...word };
+                updated_word.part_of_speech =
+                  PartsOfSpeech[`${text}` as keyof typeof PartsOfSpeech];
+                setWord(updated_word);
+                console.log(word.part_of_speech);
+              }}
+            />
+          </Fieldset>
+          <Fieldset gap="$1" horizontal>
+            <Label width={120} jc="flex-end" htmlFor="normal_form_input">
+              Cebuano Word
+            </Label>
+            <Input
+              width="100%"
+              id="normal_form_input"
+              defaultValue=""
+              placeholder="pulong"
+              value={word.normal_form}
+              onChangeText={(text) => {
+                let updated_word = { ...word };
+                updated_word.normal_form = text;
+                setWord(updated_word);
+              }}
+            />
+          </Fieldset>
+          <Fieldset gap="$1" horizontal>
+            <Label width={120} jc="flex-end" htmlFor="phonetic_form_input">
+              Phonetic Form
+            </Label>
+            <Input
+              width="100%"
+              id="phonetic_form_input"
+              defaultValue=""
+              placeholder="púluŋ"
+              value={word.phonetic_form}
+              onChangeText={(text) => {
+                let updated_word = { ...word };
+                updated_word.phonetic_form = text;
+                setWord(updated_word);
+              }}
+            />
+          </Fieldset>
+          <Fieldset gap="$1" horizontal>
+            <Label width={120} jc="flex-end" htmlFor="suffix_form_input">
+              Suffix Form
+            </Label>
+            <Input
+              width="100%"
+              id="suffix_form_input"
+              defaultValue=""
+              placeholder={word.normal_form}
+              value={word.suffix_form}
+              onChangeText={(text) => {
+                let updated_word = { ...word };
+                updated_word.suffix_form = text !== "" ? text : null;
+                setWord(updated_word);
+              }}
+            />
+          </Fieldset>
+          <Fieldset gap="$1" horizontal>
+            <Label width={120} jc="flex-end" htmlFor="representation_input">
+              Representation
+            </Label>
+            <Input
+              width="100%"
+              id="representation_input"
+              defaultValue=""
+              placeholder="*insert emoji here*"
+              value={word.representation}
+              onChangeText={(text) => {
+                let updated_word = { ...word };
+                updated_word.representation = text !== "" ? text : null;
+                setWord(updated_word);
+              }}
+            />
           </Fieldset>
 
           <XStack alignSelf="flex-end" gap="$4">
             {/* <AddWordDialog /> */}
 
             <Dialog.Close displayWhenAdapted asChild>
-              <Button theme="active" aria-label="Close">
-                Save changes
+              <Button theme="active" aria-label="Close" onPress={save}>
+                Save
               </Button>
             </Dialog.Close>
           </XStack>

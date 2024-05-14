@@ -26,8 +26,8 @@ export function SelectItem(props: SelectItemProps) {
       disablePreventBodyScroll
       {...props}
     >
-      <Select.Trigger width={220} iconAfter={ChevronDown}>
-        <Select.Value placeholder="Something" />
+      <Select.Trigger width="100%" iconAfter={ChevronDown}>
+        <Select.Value placeholder="Choose..." />
       </Select.Trigger>
 
       <Adapt when="sm" platform="touch">

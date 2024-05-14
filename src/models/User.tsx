@@ -1,4 +1,4 @@
-export interface User extends Database {
+export interface User {
   username: string;
   password: string;
 }
