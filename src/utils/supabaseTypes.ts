@@ -167,6 +167,7 @@ export type Database = {
           description: string | null
           id: number
           normal_form: string
+          part_of_speech: string
           phonetic_form: string
           representation: string | null
           suffix_form: string | null
@@ -177,6 +178,7 @@ export type Database = {
           description?: string | null
           id?: number
           normal_form: string
+          part_of_speech?: string
           phonetic_form: string
           representation?: string | null
           suffix_form?: string | null
@@ -187,6 +189,7 @@ export type Database = {
           description?: string | null
           id?: number
           normal_form?: string
+          part_of_speech?: string
           phonetic_form?: string
           representation?: string | null
           suffix_form?: string | null
@@ -209,7 +212,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      part_of_speech: "*" | "n" | "v" | "adj" | "num"
     }
     CompositeTypes: {
       [_ in never]: never
