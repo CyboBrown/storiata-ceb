@@ -23,6 +23,7 @@ import { WordSearchResult } from "../src/components/WordSearchResult";
 import { DictionaryService } from "../src/services/DictionaryService";
 import { Link } from "expo-router";
 import EditWordDialog from "../src/components/EditWordDialog";
+import EditTranslationDialog from "../src/components/EditTranslationDialog";
 
 export default function Dictionary({
   session,
@@ -202,7 +203,7 @@ export default function Dictionary({
 
             {contribMode && (
               <XStack gap="$4">
-                <Link
+                {/* <Link
                   href={{
                     pathname: "/add_translation/[id]",
                     params: {
@@ -218,7 +219,25 @@ export default function Dictionary({
                   >
                     + Edit Translations
                   </Text>
-                </Link>
+                </Link> */}
+                <EditTranslationDialog
+                  selected_word={
+                    results[selected]
+                      ? results[selected]
+                      : {
+                          added_by: null,
+                          created_at: "",
+                          description: null,
+                          id: -1,
+                          normal_form: "",
+                          part_of_speech: "",
+                          phonetic_form: "",
+                          representation: null,
+                          suffix_form: null,
+                          translations: null,
+                        }
+                  }
+                />
                 <EditWordDialog
                   selected_word={
                     results[selected]
