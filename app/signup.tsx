@@ -9,9 +9,11 @@ import {
   XStack,
   View,
   Image,
-  ScrollView
+  ScrollView,
+  Theme
 } from "tamagui";
 import { UserAuthentication} from "../src/services/UserAuthentication";
+import { useColorScheme } from "react-native";
 import { Check } from "@tamagui/lucide-icons";
 import config from "../tamagui.config";
 import { Link, router } from "expo-router";
@@ -33,6 +35,8 @@ export default function SignUp() {
     console.log("SIGNUP page loaded.");
   }, []);
 
+  const colorScheme = useColorScheme();
+
   const signup = async () => {
     setLoading(true);
     const result = UserAuthentication.checkPassword(password, confirmPassword)
@@ -51,16 +55,17 @@ export default function SignUp() {
 
   return (
     <TamaguiProvider config={config}>
+      <Theme name={colorScheme === "dark" ? "dark" : "light"}>
       <ScrollView>
       <View flex={1} padding="$4" marginTop="$10">
         <View justifyContent="center" alignItems="center">
           <Image source={logo} width="$15" height="$15" />
         </View>
         <View justifyContent="center" alignItems="center">
-          <Text color={"$background"} fontFamily={"$heading"} fontSize={30}> Create your Account </Text>
+          <Text color={"$black"} fontFamily={"$heading"} fontSize={30}> Create your Account </Text>
         </View>
       <View justifyContent="center" alignContent="center" gap={2} marginTop={15}>
-        <Text fontFamily="$body" color="$background">
+        <Text fontFamily="$body" color="$black">
           {" "}Email
         </Text>
         <Input
@@ -71,7 +76,7 @@ export default function SignUp() {
         />
         </View>
         <View marginTop={10} gap={2}>
-          <SizableText fontFamily="$body" color="$background">
+          <SizableText fontFamily="$body" color="$black">
             {" "}Password
           </SizableText>
           <Input
@@ -83,7 +88,7 @@ export default function SignUp() {
           />
         </View>
         <View marginTop={10} gap={2}>
-          <SizableText fontFamily="$body" color="$background">
+          <SizableText fontFamily="$body" color="$black">
             {" "}
             Confirm Password
           </SizableText>
@@ -118,17 +123,18 @@ export default function SignUp() {
           </Button>
         </View>
         <View marginTop={20} flexDirection="row" alignItems="center" justifyContent="center">
-          <Text color="$background" fontFamily={"$body"}>
+          <Text color="$black" fontFamily={"$body"}>
             Already have an account? {" "}
           </Text>
           <Link href="/">
-            <Text color="$background" fontFamily={"$body"} fontSize={16} fontWeight="bold">
+            <Text color="$black" fontFamily={"$body"} fontSize={16} fontWeight="bold">
               Sign In
             </Text>
           </Link>
         </View>
       </View>
       </ScrollView>
+      </Theme>
     </TamaguiProvider>
   );
 }
