@@ -18,7 +18,7 @@ import { Check } from "@tamagui/lucide-icons";
 import config from "../tamagui.config";
 import { Link, router } from "expo-router";
 import { Session, User } from "@supabase/supabase-js";
-import logo from '../src/assets/logo.svg';
+import logo from '../src/assets/StoriaTa-Logo.png';
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
