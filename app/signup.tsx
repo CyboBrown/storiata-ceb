@@ -8,7 +8,8 @@ import {
   Text,
   XStack,
   View,
-  Image
+  Image,
+  ScrollView
 } from "tamagui";
 import { UserAuthentication} from "../src/services/UserAuthentication";
 import { Check } from "@tamagui/lucide-icons";
@@ -50,6 +51,7 @@ export default function SignUp() {
 
   return (
     <TamaguiProvider config={config}>
+      <ScrollView>
       <View flex={1} padding="$4" marginTop="$10">
         <View justifyContent="center" alignItems="center">
           <Image source={logo} width="$15" height="$15" />
@@ -126,6 +128,7 @@ export default function SignUp() {
           </Link>
         </View>
       </View>
+      </ScrollView>
     </TamaguiProvider>
   );
 }

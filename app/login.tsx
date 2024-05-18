@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, Redirect, router } from "expo-router";
-import { Button, Image, Input, SizableText, TamaguiProvider, Text, View, XStack} from "tamagui";
+import { Button, Image, Input, ScrollView, SizableText, TamaguiProvider, Text, View, XStack} from "tamagui";
 import { UserAuthentication } from "../src/services/UserAuthentication";
 import config from "../tamagui.config";
 import { Session, User } from "@supabase/supabase-js";
-import logo from '../src/assets/logo.svg';
+import logo from '../src/assets/StoriaTa-Logo.png';
 
 export default function Login({
   setContrib,
@@ -39,7 +39,8 @@ export default function Login({
   };
 
   return (
-    <View flex={1} padding="$4" marginTop="$10" >
+    <ScrollView>
+      <View flex={1} padding="$4" marginTop="$10" >
       <View justifyContent="center" alignItems="center">
         <Image source={logo} width="$15" height="$15" />
       </View>
@@ -85,6 +86,7 @@ export default function Login({
         </Link>
       </View>
     </View>
+    </ScrollView>
   );
 }
 
