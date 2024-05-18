@@ -66,7 +66,6 @@ export default function EditTranslationDialog({
     try {
       console.log(text);
       setLoading(true);
-      setInput(text);
       let data = await DictionaryService.searchTranslation(text);
       if (data) {
         setResults(data);
@@ -163,9 +162,11 @@ export default function EditTranslationDialog({
                 flex={1}
                 size="$4"
                 placeholder={`Enter Word...`}
-                onChangeText={(input) => search(input)}
+                onChangeText={(input) => setInput(input)}
               />
-              <Button size="$4">Search</Button>
+              <Button size="$4" onPress={() => search(input)}>
+                Search
+              </Button>
             </XStack>
             {loading ? (
               <Spinner size="large" color="$blue9" m="$2" />
@@ -218,6 +219,10 @@ export default function EditTranslationDialog({
                     index={index}
                     key={index}
                     word_id={selected_word.id}
+                    translation_id={result.id}
+                    is_delete={selected_word.translations?.some(
+                      (translation) => translation.word == result.word
+                    )}
                   />
                 ))}
               </YGroup>

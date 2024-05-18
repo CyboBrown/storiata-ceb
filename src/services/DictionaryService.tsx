@@ -69,22 +69,21 @@ export class DictionaryService {
     console.log("GOT_WORD");
   };
 
-  // part_of_speech - meaning
-  // N - Noun
-  // p - Plural
-  // h - Noun Phrase
-  // V - Verb (usu. participle)
-  // t - Verb (transitive)
-  // i - Verb (intransitive)
-  // A - Adjective
-  // v - Adverb
-  // C - Conjunction
-  // P - Preposition
-  // ! - Interjection
-  // r - Pronoun
-  // D - Definite Article
-  // I - Indefinite Article
-  // o - Nominative
+  public static removeWordTranslation = async (
+    word_id: number,
+    translation_id: number
+  ) => {
+    console.log("REMOVED_WORD_TRANSLATION");
+    const { data, error } = await supabase
+      .from("word_translations")
+      .delete()
+      .eq("word_id", word_id)
+      .eq("translation_id", translation_id);
+    if (error) {
+      console.log(error);
+    }
+  };
+
   public static searchTranslation = async (word: string) => {
     console.log("SEARCHED_TRANSLATION");
     const { data, error, status } = await supabase
