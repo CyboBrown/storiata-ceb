@@ -17,8 +17,6 @@ export const TranslationSearchResult = ({
   translation_id: number;
   is_delete: boolean;
 }) => {
-  console.log(is_delete);
-
   return (
     <YGroup.Item key={index}>
       <Dialog.Close displayWhenAdapted asChild>

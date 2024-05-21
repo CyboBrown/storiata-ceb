@@ -58,14 +58,14 @@ export class UserAuthentication {
       Alert.alert("Please check your inbox for email verification!");
   };
 
-  public static checkPassword = ( password: string, confirmPassword: string
+  public static checkPassword = (
+    password: string,
+    confirmPassword: string
   ): boolean => {
     return password === confirmPassword;
   };
 
-  // const signOut = async () => {
-  //   setUser(undefined);
-  //   setSession(undefined);
-  //   setIsContributor(false);
-  // };
+  public static signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+  };
 }

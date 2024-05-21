@@ -10,15 +10,15 @@ import {
   View,
   Image,
   ScrollView,
-  Theme
+  Theme,
 } from "tamagui";
-import { UserAuthentication} from "../src/services/UserAuthentication";
+import { UserAuthentication } from "../src/services/UserAuthentication";
 import { useColorScheme } from "react-native";
 import { Check } from "@tamagui/lucide-icons";
 import config from "../tamagui.config";
 import { Link, router } from "expo-router";
 import { Session, User } from "@supabase/supabase-js";
-import logo from '../src/assets/StoriaTa-Logo.png';
+import logo from "../src/assets/StoriaTa-Logo.png";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -39,7 +39,7 @@ export default function SignUp() {
 
   const signup = async () => {
     setLoading(true);
-    const result = UserAuthentication.checkPassword(password, confirmPassword)
+    const result = UserAuthentication.checkPassword(password, confirmPassword);
     result ? "" : alert("Password not correct");
     const data: any = await UserAuthentication.signUpWithEmail(email, password);
     if (data?.user?.id && isContributor) {
@@ -56,87 +56,115 @@ export default function SignUp() {
   return (
     <TamaguiProvider config={config}>
       <Theme name={colorScheme === "dark" ? "dark" : "light"}>
-      <ScrollView>
-      <View flex={1} padding="$4" marginTop="$10">
-        <View justifyContent="center" alignItems="center">
-          <Image source={logo} width="$15" height="$15" />
-        </View>
-        <View justifyContent="center" alignItems="center">
-          <Text color={"$background"} fontFamily={"$heading"} fontSize={30}> Create your Account </Text>
-        </View>
-      <View justifyContent="center" alignContent="center" gap={2} marginTop={15}>
-        <Text fontFamily="$body" color="$background">
-          {" "}Email
-        </Text>
-        <Input
-          size="$4"
-          placeholder="email@gmail.com"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-        />
-        </View>
-        <View marginTop={10} gap={2}>
-          <SizableText fontFamily="$body" color="$background">
-            {" "}Password
-          </SizableText>
-          <Input
-            size="$4"
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          />
-        </View>
-        <View marginTop={10} gap={2}>
-          <SizableText fontFamily="$body" color="$background">
-            {" "}
-            Confirm Password
-          </SizableText>
-          <Input
-            size="$4"
-            placeholder="ConfirmPassword"
-            secureTextEntry
-            value={confirmPassword}
-            onChangeText={(text) => setConfirmPassword(text)}
-          />
-        </View>
-        <View marginTop="$5"
-          flexDirection="row"
-          gap={2}
-          justifyContent="center"
-          alignItems="center">
-          <XStack width={300} alignItems="center" justifyContent="center" gap={20}>
-            <Checkbox
-              size="$5"
-              checked={isContributor}
-              onPress={() => handleContributorChange()}>
-              <Checkbox.Indicator>
-                <Check />
-              </Checkbox.Indicator>
-            </Checkbox>
-            <Text color="background" fontFamily={"$body"}>Register as a Contributor?</Text>
-          </XStack>
-        </View>
-        <View marginTop={15}>
-          <Button size="$4" disabled={loading} onPress={signup}>
-            Sign up
-          </Button>
-        </View>
-        <View marginTop={20} flexDirection="row" alignItems="center" justifyContent="center">
-          <Text color="$background" fontFamily={"$body"}>
-            Already have an account? {" "}
-          </Text>
-          <Link href="/">
-            <Text color="$background" fontFamily={"$body"} fontSize={16} fontWeight="bold">
-              Sign In
-            </Text>
-          </Link>
-        </View>
-      </View>
-      </ScrollView>
+        <ScrollView>
+          <View flex={1} padding="$4" marginTop="$10">
+            <View justifyContent="center" alignItems="center">
+              <Image source={logo} width="$15" height="$15" />
+            </View>
+            <View justifyContent="center" alignItems="center">
+              <Text color={"$color"} fontFamily={"$heading"} fontSize={30}>
+                {" "}
+                Create your Account{" "}
+              </Text>
+            </View>
+            <View
+              justifyContent="center"
+              alignContent="center"
+              gap={2}
+              marginTop={15}
+            >
+              <Text fontFamily="$body" color="$color">
+                {" "}
+                Email
+              </Text>
+              <Input
+                size="$4"
+                placeholder="email@gmail.com"
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+              />
+            </View>
+            <View marginTop={10} gap={2}>
+              <SizableText fontFamily="$body" color="$color">
+                {" "}
+                Password
+              </SizableText>
+              <Input
+                size="$4"
+                placeholder="Password"
+                secureTextEntry
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+              />
+            </View>
+            <View marginTop={10} gap={2}>
+              <SizableText fontFamily="$body" color="$color">
+                {" "}
+                Confirm Password
+              </SizableText>
+              <Input
+                size="$4"
+                placeholder="ConfirmPassword"
+                secureTextEntry
+                value={confirmPassword}
+                onChangeText={(text) => setConfirmPassword(text)}
+              />
+            </View>
+            <View
+              marginTop="$5"
+              flexDirection="row"
+              gap={2}
+              justifyContent="center"
+              alignItems="center"
+            >
+              <XStack
+                width={300}
+                alignItems="center"
+                justifyContent="center"
+                gap={20}
+              >
+                <Checkbox
+                  size="$5"
+                  checked={isContributor}
+                  onPress={() => handleContributorChange()}
+                >
+                  <Checkbox.Indicator>
+                    <Check />
+                  </Checkbox.Indicator>
+                </Checkbox>
+                <Text color="$color" fontFamily={"$body"}>
+                  Register as a Contributor?
+                </Text>
+              </XStack>
+            </View>
+            <View marginTop={15}>
+              <Button size="$4" disabled={loading} onPress={signup}>
+                Sign up
+              </Button>
+            </View>
+            <View
+              marginTop={20}
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Text color="$color" fontFamily={"$body"}>
+                Already have an account?{" "}
+              </Text>
+              <Link href="/">
+                <Text
+                  color="$color"
+                  fontFamily={"$body"}
+                  fontSize={16}
+                  fontWeight="bold"
+                >
+                  Sign In
+                </Text>
+              </Link>
+            </View>
+          </View>
+        </ScrollView>
       </Theme>
     </TamaguiProvider>
   );
 }
-
-

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../src/utils/supabase";
 import { Alert } from "react-native";
-import { Button, Input, SizableText, Text, View} from "tamagui";
+import { Button, Input, SizableText, Text, View } from "tamagui";
 import { Session } from "@supabase/supabase-js";
 import Avatar from "./avatar";
 import { router } from "expo-router";
+import { UserAuthentication } from "../src/services/UserAuthentication";
 
 export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
@@ -97,48 +98,55 @@ export default function Account({ session }: { session: Session }) {
           onUpload={(url: string) => {
             setAvatarUrl(url);
             updateProfile({ username, website, avatar_url: url });
-          }}/>
+          }}
+        />
       </View>
       <View>
-        <Text color={"$black"} fontFamily={"$heading"} fontSize={20} marginTop="$2"> User Details</Text>
+        <Text
+          color={"$black"}
+          fontFamily={"$heading"}
+          fontSize={20}
+          marginTop="$2"
+        >
+          {" "}
+          User Details
+        </Text>
       </View>
       <View marginTop="$3">
-        <Input
-          placeholder="Email"
-          value={session?.user?.email}
-          disabled/>
+        <Input placeholder="Email" value={session?.user?.email} disabled />
       </View>
       <View marginTop="$3">
         <Input
           placeholder="Username"
           value={username || ""}
-          onChangeText={(text) => setUsername(text)}/>
+          onChangeText={(text) => setUsername(text)}
+        />
       </View>
       <View marginTop="$3">
         <Input
           placeholder="Website"
           value={website || ""}
-          onChangeText={(text) => setWebsite(text)}/>
+          onChangeText={(text) => setWebsite(text)}
+        />
       </View>
       <View marginTop="$5">
         <Button
           onPress={() =>
-            updateProfile({ username, website, avatar_url: avatarUrl }) }
-          disabled={loading}>
+            updateProfile({ username, website, avatar_url: avatarUrl })
+          }
+          disabled={loading}
+        >
           Update
         </Button>
       </View>
       <View marginTop="$3">
-        <Button onPress={() => supabase.auth.signOut()}>
+        <Button onPress={async () => await UserAuthentication.signOut()}>
           Sign Out
         </Button>
       </View>
       <View marginTop="$3">
-        <Button onPress={() => router.push("/settings")}>
-          App Settings
-        </Button>
+        <Button onPress={() => router.push("/settings")}>App Settings</Button>
       </View>
     </View>
   );
 }
-
