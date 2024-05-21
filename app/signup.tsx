@@ -62,10 +62,10 @@ export default function SignUp() {
           <Image source={logo} width="$15" height="$15" />
         </View>
         <View justifyContent="center" alignItems="center">
-          <Text color={"$black"} fontFamily={"$heading"} fontSize={30}> Create your Account </Text>
+          <Text color={"$background"} fontFamily={"$heading"} fontSize={30}> Create your Account </Text>
         </View>
       <View justifyContent="center" alignContent="center" gap={2} marginTop={15}>
-        <Text fontFamily="$body" color="$black">
+        <Text fontFamily="$body" color="$background">
           {" "}Email
         </Text>
         <Input
@@ -76,7 +76,7 @@ export default function SignUp() {
         />
         </View>
         <View marginTop={10} gap={2}>
-          <SizableText fontFamily="$body" color="$black">
+          <SizableText fontFamily="$body" color="$background">
             {" "}Password
           </SizableText>
           <Input
@@ -88,7 +88,7 @@ export default function SignUp() {
           />
         </View>
         <View marginTop={10} gap={2}>
-          <SizableText fontFamily="$body" color="$black">
+          <SizableText fontFamily="$body" color="$background">
             {" "}
             Confirm Password
           </SizableText>
@@ -114,7 +114,7 @@ export default function SignUp() {
                 <Check />
               </Checkbox.Indicator>
             </Checkbox>
-            <Text color="black" fontFamily={"$body"}>Register as a Contributor?</Text>
+            <Text color="background" fontFamily={"$body"}>Register as a Contributor?</Text>
           </XStack>
         </View>
         <View marginTop={15}>
@@ -123,11 +123,11 @@ export default function SignUp() {
           </Button>
         </View>
         <View marginTop={20} flexDirection="row" alignItems="center" justifyContent="center">
-          <Text color="$black" fontFamily={"$body"}>
+          <Text color="$background" fontFamily={"$body"}>
             Already have an account? {" "}
           </Text>
           <Link href="/">
-            <Text color="$black" fontFamily={"$body"} fontSize={16} fontWeight="bold">
+            <Text color="$background" fontFamily={"$body"} fontSize={16} fontWeight="bold">
               Sign In
             </Text>
           </Link>

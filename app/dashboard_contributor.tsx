@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import config from "../tamagui.config";
 import { Session } from "@supabase/supabase-js";
-import { YStack, Text } from "tamagui";
+import { YStack, Text, View } from "tamagui";
 
 export default function ContributorDashboard({
   session,
@@ -14,6 +14,9 @@ export default function ContributorDashboard({
   }, []);
   return (
     <>
+    <View>
+      <Text color="white"> WELCOME TO STORIATA </Text>
+    </View>
       <YStack f={1} jc="center" ai="center" backgroundColor={"$backgroundSoft"}>
         {/* <Paragraph color="$color" jc="center">
         Dashboard
@@ -21,7 +24,7 @@ export default function ContributorDashboard({
       <H5> </H5>
       <Button size="$4">Useless Button</Button> */}
       </YStack>
-      <Text color="black"> Welcome Contributor</Text>
+      <Text color="white"> Welcome Contributor</Text>
     </>
   );
 }

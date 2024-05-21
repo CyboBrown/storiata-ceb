@@ -45,10 +45,10 @@ export default function Login({
         <Image source={logo} width="$15" height="$15" />
       </View>
       <View justifyContent="center" alignItems="center">
-        <Text color="$black" fontSize={30} fontFamily={"$heading"}> Welcome to StoriaTa</Text>
+        <Text color="$background" fontSize={30} fontFamily={"$heading"}> Welcome to StoriaTa</Text>
       </View>
       <View marginTop="$5" gap={2}>
-        <Text fontFamily="$body" color="$black">
+        <Text fontFamily="$body" color="$background">
           {" "}Email
         </Text>
         <Input
@@ -58,7 +58,7 @@ export default function Login({
           onChangeText={(text) => setEmail(text)}/>
       </View>
       <View marginTop="$3" gap={2}>
-        <Text fontFamily="$body" color="$black">
+        <Text fontFamily="$body" color="$background">
           {" "}Password
         </Text>
         <Input
@@ -78,9 +78,9 @@ export default function Login({
         flexDirection="row"
         justifyContent="center"
         alignItems="center">
-        <Text color="$black" fontSize={16} fontFamily={"$body"}>Don't have an account? </Text>
+        <Text color="$background" fontSize={16} fontFamily={"$body"}>Don't have an account? </Text>
         <Link href="/signup" >
-          <Text fontSize={16} color={"$black"} fontFamily={"$body"} fontWeight={"bold"}>
+          <Text fontSize={16} color={"$background"} fontFamily={"$body"} fontWeight={"bold"}>
             Sign Up
           </Text>
         </Link>
