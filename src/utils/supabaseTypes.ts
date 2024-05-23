@@ -85,31 +85,62 @@ export type Database = {
           },
         ]
       }
-      user_details: {
+      vocabulary_exercise_words: {
         Row: {
+          created_at: string
+          exercise_id: number
           id: number
-          user_id: string
-          user_type: string
+          word_id: number
         }
         Insert: {
+          created_at?: string
+          exercise_id: number
           id?: number
-          user_id: string
-          user_type?: string
+          word_id: number
         }
         Update: {
+          created_at?: string
+          exercise_id?: number
           id?: number
-          user_id?: string
-          user_type?: string
+          word_id?: number
         }
         Relationships: [
           {
-            foreignKeyName: "user_details_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
+            foreignKeyName: "vocabulary_exercise_words_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "vocabulary_exercises"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vocabulary_exercise_words_word_id_fkey"
+            columns: ["word_id"]
+            isOneToOne: false
+            referencedRelation: "word_translations"
             referencedColumns: ["id"]
           },
         ]
+      }
+      vocabulary_exercises: {
+        Row: {
+          created_at: string
+          id: number
+          mode: number
+          topic: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          mode?: number
+          topic: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          mode?: number
+          topic?: string
+        }
+        Relationships: []
       }
       word_translations: {
         Row: {
@@ -167,7 +198,7 @@ export type Database = {
           description: string | null
           id: number
           normal_form: string
-          part_of_speech: string
+          part_of_speech: string | null
           phonetic_form: string
           representation: string | null
           suffix_form: string | null
@@ -178,7 +209,7 @@ export type Database = {
           description?: string | null
           id?: number
           normal_form: string
-          part_of_speech?: string
+          part_of_speech?: string | null
           phonetic_form: string
           representation?: string | null
           suffix_form?: string | null
@@ -189,7 +220,7 @@ export type Database = {
           description?: string | null
           id?: number
           normal_form?: string
-          part_of_speech?: string
+          part_of_speech?: string | null
           phonetic_form?: string
           representation?: string | null
           suffix_form?: string | null
