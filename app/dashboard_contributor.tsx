@@ -16,10 +16,11 @@ export default function ContributorDashboard({
   const[search, setSearch] = useState("");
 
   return (
-    <ScrollView>
-    <View justifyContent="center" alignItems="center">
+    <>
+    <View justifyContent="center" alignItems="center" overflow="scroll">
       <Text color="white" fontSize={40}>STORIATA</Text>
     </View>
+    <ScrollView>
     <View marginStart="$5" marginTop="$3" marginEnd="$5">
       <Input
         size="$4"
@@ -49,6 +50,23 @@ export default function ContributorDashboard({
         <CardBackground/>
       </Card>
     </View>
+    <View marginStart="$5" marginTop="$3" marginEnd="$5">
+      <Card elevate size={4} bordered height={150}>
+        <CardHeader/>
+        <CardFooter/>
+        {}
+        <CardBackground/>
+      </Card>
+    </View>
+    <View marginStart="$5" marginTop="$3" marginEnd="$5">
+      <Card elevate size={4} bordered height={150}>
+        <CardHeader/>
+        <CardFooter/>
+        {}
+        <CardBackground/>
+      </Card>
+    </View>
     </ScrollView>
+    </>
   );
 }

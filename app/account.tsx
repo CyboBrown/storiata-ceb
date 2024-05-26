@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../src/utils/supabase";
 import { Alert } from "react-native";
-import { Button, Input, SizableText, Text, View } from "tamagui";
+import { Button, Input, Text, View } from "tamagui";
 import { Session } from "@supabase/supabase-js";
 import Avatar from "./avatar";
 import { router } from "expo-router";
