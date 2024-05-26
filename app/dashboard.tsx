@@ -2,6 +2,7 @@ import { Session } from "@supabase/supabase-js";
 import { Button, H5, Paragraph, View, YStack, Text, ScrollView, Card, CardBackground, CardFooter, CardHeader, XStack } from "tamagui";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import LessonCard from "../src/components/LessonCard";
 
 export default function Dashboard({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
@@ -20,48 +21,18 @@ export default function Dashboard({ session }: { session: Session }) {
         </View>
         <XStack marginTop="$2">
           <ScrollView horizontal>
-            <Card elevate size={4} bordered height={150} width={300} marginStart={"$3"}>
-                <CardHeader/>
-                <CardFooter/>
-                {}
-                <CardBackground/>
-            </Card>
-            <Card elevate size={4} bordered height={150} width={300} marginStart={"$3"}>
-                <CardHeader/>
-                <CardFooter/>
-                {}
-                <CardBackground/>
-            </Card>
+            <LessonCard title="Sample" details="Sample Details"/>
+            <LessonCard title="Sample" details="Sample Details"/>
           </ScrollView>
         </XStack>
 
         <View marginStart="$2" marginTop="$3" marginEnd="$2">
           <Text color="white" fontSize={25}> Explore Lessons</Text>
         </View>
-        <Card elevate size={4} bordered height={150} marginStart={"$5"} marginTop={"$3"} marginEnd={"$5"}>
-            <CardHeader/>
-            <CardFooter/>
-            {}
-            <CardBackground/>
-        </Card>
-        <Card elevate size={4} bordered height={150} marginStart={"$5"} marginTop={"$3"} marginEnd={"$5"}>
-          <CardHeader/>
-          <CardFooter/>
-          {}
-          <CardBackground/>
-        </Card>
-        <Card elevate size={4} bordered height={150} marginStart={"$5"} marginTop={"$3"} marginEnd={"$5"}>
-          <CardHeader/>
-          <CardFooter/>
-          {}
-          <CardBackground/>
-        </Card>
-        <Card elevate size={4} bordered height={150} marginStart={"$5"} marginTop={"$3"} marginEnd={"$5"}>
-          <CardHeader/>
-          <CardFooter/>
-          {}
-          <CardBackground/>
-        </Card>
+        <LessonCard title="Sample" details="Sample Details"/>
+        <LessonCard title="Sample" details="Sample Details"/>
+        <LessonCard title="Sample" details="Sample Details"/>
+        
       </ScrollView>
     </>
   );

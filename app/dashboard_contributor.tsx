@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import config from "../tamagui.config";
 import { Session } from "@supabase/supabase-js";
 import { YStack, Text, View, Input, Card, CardHeader, CardFooter, CardBackground, ScrollView } from "tamagui";
+import LessonCard from "../src/components/LessonCard";
 
 export default function ContributorDashboard({
   session,
@@ -29,43 +30,15 @@ export default function ContributorDashboard({
         onChangeText={(text) => setSearch(text)}/>
     </View>
     <View marginStart="$2" marginTop="$3" marginEnd="$2">
-      <Text color="white" fontSize={25}>  Featured Contributions</Text>
+      <Text color="white" fontSize={25}>  Featured Contribution</Text>
     </View>
-    <View marginStart="$5" marginTop="$3" marginEnd="$5">
-      <Card elevate size={4} bordered height={150}>
-        <CardHeader/>
-        <CardFooter/>
-        {}
-        <CardBackground/>
-      </Card>
-    </View>
+    <LessonCard title="Sample" details="Sample Details"/>
     <View marginStart="$2" marginTop="$5" marginEnd="$2">
       <Text color="white" fontSize={25}>  Recent Contributions</Text>
     </View>
-    <View marginStart="$5" marginTop="$3" marginEnd="$5">
-      <Card elevate size={4} bordered height={150}>
-        <CardHeader/>
-        <CardFooter/>
-        {}
-        <CardBackground/>
-      </Card>
-    </View>
-    <View marginStart="$5" marginTop="$3" marginEnd="$5">
-      <Card elevate size={4} bordered height={150}>
-        <CardHeader/>
-        <CardFooter/>
-        {}
-        <CardBackground/>
-      </Card>
-    </View>
-    <View marginStart="$5" marginTop="$3" marginEnd="$5">
-      <Card elevate size={4} bordered height={150}>
-        <CardHeader/>
-        <CardFooter/>
-        {}
-        <CardBackground/>
-      </Card>
-    </View>
+    <LessonCard title="Sample" details="Sample Details"/>
+    <LessonCard title="Sample" details="Sample Details"/>
+    <LessonCard title="Sample" details="Sample Details"/>
     </ScrollView>
     </>
   );
