@@ -59,7 +59,7 @@ export default function Login({
   };
 
   return (
-    <ScrollView>
+    <ScrollView backgroundColor={"$background"}>
       <View flex={1} padding="$4" marginTop="$10">
         <View justifyContent="center" alignItems="center">
           <Image source={logo} width="$15" height="$15" />

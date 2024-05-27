@@ -56,7 +56,7 @@ export default function SignUp() {
   return (
     <TamaguiProvider config={config}>
       <Theme name={colorScheme === "dark" ? "dark" : "light"}>
-        <ScrollView>
+        <ScrollView backgroundColor={"$background"}>
           <View flex={1} padding="$4" marginTop="$10">
             <View justifyContent="center" alignItems="center">
               <Image source={logo} width="$15" height="$15" />
@@ -104,7 +104,7 @@ export default function SignUp() {
               </SizableText>
               <Input
                 size="$4"
-                placeholder="ConfirmPassword"
+                placeholder="Confirm Password"
                 secureTextEntry
                 value={confirmPassword}
                 onChangeText={(text) => setConfirmPassword(text)}
