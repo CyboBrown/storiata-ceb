@@ -40,7 +40,7 @@ export const structurizeVocabularyExercise = (
     };
   });
   const structured_data: StructuredVocabularyExercise = {
-    created_at: details.created_at,
+    created_at: details.created_at || "error",
     description: details.description,
     id: details.id,
     mode: details.mode,

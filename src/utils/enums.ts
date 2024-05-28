@@ -49,3 +49,19 @@ export enum RevEngPartsOfSpeech {
   "I" = "Indefinite Article",
   "o" = "Nominative",
 }
+
+export enum ExerciseTypeNumber {
+  Vocabulary,
+  Listening,
+  Grammar,
+  Speaking,
+}
+
+export enum VocabularyExerciseType {
+  ChooseCebRepresentationForEngWord,
+  ChooseCebWordForEngWord,
+  ChooseEngWordForCebWord,
+  ChooseRepresentationForCebWord,
+  InputCebWordForEngWord,
+  InputCebWordForRepresentation,
+}

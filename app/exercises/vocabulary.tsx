@@ -62,7 +62,7 @@ export default function VocabularyExercises({ session }: { session: Session }) {
           f={1}
           jc="flex-start"
           ai="stretch"
-          backgroundColor={"$backgroundSoft"}
+          backgroundColor={"$background"}
         >
           <XStack jc="space-between" ai="flex-start" padding="$5">
             <Text fontSize={20} fontWeight={800} color={"$color"}>

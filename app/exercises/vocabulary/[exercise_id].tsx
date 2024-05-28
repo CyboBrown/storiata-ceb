@@ -16,6 +16,7 @@ import {
   Separator,
   ListItem,
   ButtonIcon,
+  Spinner,
 } from "tamagui";
 import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
@@ -24,6 +25,9 @@ import { ExerciseService } from ".../../../src/services/ExerciseService";
 import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
 import { ExercisePopover } from ".../../../src/components/ExercisePopover";
 import { useLocalSearchParams } from "expo-router";
+import { StructuredVocabularyExercise } from "../../../src/models/StructuredVocabularyExercise";
+import { structurizeVocabularyExercise } from "../../../src/utils/structurize";
+import { OptionCard } from "../../../src/components/OptionCard";
 
 export default function VocabularyExercises({
   session,
@@ -40,6 +44,7 @@ export default function VocabularyExercises({
   const colorScheme = useColorScheme();
   const local = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState("Loading...");
   const [exerciseDetails, setExerciseDetails] = useState<VocabularyExercise>();
   const [exerciseProblems, setExerciseProblems] = useState<
     {
@@ -58,7 +63,9 @@ export default function VocabularyExercises({
       } | null;
     }[]
   >();
-  const [exercise, setExercise] = useState();
+  const [exercise, setExercise] =
+    useState<StructuredVocabularyExercise | null>();
+  const [itemIndex, setItemIndex] = useState(0);
 
   useEffect(() => {
     loadExercise();
@@ -66,6 +73,7 @@ export default function VocabularyExercises({
 
   const loadExercise = async () => {
     try {
+      setLoadingText("Loading exercise...");
       setLoading(true);
       let problems = await ExerciseService.getVocabularyExerciseProblems(
         parseInt(local.exercise_id as string)
@@ -76,8 +84,9 @@ export default function VocabularyExercises({
       if (problems) {
         setExerciseProblems(problems);
         setExerciseDetails(details);
-        console.log(problems);
-        console.log(details);
+        setExercise(structurizeVocabularyExercise(details, problems));
+        // console.log(problems);
+        // console.log(details);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -88,26 +97,115 @@ export default function VocabularyExercises({
     }
   };
 
+  useEffect(() => {
+    try {
+      setLoadingText("Generating exercise...");
+      setLoading(true);
+      console.log(exercise);
+      if (exercise) {
+        setItemIndex(0);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert(error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [exercise]);
+
   return (
     <TamaguiProvider>
       <Theme name={colorScheme === "dark" ? "dark" : "light"}>
-        <YStack
-          f={1}
-          jc="flex-start"
-          ai="stretch"
-          backgroundColor={"$backgroundSoft"}
-        >
-          <XStack jc="space-between" ai="flex-start" padding="$5">
-            <Text fontSize={20} fontWeight={800} color={"$color"}>
-              Vocabulary Exercises
-            </Text>
-            <RefreshCw
-              onPress={loadExercise}
-              disabled={loading}
-              color={loading ? "$color5" : "$color"}
-            />
-          </XStack>
-          <ScrollView></ScrollView>
+        <YStack f={1} jc="center" ai="stretch" backgroundColor={"$background"}>
+          {loading ? (
+            <YStack jc="flex-start" ai="center" padding="$5">
+              <Spinner size="large" color="$blue9" m="$2" />
+              <Text fontSize={20} fontWeight={400} color={"$color"}>
+                {loadingText}
+              </Text>
+            </YStack>
+          ) : (
+            <>
+              <View
+                alignSelf="center"
+                jc="flex-start"
+                ai="flex-start"
+                p="$5"
+                gap="$2"
+                borderColor={"$color5"}
+                borderRadius="$5"
+                borderWidth="$1"
+                width="90%"
+              >
+                <Text fontSize={20}>
+                  Choose the correct translation for
+                  <Text fontSize={20} fontWeight={600} color={"$color"}>
+                    &nbsp;"one"
+                  </Text>
+                  .
+                </Text>
+              </View>
+              <View
+                paddingVertical="$5"
+                width="100%"
+                flexDirection="row"
+                flexWrap="wrap"
+                jc="space-evenly"
+                ai="center"
+                rowGap="$5"
+              >
+                <OptionCard
+                  text={
+                    exercise?.item_sets
+                      ? exercise?.item_sets[0].ceb_word
+                      : "sample"
+                  }
+                  representation={
+                    exercise?.item_sets
+                      ? exercise?.item_sets[0].representation
+                      : "⛔"
+                  }
+                />
+                <OptionCard
+                  text={
+                    exercise?.item_sets
+                      ? exercise?.item_sets[0].ceb_word
+                      : "sample"
+                  }
+                  representation={
+                    exercise?.item_sets
+                      ? exercise?.item_sets[0].representation
+                      : "⛔"
+                  }
+                />
+                <OptionCard
+                  text={
+                    exercise?.item_sets
+                      ? exercise?.item_sets[0].ceb_word
+                      : "sample"
+                  }
+                  representation={
+                    exercise?.item_sets
+                      ? exercise?.item_sets[0].representation
+                      : "⛔"
+                  }
+                />
+                <OptionCard
+                  text={
+                    exercise?.item_sets
+                      ? exercise?.item_sets[0].ceb_word
+                      : "sample"
+                  }
+                  representation={
+                    exercise?.item_sets
+                      ? exercise?.item_sets[0].representation
+                      : "⛔"
+                  }
+                />
+              </View>
+            </>
+          )}
         </YStack>
       </Theme>
     </TamaguiProvider>
