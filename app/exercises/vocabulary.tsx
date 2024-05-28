@@ -85,8 +85,8 @@ export default function VocabularyExercises({ session }: { session: Session }) {
               {results.map((result, index) => (
                 <ExercisePopover
                   title={result.topic}
-                  subTitle={"Learn to count from 1 to 10"}
-                  index={index}
+                  subTitle={result.description}
+                  index={result.id}
                 />
               ))}
             </YGroup>

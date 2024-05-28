@@ -46,7 +46,7 @@ export default function Dashboard({ session }: { session: Session }) {
         </XStack>
 
         <View marginStart="$2" marginTop="$3" marginEnd="$2">
-          <Text color="white" fontSize={25}>
+          <Text color={"$color"} fontSize={25}>
             {" "}
             Explore Lessons
           </Text>

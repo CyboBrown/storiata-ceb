@@ -1,4 +1,5 @@
 import { ChevronRight, Hash } from "@tamagui/lucide-icons";
+import { router } from "expo-router";
 import {
   Adapt,
   Button,
@@ -6,6 +7,8 @@ import {
   Label,
   ListItem,
   Popover,
+  SizableText,
+  Text,
   XStack,
   YGroup,
   YStack,
@@ -23,7 +26,15 @@ export const ExercisePopover = ({
   index: number;
 }) => {
   return (
-    <Popover size="$5" allowFlip {...props}>
+    <Popover
+      placement="top"
+      size="$5"
+      allowFlip
+      onOpenChange={() => {
+        console.log("open change stuff");
+      }}
+      {...props}
+    >
       <YGroup.Item key={index}>
         <Popover.Trigger asChild>
           <ListItem
@@ -44,7 +55,7 @@ export const ExercisePopover = ({
       <Adapt when="sm" platform="touch">
         <Popover.Sheet modal dismissOnSnapToBottom>
           <Popover.Sheet.Frame padding="$4">
-            <Adapt.Contents />
+            <Adapt.Contents onOpenChange />
           </Popover.Sheet.Frame>
           <Popover.Sheet.Overlay
             animation="lazy"
@@ -71,19 +82,16 @@ export const ExercisePopover = ({
       >
         <Popover.Arrow borderWidth={1} borderColor="$borderColor" />
         <YStack space="$3">
-          <XStack space="$3">
-            <Label size="$3" htmlFor={title}>
-              Name
-            </Label>
-            <Input size="$3" id={title} />
-          </XStack>
-
-          <Popover.Close asChild>
+          <SizableText alignSelf="center">
+            Do you wish to start the exercise?
+          </SizableText>
+          <Popover.Close>
             <Button
               size="$3"
               onPress={() => {
                 console.log("Exercises started.");
                 /* Custom code goes here, does not interfere with popover closure */
+                router.navigate(`exercises/vocabulary/${index}`);
               }}
             >
               Start Exercise

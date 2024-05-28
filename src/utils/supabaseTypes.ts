@@ -124,18 +124,21 @@ export type Database = {
       vocabulary_exercises: {
         Row: {
           created_at: string
+          description: string
           id: number
           mode: number
           topic: string
         }
         Insert: {
           created_at?: string
+          description?: string
           id?: number
           mode?: number
           topic: string
         }
         Update: {
           created_at?: string
+          description?: string
           id?: number
           mode?: number
           topic?: string
