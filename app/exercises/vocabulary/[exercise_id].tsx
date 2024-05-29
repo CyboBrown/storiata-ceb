@@ -28,6 +28,7 @@ import { useLocalSearchParams } from "expo-router";
 import { StructuredVocabularyExercise } from "../../../src/models/StructuredVocabularyExercise";
 import { structurizeVocabularyExercise } from "../../../src/utils/structurize";
 import { OptionCard } from "../../../src/components/OptionCard";
+import { VocabularyExerciseUI } from "../../../src/components/ExerciseUI";
 
 export default function VocabularyExercises({
   session,
@@ -126,85 +127,7 @@ export default function VocabularyExercises({
               </Text>
             </YStack>
           ) : (
-            <>
-              <View
-                alignSelf="center"
-                jc="flex-start"
-                ai="flex-start"
-                p="$5"
-                gap="$2"
-                borderColor={"$color5"}
-                borderRadius="$5"
-                borderWidth="$1"
-                width="90%"
-              >
-                <Text fontSize={20}>
-                  Choose the correct translation for
-                  <Text fontSize={20} fontWeight={600} color={"$color"}>
-                    &nbsp;"one"
-                  </Text>
-                  .
-                </Text>
-              </View>
-              <View
-                paddingVertical="$5"
-                width="100%"
-                flexDirection="row"
-                flexWrap="wrap"
-                jc="space-evenly"
-                ai="center"
-                rowGap="$5"
-              >
-                <OptionCard
-                  text={
-                    exercise?.item_sets
-                      ? exercise?.item_sets[0].ceb_word
-                      : "sample"
-                  }
-                  representation={
-                    exercise?.item_sets
-                      ? exercise?.item_sets[0].representation
-                      : "⛔"
-                  }
-                />
-                <OptionCard
-                  text={
-                    exercise?.item_sets
-                      ? exercise?.item_sets[0].ceb_word
-                      : "sample"
-                  }
-                  representation={
-                    exercise?.item_sets
-                      ? exercise?.item_sets[0].representation
-                      : "⛔"
-                  }
-                />
-                <OptionCard
-                  text={
-                    exercise?.item_sets
-                      ? exercise?.item_sets[0].ceb_word
-                      : "sample"
-                  }
-                  representation={
-                    exercise?.item_sets
-                      ? exercise?.item_sets[0].representation
-                      : "⛔"
-                  }
-                />
-                <OptionCard
-                  text={
-                    exercise?.item_sets
-                      ? exercise?.item_sets[0].ceb_word
-                      : "sample"
-                  }
-                  representation={
-                    exercise?.item_sets
-                      ? exercise?.item_sets[0].representation
-                      : "⛔"
-                  }
-                />
-              </View>
-            </>
+            <VocabularyExerciseUI exercise_type={1} exercise={exercise} />
           )}
         </YStack>
       </Theme>
