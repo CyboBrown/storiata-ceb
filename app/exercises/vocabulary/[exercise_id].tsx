@@ -29,6 +29,7 @@ import { StructuredVocabularyExercise } from "../../../src/models/StructuredVoca
 import { structurizeVocabularyExercise } from "../../../src/utils/structurize";
 import { OptionCard } from "../../../src/components/OptionCard";
 import { VocabularyExerciseUI } from "../../../src/components/ExerciseUI";
+import { VocabularyExerciseType } from "../../../src/utils/enums";
 
 export default function VocabularyExercises({
   session,
@@ -51,6 +52,7 @@ export default function VocabularyExercises({
     {
       id: number;
       exercise_id: number;
+      word_id: number;
       word_translations: {
         words: {
           normal_form: string;
@@ -66,7 +68,6 @@ export default function VocabularyExercises({
   >();
   const [exercise, setExercise] =
     useState<StructuredVocabularyExercise | null>();
-  const [itemIndex, setItemIndex] = useState(0);
 
   useEffect(() => {
     loadExercise();
@@ -98,22 +99,22 @@ export default function VocabularyExercises({
     }
   };
 
-  useEffect(() => {
-    try {
-      setLoadingText("Generating exercise...");
-      setLoading(true);
-      console.log(exercise);
-      if (exercise) {
-        setItemIndex(0);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert(error.message);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [exercise]);
+  // useEffect(() => {
+  //   try {
+  //     setLoadingText("Generating exercise...");
+  //     setLoading(true);
+  //     console.log(exercise);
+  //     if (exercise) {
+  //       setItemIndex(0);
+  //     }
+  //   } catch (error) {
+  //     if (error instanceof Error) {
+  //       Alert.alert(error.message);
+  //     }
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, [exercise]);
 
   return (
     <TamaguiProvider>
@@ -127,7 +128,10 @@ export default function VocabularyExercises({
               </Text>
             </YStack>
           ) : (
-            <VocabularyExerciseUI exercise_type={1} exercise={exercise} />
+            <VocabularyExerciseUI
+              exercise_type={VocabularyExerciseType.ChooseCebWordForEngWord}
+              exercise={exercise || null}
+            />
           )}
         </YStack>
       </Theme>

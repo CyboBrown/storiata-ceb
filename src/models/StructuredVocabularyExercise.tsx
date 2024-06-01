@@ -5,6 +5,7 @@ export interface StructuredVocabularyExercise {
   mode: number;
   topic: string;
   item_sets: Array<{
+    id: number;
     ceb_word: string;
     phonetic_form: string;
     representation: string;
