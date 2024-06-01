@@ -11,6 +11,7 @@ import {
   CardFooter,
   CardBackground,
   ScrollView,
+  XStack,
 } from "tamagui";
 import LessonCard from "../src/components/LessonCard";
 
@@ -34,21 +35,31 @@ export default function ContributorDashboard({
         </Text>
       </View>
       <ScrollView>
-        <View marginStart="$5" marginTop="$3" marginEnd="$5">
-          <Input
-            size="$4"
-            placeholder="search contribution"
-            value={search}
-            onChangeText={(text) => setSearch(text)}
-          />
-        </View>
         <View marginStart="$2" marginTop="$3" marginEnd="$2">
-          <Text color={"$color"} fontSize={25}>
-            {" "}
-            Featured Contribution
-          </Text>
+          <Card elevate size={4} bordered height={200}>
+            <CardHeader padded>
+              <Text color={"$color"} fontSize={26}>Contributor Dashboard</Text>
+              <XStack marginTop={"$3"}>
+                <Text color={"$color"} fontSize={"$7"} flex={1}>Total Contribution: </Text>
+                <Text color={"$color"} fontSize={"$7"}>50</Text>
+              </XStack>
+              <XStack marginTop={"$3"}>
+                <Text color={"$color"} fontSize={"$7"} flex={1}>Total Views: </Text>
+                <Text color={"$color"} fontSize={"$7"}>50</Text>
+              </XStack>
+              <XStack marginTop={"$3"}>
+                <Text color={"$color"} fontSize={"$7"} flex={1}>Total Likes: </Text>
+                <Text color={"$color"} fontSize={"$7"}>50</Text>
+              </XStack>
+            </CardHeader>
+            <CardFooter padded>
+
+            </CardFooter>
+            <CardBackground>
+
+            </CardBackground>
+          </Card>
         </View>
-        <LessonCard title="Sample" details="Sample Details" />
         <View marginStart="$2" marginTop="$5" marginEnd="$2">
           <Text color={"$color"} fontSize={25}>
             {" "}
