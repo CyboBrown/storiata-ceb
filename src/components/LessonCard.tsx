@@ -10,7 +10,7 @@ interface LessonCardProps {
 const LessonCard: FC<LessonCardProps> = ({ title, details}) => {
   return (
     <>
-      <Card elevate size={4} bordered height={200} width={325} marginStart={"$7"} marginTop={"$3"}>
+      <Card elevate size={4} bordered height={200} width={325} marginTop={"$3"}>
         <CardHeader padded>
          <Text fontSize={"$6"} marginBottom="$2">{title}</Text>
          <Text>{details}</Text>

@@ -13,7 +13,7 @@ import {
   CardHeader,
   XStack,
 } from "tamagui";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import LessonCard from "../src/components/LessonCard";
 
 export default function Dashboard({ session }: { session: Session }) {
@@ -22,38 +22,73 @@ export default function Dashboard({ session }: { session: Session }) {
     console.log("USER_DASHBOARD page loaded.");
   }, []);
 
+
   return (
-    <>
+    <View justifyContent="center" alignItems="center">
       <View justifyContent="center" alignItems="center">
-        <Text color={"$color"} fontSize={40}>
+        <Text color={"$color"} fontSize={"$10"}>
           {" "}
           STORIATA{" "}
         </Text>
       </View>
-      <ScrollView>
-        <View marginStart="$2" marginTop="$3" marginEnd="$2">
-          <Text color={"$color"} fontSize={25}>
-            {" "}
-            Continue Lessons
-          </Text>
-        </View>
-        <XStack marginTop="$2">
-          <ScrollView horizontal>
-            <LessonCard title="Sample" details="Sample Details" />
-            <LessonCard title="Sample" details="Sample Details" />
-          </ScrollView>
-        </XStack>
+      <ScrollView marginBottom="$5">
+      <View marginStart="$2" marginTop="$3" marginEnd="$2">
+          <Card elevate height={"$15"} bordered>
+            <CardHeader padded>
+              <Text color={"$color"} fontSize={26}>StoriaTa Progress</Text>
+              <XStack marginTop={"$3"}>
+                <Text color={"$color"} fontSize={"$7"} flex={1}>Lessons Completed: </Text>
+                <Text color={"$color"} fontSize={"$7"}>50</Text>
+              </XStack>
+              <XStack marginTop={"$3"}>
+                <Text color={"$color"} fontSize={"$7"} flex={1}>Word Count: </Text>
+                <Text color={"$color"} fontSize={"$7"}>25</Text>
+              </XStack>
+              <XStack marginTop={"$3"}>
+                <Text color={"$color"} fontSize={"$7"} flex={1}>Average Rating: </Text>
+                <Text color={"$color"} fontSize={"$7"}>96%</Text>
+              </XStack>
+            </CardHeader>
+            <CardFooter padded>
 
-        <View marginStart="$2" marginTop="$3" marginEnd="$2">
-          <Text color={"$color"} fontSize={25}>
-            {" "}
-            Explore Lessons
-          </Text>
+            </CardFooter>
+            <CardBackground>
+
+            </CardBackground>
+          </Card>
         </View>
-        <LessonCard title="Vocabulary Exercises" details="This exercise will teach you the basics of Cebuano Vocabulary"/>
-        <LessonCard title="Sample" details="Sample Details" />
-        <LessonCard title="Sample" details="Sample Details" />
+        <View marginStart="$2" marginTop="$3" marginEnd="$2">
+          <Card elevate bordered height={300}>
+            <CardHeader padded>
+              <Text color={"$color"} fontSize={25}>Recent</Text>
+              <LessonCard title="Sample" details="Sample Details" />
+            </CardHeader>
+            <CardFooter padded>
+              
+            </CardFooter>
+            <CardBackground>
+              
+            </CardBackground>
+          </Card>
+        </View>
+        <View marginStart="$2" marginTop="$3" marginEnd="$2">
+          <Card elevate bordered height={300}>
+            <CardHeader padded>
+              <Text color={"$color"} fontSize={25}>Explore More Exercises</Text>
+              <Text color={"$color"} fontSize={20}>To expand your skills in...</Text>
+              <YStack>
+              
+              </YStack>
+            </CardHeader>
+            <CardFooter padded>
+              <XStack flex={1}/>
+              <Button size="$4">Start now</Button> 
+            </CardFooter>
+            <CardBackground>
+            </CardBackground>
+          </Card>
+        </View>
       </ScrollView>
-    </>
+    </View>
   );
 }
