@@ -1,23 +1,26 @@
 import { FC } from 'react';
-import { ImageSourcePropType } from 'react-native';
-import { Card, CardBackground, CardFooter, CardHeader, Image, Text } from "tamagui";
+import { Button, Card, CardBackground, CardFooter, CardHeader, Text, View, XStack, YStack} from "tamagui";
 
 
 interface LessonCardProps {
-  image?: ImageSourcePropType;
   title: string;
   details?: string;
 }
 
-const LessonCard: FC<LessonCardProps> = ({ image, title, details}) => {
+const LessonCard: FC<LessonCardProps> = ({ title, details}) => {
   return (
     <>
-      <Card elevate size={4} bordered height={150} width={300} marginStart={"$7"} marginTop={"$3"}>
-        <CardHeader>
-         <Text> Sample</Text>
+      <Card elevate size={4} bordered height={200} width={300} marginStart={"$7"} marginTop={"$3"}>
+        <CardHeader padded>
+         <Text fontSize={"$6"} marginBottom="$2">{title}</Text>
+         <Text>{details}</Text>
         </CardHeader>
-        <CardFooter>
-          <Text>{details}</Text>
+        <CardFooter padded>
+          <YStack flex={1}>
+            <Text> Views: </Text>
+            <Text> Rating : </Text>
+          </YStack>
+          <Button size="$4">Start</Button> 
         </CardFooter>
         <CardBackground>
         </CardBackground>

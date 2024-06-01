@@ -13,7 +13,6 @@ import {
   CardHeader,
   XStack,
 } from "tamagui";
-import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import LessonCard from "../src/components/LessonCard";
 
@@ -51,7 +50,7 @@ export default function Dashboard({ session }: { session: Session }) {
             Explore Lessons
           </Text>
         </View>
-        <LessonCard title="Sample" details="Sample Details" />
+        <LessonCard title="Vocabulary Exercises" details="This exercise will teach you the basics of Cebuano Vocabulary"/>
         <LessonCard title="Sample" details="Sample Details" />
         <LessonCard title="Sample" details="Sample Details" />
       </ScrollView>
