@@ -7,12 +7,16 @@ export const OptionCard = ({
   representation,
   setSelected,
   selected,
+  correct,
+  incorrect,
 }: {
   index: number;
   text?: string;
   representation?: string;
   setSelected?: React.Dispatch<React.SetStateAction<number>>;
   selected?: boolean;
+  correct?: boolean;
+  incorrect?: boolean;
 }) => {
   const [focused, setFocused] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -29,8 +33,12 @@ export const OptionCard = ({
       borderWidth="$1"
       width="40%"
       backgroundColor={
-        selected
-          ? "$blue5"
+        correct
+          ? "$green7"
+          : incorrect
+          ? "$red7"
+          : selected
+          ? "$blue7"
           : hovered
           ? "$backgroundHover"
           : focused

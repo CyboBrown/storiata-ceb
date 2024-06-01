@@ -6,6 +6,7 @@ export const structurizeVocabularyExercise = (
   problems: {
     id: number;
     exercise_id: number;
+    word_id: number;
     word_translations: {
       words: {
         normal_form: string;
@@ -23,6 +24,7 @@ export const structurizeVocabularyExercise = (
     return null;
   }
   const item_sets: Array<{
+    id: number;
     ceb_word: string;
     phonetic_form: string;
     representation: string;
@@ -30,6 +32,7 @@ export const structurizeVocabularyExercise = (
     part_of_speech: string;
   }> | null = problems.map((problem) => {
     return {
+      id: problem.word_id,
       ceb_word: problem.word_translations?.words?.normal_form || "error",
       phonetic_form: problem.word_translations?.words?.phonetic_form || "error",
       representation:
@@ -49,3 +52,7 @@ export const structurizeVocabularyExercise = (
   };
   return structured_data;
 };
+
+export const structurizeGrammarExercise = () => {};
+export const structurizeSpeakingExercise = () => {};
+export const structurizeListeningExercise = () => {};

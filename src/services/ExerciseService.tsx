@@ -31,7 +31,7 @@ export class ExerciseService {
     const { data, error, status } = await supabase
       .from("vocabulary_exercise_words")
       .select(
-        `id, exercise_id, word_translations(words(normal_form, phonetic_form, representation, part_of_speech), translations(word))`
+        `id, exercise_id, word_id, word_translations(words(normal_form, phonetic_form, representation, part_of_speech), translations(word))`
       )
       .eq("exercise_id", id);
     // .order("id", { ascending: true })
@@ -39,5 +39,23 @@ export class ExerciseService {
       console.log(error);
     }
     return data;
+  };
+
+  public static getVocabularyExerciseProgress = async (
+    user_id: string,
+    exercise_id: number
+  ) => {
+    console.log("GOT_VOCABULARY_EXERCISE_PROGRESS");
+    // const { data, error, status } = await supabase
+    //   .from("vocabulary_exercise_words")
+    //   .select(
+    //     `id, exercise_id, word_translations(words(normal_form, phonetic_form, representation, part_of_speech), translations(word))`
+    //   )
+    //   .eq("exercise_id", id);
+    // // .order("id", { ascending: true })
+    // if (error && status !== 406) {
+    //   console.log(error);
+    // }
+    // return data;
   };
 }
