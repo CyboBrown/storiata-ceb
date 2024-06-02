@@ -9,6 +9,7 @@ export const OptionCard = ({
   selected,
   correct,
   incorrect,
+  disabled,
 }: {
   index: number;
   text?: string;
@@ -17,6 +18,7 @@ export const OptionCard = ({
   selected?: boolean;
   correct?: boolean;
   incorrect?: boolean;
+  disabled?: boolean;
 }) => {
   const [focused, setFocused] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -67,28 +69,33 @@ export const OptionCard = ({
         setPressed(false);
         if (setSelected) setSelected(index);
       }}
+      disabled={disabled}
     >
-      {!representation || representation == "⛔" ? (
+      {representation == "⛔" ? (
         <Spinner size="large" color="$blue9" m="$2" />
+      ) : !representation ? (
+        ""
       ) : (
         <Text fontSize={50}>{representation}</Text>
       )}
-      <Text
-        fontSize={20}
-        fontWeight={400}
-        color={"$color"}
-        // color={
-        //   hovered
-        //     ? "$colorHover"
-        //     : focused
-        //     ? "$colorFocus"
-        //     : pressed
-        //     ? "$colorPress"
-        //     : "$color"
-        // }
-      >
-        {text}
-      </Text>
+      {!text || (
+        <Text
+          fontSize={20}
+          fontWeight={400}
+          color={"$color"}
+          // color={
+          //   hovered
+          //     ? "$colorHover"
+          //     : focused
+          //     ? "$colorFocus"
+          //     : pressed
+          //     ? "$colorPress"
+          //     : "$color"
+          // }
+        >
+          {text}
+        </Text>
+      )}
     </YStack>
   );
 };

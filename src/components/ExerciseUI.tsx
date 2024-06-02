@@ -57,6 +57,63 @@ export const VocabularyExerciseUI = ({
     }
   }, [itemIndex]);
 
+  const handleSubmit = () => {
+    if (reveal) {
+      setButtonText("Submit");
+      setSelectedIndex(-1);
+      !(exercise?.item_sets && itemIndex < exercise?.item_sets?.length - 1) ||
+        setItemIndex(itemIndex + 1);
+    } else {
+      setButtonText("Next");
+      if (selectedIndex == correct) setScore(score + 1);
+    }
+    setReveal(!reveal);
+  };
+
+  const getText = (index: number) =>
+    exercise?.item_sets
+      ? [
+          exercise?.item_sets[
+            correct === index ? arrangement[itemIndex] : randomArray[index]
+          ].ceb_word,
+          exercise?.item_sets[
+            correct === index ? arrangement[itemIndex] : randomArray[index]
+          ].ceb_word,
+          exercise?.item_sets[
+            correct === index ? arrangement[itemIndex] : randomArray[index]
+          ].eng_word,
+          "",
+        ][exercise_type]
+      : "...";
+
+  const getRepresentation = (index: number) =>
+    exercise?.item_sets
+      ? [
+          exercise?.item_sets[
+            correct === index ? arrangement[itemIndex] : randomArray[index]
+          ].representation,
+          "",
+          "",
+          exercise?.item_sets[
+            correct === index ? arrangement[itemIndex] : randomArray[index]
+          ].representation,
+        ][exercise_type]
+      : "⛔";
+
+  const optionCards = [0, 1, 2, 3].map((index) => (
+    <OptionCard
+      key={index}
+      index={index}
+      text={getText(index)}
+      representation={getRepresentation(index)}
+      setSelected={setSelectedIndex}
+      selected={selectedIndex === index}
+      correct={reveal && correct === index}
+      incorrect={reveal && correct !== index && selectedIndex === index}
+      disabled={reveal}
+    />
+  ));
+
   if (exercise_type < 4) {
     return (
       <>
@@ -85,7 +142,7 @@ export const VocabularyExerciseUI = ({
               &nbsp;"
               {!(
                 exercise?.item_sets &&
-                arrangement.length == exercise?.item_sets.length
+                arrangement.length === exercise?.item_sets.length
               ) ||
                 [
                   exercise?.item_sets[arrangement[itemIndex]].eng_word,
@@ -107,110 +164,14 @@ export const VocabularyExerciseUI = ({
           ai="center"
           rowGap="$5"
         >
-          <OptionCard
-            index={0}
-            text={
-              exercise?.item_sets
-                ? exercise?.item_sets[
-                    correct == 0 ? arrangement[itemIndex] : randomArray[0]
-                  ].ceb_word
-                : "..."
-            }
-            representation={
-              exercise?.item_sets
-                ? exercise?.item_sets[
-                    correct == 0 ? arrangement[itemIndex] : randomArray[0]
-                  ].representation
-                : "⛔"
-            }
-            setSelected={setSelectedIndex}
-            selected={selectedIndex == 0}
-            correct={reveal && correct == 0}
-            incorrect={reveal && correct != 0 && selectedIndex == 0}
-          />
-          <OptionCard
-            index={1}
-            text={
-              exercise?.item_sets
-                ? exercise?.item_sets[
-                    correct == 1 ? arrangement[itemIndex] : randomArray[1]
-                  ].ceb_word
-                : "..."
-            }
-            representation={
-              exercise?.item_sets
-                ? exercise?.item_sets[
-                    correct == 1 ? arrangement[itemIndex] : randomArray[1]
-                  ].representation
-                : "⛔"
-            }
-            setSelected={setSelectedIndex}
-            selected={selectedIndex == 1}
-            correct={reveal && correct == 1}
-            incorrect={reveal && correct != 1 && selectedIndex == 1}
-          />
-          <OptionCard
-            index={2}
-            text={
-              exercise?.item_sets
-                ? exercise?.item_sets[
-                    correct == 2 ? arrangement[itemIndex] : randomArray[2]
-                  ].ceb_word
-                : "..."
-            }
-            representation={
-              exercise?.item_sets
-                ? exercise?.item_sets[
-                    correct == 2 ? arrangement[itemIndex] : randomArray[2]
-                  ].representation
-                : "⛔"
-            }
-            setSelected={setSelectedIndex}
-            selected={selectedIndex == 2}
-            correct={reveal && correct == 2}
-            incorrect={reveal && correct != 2 && selectedIndex == 2}
-          />
-          <OptionCard
-            index={3}
-            text={
-              exercise?.item_sets
-                ? exercise?.item_sets[
-                    correct == 3 ? arrangement[itemIndex] : randomArray[3]
-                  ].ceb_word
-                : "..."
-            }
-            representation={
-              exercise?.item_sets
-                ? exercise?.item_sets[
-                    correct == 3 ? arrangement[itemIndex] : randomArray[3]
-                  ].representation
-                : "⛔"
-            }
-            setSelected={setSelectedIndex}
-            selected={selectedIndex == 3}
-            correct={reveal && correct == 3}
-            incorrect={reveal && correct != 4 && selectedIndex == 4}
-          />
+          {optionCards}
         </View>
         <Button
           alignSelf="center"
           width="90%"
           size="$6"
-          onPress={() => {
-            if (reveal) {
-              setButtonText("Submit");
-              setSelectedIndex(-1);
-              !(
-                exercise?.item_sets &&
-                itemIndex < exercise?.item_sets?.length - 1
-              ) || setItemIndex(itemIndex + 1);
-            } else {
-              setButtonText("Next");
-              if (selectedIndex == correct) setScore(score + 1);
-            }
-            setReveal(!reveal);
-          }}
-          disabled={!reveal && selectedIndex == -1}
+          onPress={handleSubmit}
+          disabled={!reveal && selectedIndex === -1}
         >
           {buttonText}
         </Button>
