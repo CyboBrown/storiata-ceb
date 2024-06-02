@@ -38,6 +38,7 @@ export default function Dictionary({
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(-1);
   const [position, setPosition] = useState(0);
+  const [searched, setSearched] = useState(false);
 
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
@@ -48,7 +49,8 @@ export default function Dictionary({
     try {
       console.log(text);
       setLoading(true);
-      setInput(text);
+      setSearched(true);
+      // setInput(text);
       let data = await DictionaryService.searchWord(text);
       if (data) {
         setResults(data);
@@ -84,15 +86,17 @@ export default function Dictionary({
               flex={1}
               size="$4"
               placeholder={`Enter Word...`}
-              onChangeText={(input) => search(input)}
+              onChangeText={(input) => setInput(input)}
             />
-            <Button size="$4">Search</Button>
+            <Button size="$4" onPress={() => search(input)}>
+              Search
+            </Button>
           </XStack>
           {loading ? (
             <Spinner size="large" color="$blue9" m="$2" />
           ) : (
             results.length == 0 &&
-            (input === "" ? (
+            (!searched ? (
               <SizableText
                 size="$4"
                 fontWeight="200"
