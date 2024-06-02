@@ -1,5 +1,6 @@
 import { supabase } from "../utils/supabase";
 import { Word } from "../models/Word";
+import { Translation } from "../models/Translation";
 
 export class DictionaryService {
   public static addWordTranslation = async (
@@ -22,9 +23,21 @@ export class DictionaryService {
     return data;
   };
 
+  // ***
+  public static createTranslation = async (translation: Translation) => {
+    console.log("CREATED_TRANSLATION");
+    const { data, error } = await supabase
+      .from("translations")
+      .insert([translation])
+      .select();
+    if (error) {
+      console.log(error);
+    }
+    return data;
+  };
+
   public static createWord = async (word: Word) => {
     console.log("CREATED_WORD");
-    // console.log(word);
     const { data, error } = await supabase
       .from("words")
       .insert([
@@ -44,9 +57,22 @@ export class DictionaryService {
     return data;
   };
 
+  // ***
+  public static editTranslation = async (translation: Translation) => {
+    console.log("EDITED_TRANSLATION");
+    const { data, error } = await supabase
+      .from("words")
+      .update(translation)
+      .eq("id", translation.id)
+      .select();
+    if (error) {
+      console.log(error);
+    }
+    return data;
+  };
+
   public static editWord = async (word: Word) => {
     console.log("EDITED_WORD");
-    // console.log(word);
     const { data, error } = await supabase
       .from("words")
       .update({
@@ -65,8 +91,56 @@ export class DictionaryService {
     return data;
   };
 
+  // ***
+  public static getTranslation = async (translation_id: string) => {
+    console.log("GOT_TRANSLATION");
+    const { data, error, status } = await supabase
+      .from("translations")
+      .select(`*`)
+      .eq("id", translation_id)
+      .single();
+    if (error && status !== 406) {
+      console.log(error);
+    }
+    return data;
+  };
+
+  // ***
   public static getWord = async (word_id: string) => {
     console.log("GOT_WORD");
+    const { data, error, status } = await supabase
+      .from("words")
+      .select(`*, translations(word)`)
+      .eq("id", word_id)
+      .single();
+    if (error && status !== 406) {
+      console.log(error);
+    }
+    return data;
+  };
+
+  // ***
+  public static removeTranslation = async (translation_id: number) => {
+    console.log("REMOVED_TRANSLATION");
+    const { data, error } = await supabase
+      .from("translations")
+      .delete()
+      .eq("id", translation_id);
+    if (error) {
+      console.log(error);
+    }
+  };
+
+  // ***
+  public static removeWord = async (word_id: number) => {
+    console.log("REMOVED_WORD");
+    const { data, error } = await supabase
+      .from("words")
+      .delete()
+      .eq("id", word_id);
+    if (error) {
+      console.log(error);
+    }
   };
 
   public static removeWordTranslation = async (
