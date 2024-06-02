@@ -50,7 +50,8 @@ export enum RevEngPartsOfSpeech {
   "o" = "Nominative",
 }
 
-export enum ExerciseTypeNumber {
+export enum ExerciseTypes {
+  Uncategorized,
   Vocabulary,
   Listening,
   Grammar,

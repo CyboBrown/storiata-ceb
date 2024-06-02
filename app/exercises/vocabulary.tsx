@@ -19,10 +19,11 @@ import {
 } from "tamagui";
 import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
-import { VocabularyExercise } from "../../src/models/VocabularyExercise";
+import { Exercise } from "../../src/models/Exercise";
 import { ExerciseService } from "../../src/services/ExerciseService";
 import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
 import { ExercisePopover } from "../../src/components/ExercisePopover";
+import { ExerciseTypes } from "../../src/utils/enums";
 
 export default function VocabularyExercises({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
@@ -33,7 +34,7 @@ export default function VocabularyExercises({ session }: { session: Session }) {
   const colorScheme = useColorScheme();
 
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<VocabularyExercise[]>([]);
+  const [results, setResults] = useState<Exercise[]>([]);
 
   useEffect(() => {
     loadExercises();
@@ -42,7 +43,9 @@ export default function VocabularyExercises({ session }: { session: Session }) {
   const loadExercises = async () => {
     try {
       setLoading(true);
-      let data = await ExerciseService.getAllVocabularyExercises();
+      let data = await ExerciseService.getAllExercisesByType(
+        ExerciseTypes.Vocabulary
+      );
       if (data) {
         setResults(data);
       }

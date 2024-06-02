@@ -2,7 +2,7 @@ export interface StructuredVocabularyExercise {
   created_at: string;
   description: string;
   id: number;
-  mode: number;
+  type: number;
   topic: string;
   item_sets: Array<{
     id: number;

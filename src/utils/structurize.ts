@@ -1,8 +1,8 @@
 import { StructuredVocabularyExercise } from "../models/StructuredVocabularyExercise";
-import { VocabularyExercise } from "../models/VocabularyExercise";
+import { Exercise } from "../models/Exercise";
 
 export const structurizeVocabularyExercise = (
-  details: VocabularyExercise,
+  details: Exercise,
   problems: {
     id: number;
     exercise_id: number;
@@ -46,7 +46,7 @@ export const structurizeVocabularyExercise = (
     created_at: details.created_at || "error",
     description: details.description,
     id: details.id,
-    mode: details.mode,
+    type: details.type,
     topic: details.topic,
     item_sets: item_sets,
   };

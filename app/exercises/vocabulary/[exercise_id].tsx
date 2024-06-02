@@ -20,7 +20,7 @@ import {
 } from "tamagui";
 import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
-import { VocabularyExercise } from ".../../../src/models/VocabularyExercise";
+import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from ".../../../src/services/ExerciseService";
 import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
 import { ExercisePopover } from ".../../../src/components/ExercisePopover";
@@ -47,7 +47,7 @@ export default function VocabularyExercises({
   const local = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Loading...");
-  const [exerciseDetails, setExerciseDetails] = useState<VocabularyExercise>();
+  const [exerciseDetails, setExerciseDetails] = useState<Exercise>();
   const [exerciseProblems, setExerciseProblems] = useState<
     {
       id: number;
@@ -80,9 +80,9 @@ export default function VocabularyExercises({
       let problems = await ExerciseService.getVocabularyExerciseProblems(
         parseInt(local.exercise_id as string)
       );
-      let details = (await ExerciseService.getVocabularyExerciseDetails(
+      let details = (await ExerciseService.getExerciseDetails(
         parseInt(local.exercise_id as string)
-      )) as VocabularyExercise;
+      )) as Exercise;
       if (problems) {
         setExerciseProblems(problems);
         setExerciseDetails(details);
@@ -130,7 +130,7 @@ export default function VocabularyExercises({
           ) : (
             <VocabularyExerciseUI
               exercise_type={
-                VocabularyExerciseType.ChooseRepresentationForCebWord
+                VocabularyExerciseType.ChooseCebRepresentationForEngWord
               }
               exercise={exercise || null}
             />

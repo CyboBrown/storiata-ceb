@@ -9,6 +9,66 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      exercise_words: {
+        Row: {
+          created_at: string
+          exercise_id: number
+          id: number
+          word_id: number
+        }
+        Insert: {
+          created_at?: string
+          exercise_id: number
+          id?: number
+          word_id: number
+        }
+        Update: {
+          created_at?: string
+          exercise_id?: number
+          id?: number
+          word_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vocabulary_exercise_words_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "exercises"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vocabulary_exercise_words_word_id_fkey"
+            columns: ["word_id"]
+            isOneToOne: false
+            referencedRelation: "word_translations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exercises: {
+        Row: {
+          created_at: string
+          description: string
+          id: number
+          topic: string
+          type: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: number
+          topic: string
+          type?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: number
+          topic?: string
+          type?: number
+        }
+        Relationships: []
+      }
       preferences: {
         Row: {
           created_at: string
@@ -110,66 +170,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      vocabulary_exercise_words: {
-        Row: {
-          created_at: string
-          exercise_id: number
-          id: number
-          word_id: number
-        }
-        Insert: {
-          created_at?: string
-          exercise_id: number
-          id?: number
-          word_id: number
-        }
-        Update: {
-          created_at?: string
-          exercise_id?: number
-          id?: number
-          word_id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "vocabulary_exercise_words_exercise_id_fkey"
-            columns: ["exercise_id"]
-            isOneToOne: false
-            referencedRelation: "vocabulary_exercises"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "vocabulary_exercise_words_word_id_fkey"
-            columns: ["word_id"]
-            isOneToOne: false
-            referencedRelation: "word_translations"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      vocabulary_exercises: {
-        Row: {
-          created_at: string
-          description: string
-          id: number
-          mode: number
-          topic: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string
-          id?: number
-          mode?: number
-          topic: string
-        }
-        Update: {
-          created_at?: string
-          description?: string
-          id?: number
-          mode?: number
-          topic?: string
-        }
-        Relationships: []
       }
       word_translations: {
         Row: {
