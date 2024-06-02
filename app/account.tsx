@@ -6,6 +6,8 @@ import { Session } from "@supabase/supabase-js";
 import Avatar from "./avatar";
 import { router } from "expo-router";
 import { UserAuthentication } from "../src/services/UserAuthentication";
+import { AccountService } from "../src/services/AccountService";
+import { Profile } from "../src/models/Profile";
 
 export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
@@ -19,22 +21,15 @@ export default function Account({ session }: { session: Session }) {
   }, []);
 
   useEffect(() => {
-    if (session) getProfile();
+    if (session) showProfile();
   }, [session]);
 
-  async function getProfile() {
+  async function showProfile() {
     try {
       setLoading(true);
       if (!session?.user) throw new Error("No user on the session!");
 
-      const { data, error, status } = await supabase
-        .from("profiles")
-        .select(`username, website, avatar_url`)
-        .eq("id", session?.user.id)
-        .single();
-      if (error && status !== 406) {
-        throw error;
-      }
+      let data = await AccountService.getProfile(session?.user.id);
 
       if (data?.avatar_url) {
         setAvatarUrl(data.avatar_url);
@@ -54,7 +49,7 @@ export default function Account({ session }: { session: Session }) {
     }
   }
 
-  async function updateProfile({
+  async function editProfile({
     username,
     website,
     avatar_url,
@@ -66,20 +61,14 @@ export default function Account({ session }: { session: Session }) {
     try {
       setLoading(true);
       if (!session?.user) throw new Error("No user on the session!");
-
-      const updates = {
+      const updates: Profile = {
         id: session?.user.id,
         username,
         website,
         avatar_url,
         updated_at: new Date(),
       };
-
-      const { error } = await supabase.from("profiles").upsert(updates);
-
-      if (error) {
-        throw error;
-      }
+      await AccountService.updateProfile(updates);
     } catch (error) {
       if (error instanceof Error) {
         Alert.alert(error.message);
@@ -97,7 +86,7 @@ export default function Account({ session }: { session: Session }) {
           url={avatarUrl}
           onUpload={(url: string) => {
             setAvatarUrl(url);
-            updateProfile({ username, website, avatar_url: url });
+            editProfile({ username, website, avatar_url: url });
           }}
         />
       </View>
@@ -132,7 +121,7 @@ export default function Account({ session }: { session: Session }) {
       <View marginTop="$5">
         <Button
           onPress={() =>
-            updateProfile({ username, website, avatar_url: avatarUrl })
+            editProfile({ username, website, avatar_url: avatarUrl })
           }
           disabled={loading}
         >

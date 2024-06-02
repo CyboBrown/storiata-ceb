@@ -17,16 +17,16 @@ export class UserAuthentication {
     }
   };
 
-  public static insertUser = async (
-    user_id: string,
-    isContributor: boolean
-  ) => {
-    const { data, error } = await supabase
-      .from("user_details")
-      .insert([{ user_id, user_type: isContributor ? "contributor" : "user" }])
-      .select();
-    console.log(error, data);
-  };
+  // public static insertUser = async (
+  //   user_id: string,
+  //   isContributor: boolean
+  // ) => {
+  //   const { data, error } = await supabase
+  //     .from("user_details")
+  //     .insert([{ user_id, user_type: isContributor ? "contributor" : "user" }])
+  //     .select();
+  //   console.log(error, data);
+  // };
 
   public static requestContributor = async (user_id: string) => {
     const { data, error } = await supabase
