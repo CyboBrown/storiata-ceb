@@ -1,4 +1,4 @@
-export interface StructuredVocabularyExercise {
+export interface SpeakingExercise {
   created_at: string;
   description: string;
   id: number;

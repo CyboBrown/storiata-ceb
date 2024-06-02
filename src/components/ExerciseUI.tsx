@@ -1,6 +1,6 @@
 import { Button, Text, View } from "tamagui";
 import { OptionCard } from "./OptionCard";
-import { StructuredVocabularyExercise } from "../models/StructuredVocabularyExercise";
+import { VocabularyExercise } from "../models/VocabularyExercise";
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { randomIndex, shuffleArray } from "../utils/helpers";
@@ -11,7 +11,7 @@ export const VocabularyExerciseUI = ({
   exercise,
 }: {
   exercise_type: number;
-  exercise: StructuredVocabularyExercise | null;
+  exercise: VocabularyExercise | null;
 }) => {
   const [itemIndex, setItemIndex] = useState(0);
   const [arrangement, setArrangement] = useState<Array<number>>([]);
@@ -42,7 +42,7 @@ export const VocabularyExerciseUI = ({
   }, [exercise]);
 
   useEffect(() => {
-    console.log("Previous correct: " + correct);
+    // console.log("Previous correct: " + correct);
     const current = randomIndex(4);
     console.log("Current correct: " + current);
     setCorrect(current);

@@ -25,7 +25,7 @@ import { ExerciseService } from ".../../../src/services/ExerciseService";
 import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
 import { ExercisePopover } from ".../../../src/components/ExercisePopover";
 import { useLocalSearchParams } from "expo-router";
-import { StructuredVocabularyExercise } from "../../../src/models/StructuredVocabularyExercise";
+import { VocabularyExercise } from "../../../src/models/VocabularyExercise";
 import { structurizeVocabularyExercise } from "../../../src/utils/structurize";
 import { OptionCard } from "../../../src/components/OptionCard";
 import { VocabularyExerciseUI } from "../../../src/components/ExerciseUI";
@@ -47,27 +47,26 @@ export default function VocabularyExercises({
   const local = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Loading...");
-  const [exerciseDetails, setExerciseDetails] = useState<Exercise>();
-  const [exerciseProblems, setExerciseProblems] = useState<
-    {
-      id: number;
-      exercise_id: number;
-      word_id: number;
-      word_translations: {
-        words: {
-          normal_form: string;
-          phonetic_form: string;
-          representation: string | null;
-          part_of_speech: string | null;
-        } | null;
-        translations: {
-          word: string;
-        } | null;
-      } | null;
-    }[]
-  >();
-  const [exercise, setExercise] =
-    useState<StructuredVocabularyExercise | null>();
+  // const [exerciseDetails, setExerciseDetails] = useState<Exercise>();
+  // const [exerciseProblems, setExerciseProblems] = useState<
+  //   {
+  //     id: number;
+  //     exercise_id: number;
+  //     word_id: number;
+  //     word_translations: {
+  //       words: {
+  //         normal_form: string;
+  //         phonetic_form: string;
+  //         representation: string | null;
+  //         part_of_speech: string | null;
+  //       } | null;
+  //       translations: {
+  //         word: string;
+  //       } | null;
+  //     } | null;
+  //   }[]
+  // >();
+  const [exercise, setExercise] = useState<VocabularyExercise | null>();
 
   useEffect(() => {
     loadExercise();
@@ -80,16 +79,8 @@ export default function VocabularyExercises({
       let problems = await ExerciseService.getVocabularyExerciseProblems(
         parseInt(local.exercise_id as string)
       );
-      let details = (await ExerciseService.getExerciseDetails(
-        parseInt(local.exercise_id as string)
-      )) as Exercise;
-      if (problems) {
-        setExerciseProblems(problems);
-        setExerciseDetails(details);
-        setExercise(structurizeVocabularyExercise(details, problems));
-        // console.log(problems);
-        // console.log(details);
-      }
+      setExercise(problems);
+      console.log("*****" + problems);
     } catch (error) {
       if (error instanceof Error) {
         Alert.alert(error.message);
@@ -98,23 +89,6 @@ export default function VocabularyExercises({
       setLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   try {
-  //     setLoadingText("Generating exercise...");
-  //     setLoading(true);
-  //     console.log(exercise);
-  //     if (exercise) {
-  //       setItemIndex(0);
-  //     }
-  //   } catch (error) {
-  //     if (error instanceof Error) {
-  //       Alert.alert(error.message);
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, [exercise]);
 
   return (
     <TamaguiProvider>

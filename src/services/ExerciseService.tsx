@@ -1,8 +1,11 @@
+import { Exercise } from "../models/Exercise";
+import { VocabularyExercise } from "../models/VocabularyExercise";
+import { structurizeVocabularyExercise } from "../utils/structurize";
 import { supabase } from "../utils/supabase";
 
 export class ExerciseService {
   public static getAllExercisesByType = async (type: number) => {
-    console.log("GOT_ALL_EXERCISES");
+    console.log("GOT_ALL_EXERCISES_" + type);
     const { data, error, status } = await supabase
       .from("exercises")
       .select(`*`)
@@ -27,6 +30,24 @@ export class ExerciseService {
     return data;
   };
 
+  // ***
+  public static getGrammarExerciseProblems = async (id: number) => {
+    console.log("GOT_GRAMMAR_EXERCISE_PROBLEMS");
+    return null;
+  };
+
+  // ***
+  public static getListeningExerciseProblems = async (id: number) => {
+    console.log("GOT_LISTENING_EXERCISE_PROBLEMS");
+    return null;
+  };
+
+  // ***
+  public static getSpeakingExerciseProblems = async (id: number) => {
+    console.log("GOT_SPEAKING_EXERCISE_PROBLEMS");
+    return null;
+  };
+
   public static getVocabularyExerciseProblems = async (id: number) => {
     console.log("GOT_VOCABULARY_EXERCISE_PROBLEMS");
     const { data, error, status } = await supabase
@@ -39,25 +60,53 @@ export class ExerciseService {
     if (error && status !== 406) {
       console.log(error);
     }
-    return data;
+    let details = (await ExerciseService.getExerciseDetails(id)) as Exercise;
+    if (data) {
+      const problems: VocabularyExercise | null = structurizeVocabularyExercise(
+        details,
+        data
+      );
+      // console.log("Details: " + details);
+      // console.log("Data: " + data);
+      // console.log("Problems: " + problems);
+      return problems;
+    }
+    return null;
   };
 
   // ***
-  public static getVocabularyExerciseProgress = async (
-    user_id: string,
-    exercise_id: number
-  ) => {
-    console.log("GOT_VOCABULARY_EXERCISE_PROGRESS");
-    // const { data, error, status } = await supabase
-    //   .from("vocabulary_exercise_words")
-    //   .select(
-    //     `id, exercise_id, word_translations(words(normal_form, phonetic_form, representation, part_of_speech), translations(word))`
-    //   )
-    //   .eq("exercise_id", id);
-    // // .order("id", { ascending: true })
-    // if (error && status !== 406) {
-    //   console.log(error);
-    // }
-    // return data;
+  public static updateExerciseDetails = async (exercise: Exercise) => {
+    console.log("UPDATED_EXERCISE_DETAILS");
+    return null;
   };
+
+  // ***
+  public static createExercise = async (exercise: Exercise) => {
+    console.log("CREATED_EXERCISE");
+    return null;
+  };
+
+  // ***
+  public static deleteExercise = async (id: number) => {
+    console.log("DELETED_EXERCISE");
+  };
+
+  // ***
+  // public static getVocabularyExerciseProgress = async (
+  //   user_id: string,
+  //   exercise_id: number
+  // ) => {
+  //   console.log("GOT_VOCABULARY_EXERCISE_PROGRESS");
+  //   // const { data, error, status } = await supabase
+  //   //   .from("vocabulary_exercise_words")
+  //   //   .select(
+  //   //     `id, exercise_id, word_translations(words(normal_form, phonetic_form, representation, part_of_speech), translations(word))`
+  //   //   )
+  //   //   .eq("exercise_id", id);
+  //   // // .order("id", { ascending: true })
+  //   // if (error && status !== 406) {
+  //   //   console.log(error);
+  //   // }
+  //   // return data;
+  // };
 }
