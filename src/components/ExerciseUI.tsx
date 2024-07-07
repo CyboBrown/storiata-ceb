@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { randomIndex, shuffleArray } from "../utils/helpers";
 import { VocabularyExerciseType } from "../utils/enums";
+import { Link } from "expo-router";
 
 export const VocabularyExerciseUI = ({
   exercise_type,
@@ -13,7 +14,7 @@ export const VocabularyExerciseUI = ({
   exercise_type: number;
   exercise: VocabularyExercise | null;
 }) => {
-  const [itemIndex, setItemIndex] = useState(0);
+  const [itemIndex, setItemIndex] = useState(0); // Current exercise item number
   const [arrangement, setArrangement] = useState<Array<number>>([]);
   const [score, setScore] = useState(0);
   const [buttonText, setButtonText] = useState("Submit");
@@ -21,37 +22,67 @@ export const VocabularyExerciseUI = ({
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [randomArray, setRandomArray] = useState<Array<number>>([0, 1, 2, 3]);
   const [reveal, setReveal] = useState<boolean>(false);
+  const [finished, setFinished] = useState<boolean>(false);
+  const [rendered, setRendered] = useState<boolean>(false); // Checks if page has been rendered
+
+  // useEffect(() => {
+  //   try {
+  //     console.log(exercise);
+  //     if (exercise) {
+  //       setItemIndex(0);
+  //       setScore(0);
+  //       setArrangement(
+  //         shuffleArray(Array.from(Array(exercise.item_sets?.length).keys()))
+  //       );
+  //     }
+  //   } catch (error) {
+  //     if (error instanceof Error) {
+  //       Alert.alert(error.message);
+  //     }
+  //   } finally {
+  //     console.log("Initialization Complete.");
+  //   }
+  // }, []);
 
   useEffect(() => {
-    try {
-      console.log(exercise);
-      if (exercise) {
-        setItemIndex(0);
-        setScore(0);
-        setArrangement(
-          shuffleArray(Array.from(Array(exercise.item_sets?.length).keys()))
-        );
+    let arrangement_temp = null;
+    if (!rendered) {
+      try {
+        console.log(exercise);
+        if (exercise) {
+          setItemIndex(0);
+          setScore(0);
+          arrangement_temp = shuffleArray(
+            Array.from(Array(exercise.item_sets?.length).keys())
+          );
+          setArrangement(arrangement_temp);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          Alert.alert(error.message);
+        }
+      } finally {
+        console.log("Initialization Complete.");
+        setRendered(true);
       }
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert(error.message);
-      }
-    } finally {
-      console.log("Initialization Complete.");
     }
-  }, [exercise]);
-
-  useEffect(() => {
     // console.log("Previous correct: " + correct);
     const current = randomIndex(4);
     console.log("Current correct: " + current);
     setCorrect(current);
     if (exercise?.item_sets?.length) {
-      const allIndices = Array.from(Array(exercise.item_sets.length).keys());
+      const allIndices = Array.from(Array(exercise.item_sets.length).keys()); // Generates an array of numbers from 0 to size -1
       const filteredIndices = allIndices.filter(
-        (index) => index != arrangement[itemIndex]
+        // Filters the array of numbers that does not include the current item number
+        (index) =>
+          arrangement_temp == null
+            ? index != arrangement[itemIndex]
+            : index != arrangement_temp[itemIndex]
       );
-      const shuffledIndices = shuffleArray(filteredIndices);
+      // console.log(
+      //   "~*~*~*~*~*~*~*~*~* " + arrangement[itemIndex] + " ~*~*~*~*~*~*~*~*~*"
+      // );
+      const shuffledIndices = shuffleArray(filteredIndices); // Shuffles the filtered array and selects the first four elements
       const newRandomArray = shuffledIndices.slice(0, 4);
       setRandomArray(newRandomArray);
     }
@@ -59,10 +90,16 @@ export const VocabularyExerciseUI = ({
 
   const handleSubmit = () => {
     if (reveal) {
+      console.log("Score: " + score + "/" + exercise?.item_sets?.length);
       setButtonText("Submit");
       setSelectedIndex(-1);
-      !(exercise?.item_sets && itemIndex < exercise?.item_sets?.length - 1) ||
+      if (exercise?.item_sets && itemIndex < exercise?.item_sets?.length - 1) {
+        // If not last item, proceed to next item
         setItemIndex(itemIndex + 1);
+      } else {
+        // Else proceed to results
+        setFinished(true);
+      }
     } else {
       setButtonText("Next");
       if (selectedIndex == correct) setScore(score + 1);
@@ -114,7 +151,8 @@ export const VocabularyExerciseUI = ({
     />
   ));
 
-  if (exercise_type < 4) {
+  if (finished) {
+    // Show results if finished
     return (
       <>
         <View
@@ -122,6 +160,7 @@ export const VocabularyExerciseUI = ({
           jc="flex-start"
           ai="flex-start"
           p="$5"
+          my="$5"
           gap="$2"
           borderColor={"$color5"}
           borderRadius="$5"
@@ -129,53 +168,81 @@ export const VocabularyExerciseUI = ({
           width="90%"
         >
           <Text fontSize={20}>
-            {itemIndex + 1 + ") "}
-            {
-              [
-                "Choose the correct translation for",
-                "Choose the correct translation for",
-                "Choose the English equivalent of",
-                "Choose the most suitable representation for",
-              ][exercise_type]
-            }
-            <Text fontSize={20} fontWeight={600} color={"$color"}>
-              &nbsp;"
-              {!(
-                exercise?.item_sets &&
-                arrangement.length === exercise?.item_sets.length
-              ) ||
-                [
-                  exercise?.item_sets[arrangement[itemIndex]].eng_word,
-                  exercise?.item_sets[arrangement[itemIndex]].eng_word,
-                  exercise?.item_sets[arrangement[itemIndex]].ceb_word,
-                  exercise?.item_sets[arrangement[itemIndex]].ceb_word,
-                ][exercise_type]}
-              "
-            </Text>
-            .
+            {"Score: " + score + "/" + exercise?.item_sets?.length}
           </Text>
         </View>
-        <View
-          paddingVertical="$5"
-          width="100%"
-          flexDirection="row"
-          flexWrap="wrap"
-          jc="space-evenly"
-          ai="center"
-          rowGap="$5"
-        >
-          {optionCards}
-        </View>
-        <Button
-          alignSelf="center"
-          width="90%"
-          size="$6"
-          onPress={handleSubmit}
-          disabled={!reveal && selectedIndex === -1}
-        >
-          {buttonText}
-        </Button>
+        <Link href="/exercises/vocabulary" asChild>
+          <Button alignSelf="center" width="90%" size="$6">
+            Return
+          </Button>
+        </Link>
       </>
     );
+  } else {
+    // Show problems if not yet finished
+    if (exercise_type < 4) {
+      return (
+        <>
+          <View
+            alignSelf="center"
+            jc="flex-start"
+            ai="flex-start"
+            p="$5"
+            gap="$2"
+            borderColor={"$color5"}
+            borderRadius="$5"
+            borderWidth="$1"
+            width="90%"
+          >
+            <Text fontSize={20}>
+              {itemIndex + 1 + ") "}
+              {
+                [
+                  "Choose the correct translation for",
+                  "Choose the correct translation for",
+                  "Choose the English equivalent of",
+                  "Choose the most suitable representation for",
+                ][exercise_type]
+              }
+              <Text fontSize={20} fontWeight={600} color={"$color"}>
+                &nbsp;"
+                {!(
+                  exercise?.item_sets &&
+                  arrangement.length === exercise?.item_sets.length
+                ) ||
+                  [
+                    exercise?.item_sets[arrangement[itemIndex]].eng_word,
+                    exercise?.item_sets[arrangement[itemIndex]].eng_word,
+                    exercise?.item_sets[arrangement[itemIndex]].ceb_word,
+                    exercise?.item_sets[arrangement[itemIndex]].ceb_word,
+                  ][exercise_type]}
+                "
+              </Text>
+              .
+            </Text>
+          </View>
+          <View
+            paddingVertical="$5"
+            width="100%"
+            flexDirection="row"
+            flexWrap="wrap"
+            jc="space-evenly"
+            ai="center"
+            rowGap="$5"
+          >
+            {optionCards}
+          </View>
+          <Button
+            alignSelf="center"
+            width="90%"
+            size="$6"
+            onPress={handleSubmit}
+            disabled={!reveal && selectedIndex === -1}
+          >
+            {buttonText}
+          </Button>
+        </>
+      );
+    }
   }
 };

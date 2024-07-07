@@ -20,14 +20,9 @@ import {
 } from "tamagui";
 import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
-import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from ".../../../src/services/ExerciseService";
-import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
-import { ExercisePopover } from ".../../../src/components/ExercisePopover";
 import { useLocalSearchParams } from "expo-router";
 import { VocabularyExercise } from "../../../src/models/VocabularyExercise";
-import { structurizeVocabularyExercise } from "../../../src/utils/structurize";
-import { OptionCard } from "../../../src/components/OptionCard";
 import { VocabularyExerciseUI } from "../../../src/components/ExerciseUI";
 import { VocabularyExerciseType } from "../../../src/utils/enums";
 
@@ -103,9 +98,7 @@ export default function VocabularyExercises({
             </YStack>
           ) : (
             <VocabularyExerciseUI
-              exercise_type={
-                VocabularyExerciseType.ChooseCebRepresentationForEngWord
-              }
+              exercise_type={VocabularyExerciseType.ChooseEngWordForCebWord}
               exercise={exercise || null}
             />
           )}
