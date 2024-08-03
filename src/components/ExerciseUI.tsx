@@ -1,4 +1,4 @@
-import { Button, Text, View } from "tamagui";
+import { Button, Progress, Text, View } from "tamagui";
 import { OptionCard } from "./OptionCard";
 import { VocabularyExercise } from "../models/VocabularyExercise";
 import { useEffect, useState } from "react";
@@ -24,25 +24,6 @@ export const VocabularyExerciseUI = ({
   const [reveal, setReveal] = useState<boolean>(false);
   const [finished, setFinished] = useState<boolean>(false);
   const [rendered, setRendered] = useState<boolean>(false); // Checks if page has been rendered
-
-  // useEffect(() => {
-  //   try {
-  //     console.log(exercise);
-  //     if (exercise) {
-  //       setItemIndex(0);
-  //       setScore(0);
-  //       setArrangement(
-  //         shuffleArray(Array.from(Array(exercise.item_sets?.length).keys()))
-  //       );
-  //     }
-  //   } catch (error) {
-  //     if (error instanceof Error) {
-  //       Alert.alert(error.message);
-  //     }
-  //   } finally {
-  //     console.log("Initialization Complete.");
-  //   }
-  // }, []);
 
   useEffect(() => {
     let arrangement_temp = null;
@@ -80,7 +61,7 @@ export const VocabularyExerciseUI = ({
             : index != arrangement_temp[itemIndex]
       );
       // console.log(
-      //   "~*~*~*~*~*~*~*~*~* " + arrangement[itemIndex] + " ~*~*~*~*~*~*~*~*~*"
+      //   "~*~*~*~*~*~*~*~*~* " + test + " ~*~*~*~*~*~*~*~*~*"
       // );
       const shuffledIndices = shuffleArray(filteredIndices); // Shuffles the filtered array and selects the first four elements
       const newRandomArray = shuffledIndices.slice(0, 4);
@@ -183,6 +164,15 @@ export const VocabularyExerciseUI = ({
     if (exercise_type < 4) {
       return (
         <>
+          <Progress
+            size="$2"
+            value={((itemIndex + 1) / arrangement.length) * 100}
+            m="$5"
+            width="90%"
+            alignSelf="center"
+          >
+            <Progress.Indicator animation="bouncy" />
+          </Progress>
           <View
             alignSelf="center"
             jc="flex-start"

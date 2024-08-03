@@ -1,4 +1,4 @@
-import { ChevronRight, Hash } from "@tamagui/lucide-icons";
+import { ChevronRight, Hash, Lock, Unlock } from "@tamagui/lucide-icons";
 import { router } from "expo-router";
 import {
   Adapt,
@@ -19,11 +19,13 @@ export const ExercisePopover = ({
   title,
   subTitle,
   index,
+  locked,
   ...props
 }: PopoverProps & {
   title: string;
   subTitle: string;
   index: number;
+  locked?: boolean;
 }) => {
   return (
     <Popover
@@ -43,7 +45,7 @@ export const ExercisePopover = ({
             pressTheme
             title={title}
             subTitle={subTitle}
-            icon={Hash}
+            icon={locked ? Lock : Unlock}
             iconAfter={ChevronRight}
             onPress={() => {
               console.log("You just touched me! How dare you?");
