@@ -66,3 +66,7 @@ export enum VocabularyExerciseType {
   InputCebWordForEngWord,
   InputCebWordForRepresentation,
 }
+
+export enum GrammarExerciseType {
+  Default,
+}

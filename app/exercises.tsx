@@ -43,7 +43,7 @@ export default function Exercises({ session }: { session: Session }) {
         ai="stretch"
         backgroundColor={"$backgroundSoft"}
       >
-        <Link push href="/other" asChild>
+        <Link push href="/exercises/grammar" asChild>
           <Button size="$4">Grammar</Button>
         </Link>
         <Link push href="/exercises/vocabulary" asChild>
@@ -56,7 +56,7 @@ export default function Exercises({ session }: { session: Session }) {
         ai="stretch"
         backgroundColor={"$backgroundSoft"}
       >
-        <Link push href="/other" asChild>
+        <Link push href="/exercises/listening" asChild>
           <Button size="$4">Listening</Button>
         </Link>
         <Link push href="/other" asChild>

@@ -14,17 +14,20 @@ import {
   YStack,
 } from "tamagui";
 import type { PopoverProps } from "tamagui";
+import { ExerciseTypes } from "../utils/enums";
 
 export const ExercisePopover = ({
   title,
   subTitle,
   index,
+  exerciseType,
   locked,
   ...props
 }: PopoverProps & {
   title: string;
   subTitle: string;
   index: number;
+  exerciseType: number;
   locked?: boolean;
 }) => {
   return (
@@ -93,7 +96,20 @@ export const ExercisePopover = ({
               onPress={() => {
                 console.log("Exercises started.");
                 /* Custom code goes here, does not interfere with popover closure */
-                router.navigate(`exercises/vocabulary/${index}`);
+                switch (exerciseType) {
+                  case ExerciseTypes.Vocabulary:
+                    router.navigate(`exercises/vocabulary/${index}`);
+                    break;
+                  case ExerciseTypes.Listening:
+                    router.navigate(`exercises/listening/${index}`);
+                    break;
+                  case ExerciseTypes.Grammar:
+                    router.navigate(`exercises/grammar/${index}`);
+                    break;
+                  case ExerciseTypes.Speaking:
+                    router.navigate(`exercises/speaking/${index}`);
+                    break;
+                }
               }}
             >
               Start Exercise

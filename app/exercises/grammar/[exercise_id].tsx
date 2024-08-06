@@ -22,11 +22,11 @@ import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
 import { ExerciseService } from ".../../../src/services/ExerciseService";
 import { useLocalSearchParams } from "expo-router";
-import { VocabularyExercise } from "../../../src/models/VocabularyExercise";
-import { VocabularyExerciseUI } from "../../../src/components/ExerciseUI";
-import { VocabularyExerciseType } from "../../../src/utils/enums";
+import { GrammarExerciseUI } from "../../../src/components/ExerciseUI";
+import { GrammarExerciseType } from "../../../src/utils/enums";
+import { GrammarExercise } from "../../../src/models/GrammarExercise";
 
-export default function VocabularyExercises({
+export default function GrammarExercises({
   session,
   exercise_id,
 }: {
@@ -35,33 +35,14 @@ export default function VocabularyExercises({
 }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
-    console.log("VOCABULARY_EXERCISES_" + local.exercise_id + " page loaded.");
+    console.log("GRAMMAR_EXERCISES_" + local.exercise_id + " page loaded.");
   }, []);
 
   const colorScheme = useColorScheme();
   const local = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Loading...");
-  // const [exerciseDetails, setExerciseDetails] = useState<Exercise>();
-  // const [exerciseProblems, setExerciseProblems] = useState<
-  //   {
-  //     id: number;
-  //     exercise_id: number;
-  //     word_id: number;
-  //     word_translations: {
-  //       words: {
-  //         normal_form: string;
-  //         phonetic_form: string;
-  //         representation: string | null;
-  //         part_of_speech: string | null;
-  //       } | null;
-  //       translations: {
-  //         word: string;
-  //       } | null;
-  //     } | null;
-  //   }[]
-  // >();
-  const [exercise, setExercise] = useState<VocabularyExercise | null>();
+  const [exercise, setExercise] = useState<GrammarExercise | null>();
 
   useEffect(() => {
     loadExercise();
@@ -71,7 +52,7 @@ export default function VocabularyExercises({
     try {
       setLoadingText("Loading exercise...");
       setLoading(true);
-      let problems = await ExerciseService.getVocabularyExerciseProblems(
+      let problems = await ExerciseService.getGrammarExerciseProblems(
         parseInt(local.exercise_id as string)
       );
       setExercise(problems);
@@ -97,10 +78,8 @@ export default function VocabularyExercises({
               </Text>
             </YStack>
           ) : (
-            <VocabularyExerciseUI
-              exercise_type={
-                VocabularyExerciseType.ChooseCebRepresentationForEngWord
-              }
+            <GrammarExerciseUI
+              exercise_type={GrammarExerciseType.Default}
               exercise={exercise || null}
             />
           )}
