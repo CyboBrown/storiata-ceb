@@ -1,4 +1,30 @@
-export function DamerauLevenshtein(prices, damerau) {
+export function compareCebuanoSentences(text1, text2) {
+  let dl = DamerauLevenshtein();
+  return dl(phoneticize(text1), phoneticize(text2)) <= 2;
+}
+
+export function compareCebuanoWords(text1, text2) {
+  let dl = DamerauLevenshtein();
+  return dl(phoneticize(text1), phoneticize(text2)) <= 1;
+}
+
+export function compareEnglishSentences(text1, text2) {
+  let dl = DamerauLevenshtein();
+  return dl(text1, text2) <= 2;
+}
+
+export function compareEnglishWords(text1, text2) {
+  let dl = DamerauLevenshtein();
+  return dl(text1, text2) <= 1;
+}
+
+function phoneticize(text) {
+  text = text.replace("e", "i");
+  text = text.replace("o", "u");
+  return text;
+}
+
+function DamerauLevenshtein(prices, damerau) {
   //'prices' customisation of the edit costs by passing an object with optional 'insert', 'remove', 'substitute', and
   //'transpose' keys, corresponding to either a constant number, or a function that returns the cost. The default cost
   //for each operation is 1. The price functions take relevant character(s) as arguments, should return numbers, and

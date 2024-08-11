@@ -42,25 +42,6 @@ export default function VocabularyExercises({
   const local = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Loading...");
-  // const [exerciseDetails, setExerciseDetails] = useState<Exercise>();
-  // const [exerciseProblems, setExerciseProblems] = useState<
-  //   {
-  //     id: number;
-  //     exercise_id: number;
-  //     word_id: number;
-  //     word_translations: {
-  //       words: {
-  //         normal_form: string;
-  //         phonetic_form: string;
-  //         representation: string | null;
-  //         part_of_speech: string | null;
-  //       } | null;
-  //       translations: {
-  //         word: string;
-  //       } | null;
-  //     } | null;
-  //   }[]
-  // >();
   const [exercise, setExercise] = useState<VocabularyExercise | null>();
 
   useEffect(() => {
@@ -89,7 +70,7 @@ export default function VocabularyExercises({
     <TamaguiProvider>
       <Theme name={colorScheme === "dark" ? "dark" : "light"}>
         <YStack f={1} jc="center" ai="stretch" backgroundColor={"$background"}>
-          {loading ? (
+          {loading && exercise ? (
             <YStack jc="flex-start" ai="center" padding="$5">
               <Spinner size="large" color="$blue9" m="$2" />
               <Text fontSize={20} fontWeight={400} color={"$color"}>
@@ -98,9 +79,7 @@ export default function VocabularyExercises({
             </YStack>
           ) : (
             <VocabularyExerciseUI
-              exercise_type={
-                VocabularyExerciseType.ChooseCebRepresentationForEngWord
-              }
+              exercise_type={VocabularyExerciseType.InputCebWordForEngWord}
               exercise={exercise || null}
             />
           )}

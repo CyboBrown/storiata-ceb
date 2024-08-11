@@ -1,4 +1,4 @@
-import { Button, Progress, Text, View } from "tamagui";
+import { Button, Input, Progress, Text, View, YStack } from "tamagui";
 import { OptionCard } from "./OptionCard";
 import { VocabularyExercise } from "../models/VocabularyExercise";
 import { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import { randomIndex, shuffleArray } from "../utils/helpers";
 import { VocabularyExerciseType } from "../utils/enums";
 import { Link } from "expo-router";
 import { GrammarExercise } from "../models/GrammarExercise";
+import { compareCebuanoWords, compareEnglishWords } from "../utils/compare";
 
 export const VocabularyExerciseUI = ({
   exercise_type,
@@ -26,8 +27,11 @@ export const VocabularyExerciseUI = ({
   const [finished, setFinished] = useState<boolean>(false);
   const [rendered, setRendered] = useState<boolean>(false); // Checks if page has been rendered
 
+  const [input, setInput] = useState("");
+  const [correctAnswer, setCorrectAnswer] = useState("error");
+
   useEffect(() => {
-    let arrangement_temp = null;
+    let arrangement_temp = arrangement;
     if (!rendered) {
       try {
         console.log(exercise);
@@ -49,9 +53,25 @@ export const VocabularyExerciseUI = ({
       }
     }
     // console.log("Previous correct: " + correct);
-    const current = randomIndex(4);
-    console.log("Current correct: " + current);
-    setCorrect(current);
+    if (exercise_type < 4) {
+      const current = randomIndex(4);
+      console.log("Current correct: " + current);
+      setCorrect(current);
+    } else if (exercise_type == 4) {
+      setCorrect(-1);
+      setCorrectAnswer(
+        exercise && exercise.item_sets
+          ? exercise?.item_sets[arrangement_temp[itemIndex]].ceb_word
+          : "~*~*~*~"
+      );
+    } else if (exercise_type == 5) {
+      setCorrect(-1);
+      setCorrectAnswer(
+        exercise && exercise.item_sets
+          ? exercise?.item_sets[arrangement[itemIndex]].eng_word
+          : "~*~*~*~"
+      );
+    }
     if (exercise?.item_sets?.length) {
       const allIndices = Array.from(Array(exercise.item_sets.length).keys()); // Generates an array of numbers from 0 to size -1
       const filteredIndices = allIndices.filter(
@@ -74,7 +94,11 @@ export const VocabularyExerciseUI = ({
     if (reveal) {
       console.log("Score: " + score + "/" + exercise?.item_sets?.length);
       setButtonText("Submit");
-      setSelectedIndex(-1);
+      if (exercise_type < 4) {
+        setSelectedIndex(-1);
+      } else {
+        setInput("");
+      }
       if (exercise?.item_sets && itemIndex < exercise?.item_sets?.length - 1) {
         // If not last item, proceed to next item
         setItemIndex(itemIndex + 1);
@@ -84,7 +108,21 @@ export const VocabularyExerciseUI = ({
       }
     } else {
       setButtonText("Next");
-      if (selectedIndex == correct) setScore(score + 1);
+      if (exercise_type < 4) {
+        if (selectedIndex == correct) setScore(score + 1);
+      } else if (exercise_type == 4) {
+        console.log(input + " =? " + correctAnswer);
+        console.log(compareCebuanoWords(input, correctAnswer));
+        if (compareCebuanoWords(input, correctAnswer)) {
+          setScore(score + 1);
+          setCorrect(1);
+        }
+      } else if (exercise_type == 5) {
+        if (compareEnglishWords(input, correctAnswer)) {
+          setScore(score + 1);
+          setCorrect(1);
+        }
+      }
     }
     setReveal(!reveal);
   };
@@ -133,6 +171,57 @@ export const VocabularyExerciseUI = ({
     />
   ));
 
+  const inputBar = (
+    <>
+      <Input
+        size={"$5"}
+        placeholder={"Type here..."}
+        p="$5"
+        borderColor={"$color5"}
+        borderRadius="$5"
+        borderWidth="$1"
+        width="90%"
+        fontSize={20}
+        minHeight={"$8"}
+        value={input}
+        disabled={reveal}
+        backgroundColor={
+          reveal ? (correct == 1 ? "$green7" : "$red7") : "unset"
+        }
+        onChangeText={(input) => setInput(input)}
+      />
+      <YStack
+        jc="flex-start"
+        ai="center"
+        p="$5"
+        gap="$2"
+        borderColor={"$color5"}
+        borderRadius="$5"
+        borderWidth="$1"
+        width="90%"
+        backgroundColor={"$green7"}
+        display={reveal ? "unset" : "none"}
+      >
+        <Text
+          fontSize={20}
+          fontWeight={800}
+          color={"$color"}
+          alignSelf="flex-start"
+        >
+          Correct Answer:
+        </Text>
+        <Text
+          fontSize={20}
+          fontWeight={400}
+          color={"$color"}
+          alignSelf="flex-start"
+        >
+          {correctAnswer}
+        </Text>
+      </YStack>
+    </>
+  );
+
   if (finished) {
     // Show results if finished
     return (
@@ -162,7 +251,7 @@ export const VocabularyExerciseUI = ({
     );
   } else {
     // Show problems if not yet finished
-    if (exercise_type < 4) {
+    if (exercise_type < 6) {
       return (
         <>
           <Progress
@@ -193,6 +282,8 @@ export const VocabularyExerciseUI = ({
                   "Choose the correct translation for",
                   "Choose the English equivalent of",
                   "Choose the most suitable representation for",
+                  "Input the correct translation for",
+                  "Input the English equivalent of",
                 ][exercise_type]
               }
               <Text fontSize={20} fontWeight={600} color={"$color"}>
@@ -205,6 +296,8 @@ export const VocabularyExerciseUI = ({
                     exercise?.item_sets[arrangement[itemIndex]].eng_word,
                     exercise?.item_sets[arrangement[itemIndex]].eng_word,
                     exercise?.item_sets[arrangement[itemIndex]].ceb_word,
+                    exercise?.item_sets[arrangement[itemIndex]].ceb_word,
+                    exercise?.item_sets[arrangement[itemIndex]].eng_word,
                     exercise?.item_sets[arrangement[itemIndex]].ceb_word,
                   ][exercise_type]}
                 "
@@ -221,17 +314,43 @@ export const VocabularyExerciseUI = ({
             ai="center"
             rowGap="$5"
           >
-            {optionCards}
+            {exercise_type < 4 ? optionCards : inputBar}
           </View>
           <Button
             alignSelf="center"
             width="90%"
             size="$6"
             onPress={handleSubmit}
-            disabled={!reveal && selectedIndex === -1}
+            disabled={
+              !reveal && selectedIndex === -1 && (input === "" || input === " ")
+            }
           >
             {buttonText}
           </Button>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <View
+            alignSelf="center"
+            jc="flex-start"
+            ai="flex-start"
+            p="$5"
+            my="$5"
+            gap="$2"
+            borderColor={"$color5"}
+            borderRadius="$5"
+            borderWidth="$1"
+            width="90%"
+          >
+            <Text fontSize={20}>Invalid exercise type.</Text>
+          </View>
+          <Link href="/exercises/vocabulary" asChild>
+            <Button alignSelf="center" width="90%" size="$6">
+              Return
+            </Button>
+          </Link>
         </>
       );
     }

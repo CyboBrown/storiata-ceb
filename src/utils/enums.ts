@@ -64,9 +64,14 @@ export enum VocabularyExerciseType {
   ChooseEngWordForCebWord,
   ChooseRepresentationForCebWord,
   InputCebWordForEngWord,
-  InputCebWordForRepresentation,
+  InputEngWordForCebWord,
 }
 
 export enum GrammarExerciseType {
-  Default,
+  ChooseCebuanoForEnglishSentence,
+  ChooseEnglishForCebuanoSentence,
+  InputMissingCebuanoWord,
+  InputMissingEnglishWord,
+  InputCebuanoSentence,
+  InputEnglishSentence,
 }

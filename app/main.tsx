@@ -9,6 +9,7 @@ import Dictionary from "./dictionary";
 import Account from "./account";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
+import { compareCebuanoWords } from "../src/utils/compare";
 
 export default function Main({
   session,
@@ -20,6 +21,9 @@ export default function Main({
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
     console.log("MAIN page loaded.");
+    console.log(compareCebuanoWords("tapol", "tapol"));
+    console.log(compareCebuanoWords("tapol", "tapul"));
+    console.log(compareCebuanoWords("tapol", "drfasdf"));
   }, []);
 
   return (
