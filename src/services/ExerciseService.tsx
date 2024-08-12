@@ -160,9 +160,12 @@ export class ExerciseService {
         VocabularyExerciseType.ChooseCebWordForEngWord,
         VocabularyExerciseType.ChooseEngWordForCebWord,
         VocabularyExerciseType.ChooseRepresentationForCebWord,
+        VocabularyExerciseType.InputCebWordForEngWord,
+        VocabularyExerciseType.InputEngWordForCebWord,
       ];
 
-      if (data && data.level) exerTypeInInt = data.level % 5;
+      if (data && data.level) exerTypeInInt = data.level % 6;
+      console.log(vocabTypeMap[exerTypeInInt]);
       return vocabTypeMap[exerTypeInInt];
     } catch (error) {
       console.log("EXER_TYPE_ERROR: ", error);

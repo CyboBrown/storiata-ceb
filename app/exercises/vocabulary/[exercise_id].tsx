@@ -66,6 +66,7 @@ export default function VocabularyExercises({
         );
       setVocabExerType(exerType);
       setExercise(problems);
+      console.log(("EXERTPE IS CURRENTLY " + vocabExerType) as string);
       console.log("*****" + problems);
     } catch (error) {
       if (error instanceof Error) {
@@ -90,7 +91,7 @@ export default function VocabularyExercises({
           ) : (
             <VocabularyExerciseUI
               exercise_id={parseInt(local.exercise_id as string)}
-              exercise_type={vocabExerType as number}
+              exercise_type={vocabExerType}
               exercise={exercise || null}
             />
           )}
