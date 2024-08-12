@@ -10,6 +10,7 @@ export const OptionCard = ({
   correct,
   incorrect,
   disabled,
+  lengthy,
 }: {
   index: number;
   text?: string;
@@ -19,6 +20,7 @@ export const OptionCard = ({
   correct?: boolean;
   incorrect?: boolean;
   disabled?: boolean;
+  lengthy?: boolean;
 }) => {
   const [focused, setFocused] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -28,12 +30,13 @@ export const OptionCard = ({
       jc="flex-start"
       ai="center"
       //   m="$5"
-      p="$5"
+      px="$5"
+      py={lengthy ? "$3" : "$5"}
       gap="$2"
       borderColor={"$color5"}
       borderRadius="$5"
       borderWidth="$1"
-      width="40%"
+      width={lengthy ? "90%" : "40%"}
       backgroundColor={
         correct
           ? "$green7"

@@ -25,10 +25,10 @@ import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
 import { ExercisePopover } from "../../src/components/ExercisePopover";
 import { ExerciseTypes } from "../../src/utils/enums";
 
-export default function VocabularyExercises({ session }: { session: Session }) {
+export default function ListeningExercises({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
-    console.log("VOCABULARY_EXERCISES page loaded.");
+    console.log("LISTENING_EXERCISES page loaded.");
   }, []);
 
   const colorScheme = useColorScheme();
@@ -44,7 +44,7 @@ export default function VocabularyExercises({ session }: { session: Session }) {
     try {
       setLoading(true);
       let data = await ExerciseService.getAllExercisesByType(
-        ExerciseTypes.Vocabulary
+        ExerciseTypes.Listening
       );
       if (data) {
         setResults(data);
@@ -69,7 +69,7 @@ export default function VocabularyExercises({ session }: { session: Session }) {
         >
           <XStack jc="space-between" ai="flex-start" padding="$5">
             <Text fontSize={20} fontWeight={800} color={"$color"}>
-              Vocabulary Exercises
+              Listening Exercises
             </Text>
             <RefreshCw
               onPress={loadExercises}
@@ -87,12 +87,9 @@ export default function VocabularyExercises({ session }: { session: Session }) {
             >
               {results.map((result, index) => (
                 <ExercisePopover
-                  user="3ad19072-1877-415d-bf5e-61c4bfe03977"
                   title={result.topic}
                   subTitle={result.description}
                   index={result.id}
-                  exerciseType={ExerciseTypes.Vocabulary}
-                  key={result.id}
                 />
               ))}
             </YGroup>
