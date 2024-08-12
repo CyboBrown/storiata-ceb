@@ -1,4 +1,4 @@
-import { Button, Progress, Text, View } from "tamagui";
+import { Button, Progress, SizableText, Spacer, Text, View } from "tamagui";
 import { OptionCard } from "./OptionCard";
 import { VocabularyExercise } from "../models/VocabularyExercise";
 import { useEffect, useState } from "react";
@@ -6,24 +6,33 @@ import { Alert } from "react-native";
 import { randomIndex, shuffleArray } from "../utils/helpers";
 import { VocabularyExerciseType } from "../utils/enums";
 import { Link } from "expo-router";
+import { ExerciseService } from "../services/ExerciseService";
+import { red } from "@tamagui/themes";
 
 export const VocabularyExerciseUI = ({
+  exercise_id,
   exercise_type,
   exercise,
 }: {
+  exercise_id: number;
   exercise_type: number;
   exercise: VocabularyExercise | null;
 }) => {
+  const DEBUG_USER_UUID = "3ad19072-1877-415d-bf5e-61c4bfe03977";
   const [itemIndex, setItemIndex] = useState(0); // Current exercise item number
   const [arrangement, setArrangement] = useState<Array<number>>([]);
   const [score, setScore] = useState(0);
   const [buttonText, setButtonText] = useState("Submit");
   const [correct, setCorrect] = useState(-1);
+  const [incorrect, setIncorrect] = useState(0);
+  const [hasFailed, setHasFailed] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [randomArray, setRandomArray] = useState<Array<number>>([0, 1, 2, 3]);
   const [reveal, setReveal] = useState<boolean>(false);
   const [finished, setFinished] = useState<boolean>(false);
   const [rendered, setRendered] = useState<boolean>(false); // Checks if page has been rendered
+
+  const [wrongWords, setWrongWords] = useState<string[]>([]);
 
   useEffect(() => {
     let arrangement_temp = null;
@@ -83,7 +92,43 @@ export const VocabularyExerciseUI = ({
       }
     } else {
       setButtonText("Next");
-      if (selectedIndex == correct) setScore(score + 1);
+      if (selectedIndex == correct) {
+        setScore(score + 1);
+        const correct_word = exercise?.item_sets?.at(
+          arrangement[itemIndex]
+        )?.ceb_word;
+
+        // Revert mistake points from this word, if there was any.
+        if (correct_word) {
+          ExerciseService.trackCorrectWord(
+            exercise_id,
+            correct_word,
+            DEBUG_USER_UUID
+          );
+        } else {
+          console.error("The correct word is undefined, cannot track.");
+        }
+      } else {
+        if (incorrect >= 3) setHasFailed(true);
+        const wrongWord = exercise?.item_sets?.at(
+          arrangement[itemIndex]
+        )?.ceb_word;
+        setWrongWords((prevWords) => {
+          return wrongWord ? [...prevWords, wrongWord] : prevWords;
+        });
+        setIncorrect(incorrect + 1);
+
+        // Push updates to DB regarding this mistake.
+        if (wrongWord) {
+          ExerciseService.trackWrongWord(
+            exercise_id,
+            wrongWord,
+            DEBUG_USER_UUID
+          );
+        } else {
+          console.error("The wrong word is undefined, cannot track.");
+        }
+      }
     }
     setReveal(!reveal);
   };
@@ -133,24 +178,88 @@ export const VocabularyExerciseUI = ({
   ));
 
   if (finished) {
-    // Show results if finished
+    // Show results if finished.
+
+    // Increment level if passed and don't otherwise:
+    if (incorrect >= 3) {
+      console.log("YOU ARE A FAILURE!!!!");
+    } else {
+      ExerciseService.incrementUserExerciseProgress(
+        exercise_id,
+        "3ad19072-1877-415d-bf5e-61c4bfe03977"
+      );
+    }
+
     return (
       <>
         <View
           alignSelf="center"
           jc="flex-start"
           ai="flex-start"
-          p="$5"
+          p="$4"
           my="$5"
           gap="$2"
-          borderColor={"$color5"}
-          borderRadius="$5"
-          borderWidth="$1"
+          //borderColor={"$color5"}
+          //borderRadius="$5"
+          //borderWidth="$1"
           width="90%"
         >
-          <Text fontSize={20}>
-            {"Score: " + score + "/" + exercise?.item_sets?.length}
-          </Text>
+          <SizableText
+            alignSelf="center"
+            fontSize={28}
+            lineHeight={32}
+            fontWeight={900}
+          >
+            YOUR FINAL SCORE
+          </SizableText>
+
+          <SizableText
+            alignSelf="center"
+            fontSize={32}
+            lineHeight={32}
+            color={hasFailed ? "$red10Light" : "$green10Light"}
+          >
+            {score + " / " + exercise?.item_sets?.length}
+          </SizableText>
+
+          <Spacer></Spacer>
+
+          {hasFailed && (
+            <SizableText
+              alignSelf="center"
+              textAlign="center"
+              fontSize={12}
+              lineHeight={13}
+              color={hasFailed ? "$red10Light" : "$green10Light"}
+            >
+              Your efforts were recognized but weren't enough to pass the
+              exercise. Let's try again, shall we?
+            </SizableText>
+          )}
+
+          {incorrect > 0 && (
+            <>
+              <Spacer></Spacer>
+              <SizableText
+                alignSelf="center"
+                textAlign="center"
+                fontSize={16}
+                lineHeight={16}
+                fontWeight={700}
+              >
+                INCORRECT WORDS:
+              </SizableText>
+
+              <SizableText
+                alignSelf="center"
+                textAlign="center"
+                fontSize={13}
+                lineHeight={13}
+              >
+                {wrongWords.join(", ")}
+              </SizableText>
+            </>
+          )}
         </View>
         <Link href="/exercises/vocabulary" asChild>
           <Button alignSelf="center" width="90%" size="$6">

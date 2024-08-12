@@ -38,6 +38,7 @@ export default function VocabularyExercises({
     console.log("VOCABULARY_EXERCISES_" + local.exercise_id + " page loaded.");
   }, []);
 
+  const TEMP_USER_UUID = "3ad19072-1877-415d-bf5e-61c4bfe03977";
   const colorScheme = useColorScheme();
   const local = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
@@ -62,6 +63,9 @@ export default function VocabularyExercises({
   //   }[]
   // >();
   const [exercise, setExercise] = useState<VocabularyExercise | null>();
+  const [vocabExerType, setVocabExerType] = useState<VocabularyExerciseType>(
+    VocabularyExerciseType.ChooseCebRepresentationForEngWord
+  );
 
   useEffect(() => {
     loadExercise();
@@ -74,6 +78,12 @@ export default function VocabularyExercises({
       let problems = await ExerciseService.getVocabularyExerciseProblems(
         parseInt(local.exercise_id as string)
       );
+      let exerType: VocabularyExerciseType =
+        await ExerciseService.getVocabularyExerciseType(
+          parseInt(local.exercise_id as string),
+          TEMP_USER_UUID
+        );
+      setVocabExerType(exerType);
       setExercise(problems);
       console.log("*****" + problems);
     } catch (error) {
@@ -98,7 +108,8 @@ export default function VocabularyExercises({
             </YStack>
           ) : (
             <VocabularyExerciseUI
-              exercise_type={VocabularyExerciseType.ChooseEngWordForCebWord}
+              exercise_id={parseInt(local.exercise_id as string)}
+              exercise_type={vocabExerType as number}
               exercise={exercise || null}
             />
           )}
