@@ -21,9 +21,6 @@ export default function Main({
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
     console.log("MAIN page loaded.");
-    console.log(compareCebuanoWords("tapol", "tapol"));
-    console.log(compareCebuanoWords("tapol", "tapul"));
-    console.log(compareCebuanoWords("tapol", "drfasdf"));
   }, []);
 
   return (

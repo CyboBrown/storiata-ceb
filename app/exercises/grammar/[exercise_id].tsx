@@ -79,7 +79,7 @@ export default function GrammarExercises({
             </YStack>
           ) : (
             <GrammarExerciseUI
-              exercise_type={GrammarExerciseType.Default}
+              exercise_type={GrammarExerciseType.InputEnglishSentence}
               exercise={exercise || null}
             />
           )}

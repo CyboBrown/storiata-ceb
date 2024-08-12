@@ -79,7 +79,9 @@ export default function VocabularyExercises({
             </YStack>
           ) : (
             <VocabularyExerciseUI
-              exercise_type={VocabularyExerciseType.InputCebWordForEngWord}
+              exercise_type={
+                VocabularyExerciseType.ChooseCebRepresentationForEngWord
+              }
               exercise={exercise || null}
             />
           )}
