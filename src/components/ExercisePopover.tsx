@@ -50,19 +50,6 @@ export const ExercisePopover = ({
       console.error("Error fetching common wrong words:", error);
     }
   };
-  const fetchAccessedStatus = async () => {
-    try {
-      const words = await ExerciseService.getCommonMistakenWordsInExer(
-        index,
-        TEMP_USER_UUID
-      );
-      setCommonWrongWords(words);
-    } catch (error) {
-      console.error("Error fetching common wrong words:", error);
-    }
-  };
-
-  fetchAndSetCommonWrongWords();
 
   return (
     <Popover
