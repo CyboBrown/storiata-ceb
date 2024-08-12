@@ -6,7 +6,6 @@ import {
   structurizeVocabularyExercise,
 } from "../utils/structurize";
 import { VocabularyExerciseType } from "../utils/enums";
-import { structurizeVocabularyExercise } from "../utils/structurize";
 import { supabase } from "../utils/supabase";
 
 export class ExerciseService {
@@ -163,7 +162,7 @@ export class ExerciseService {
         VocabularyExerciseType.ChooseRepresentationForCebWord,
       ];
 
-      if (data && data.level) exerTypeInInt = data.level % 4;
+      if (data && data.level) exerTypeInInt = data.level % 5;
       return vocabTypeMap[exerTypeInInt];
     } catch (error) {
       console.log("EXER_TYPE_ERROR: ", error);
