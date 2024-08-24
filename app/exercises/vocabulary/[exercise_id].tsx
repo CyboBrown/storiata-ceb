@@ -91,9 +91,7 @@ export default function VocabularyExercises({
           ) : (
             <VocabularyExerciseUI
               exercise_id={parseInt(local.exercise_id as string)}
-              exercise_type={
-                VocabularyExerciseType.ChooseCebRepresentationForEngWord
-              }
+              exercise_type={vocabExerType}
               exercise={exercise || null}
             />
           )}
