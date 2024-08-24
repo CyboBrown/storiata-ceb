@@ -87,7 +87,7 @@ export default function VocabularyExercises({ session }: { session: Session }) {
             >
               {results.map((result, index) => (
                 <ExercisePopover
-                  user="3ad19072-1877-415d-bf5e-61c4bfe03977"
+                  user="ebabaa6c-4254-465e-9f2f-f285a2364277"
                   title={result.topic}
                   subTitle={result.description}
                   index={result.id}

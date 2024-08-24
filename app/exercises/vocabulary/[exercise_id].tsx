@@ -38,7 +38,7 @@ export default function VocabularyExercises({
     console.log("VOCABULARY_EXERCISES_" + local.exercise_id + " page loaded.");
   }, []);
 
-  const TEMP_USER_UUID = "3ad19072-1877-415d-bf5e-61c4bfe03977";
+  const TEMP_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
   const colorScheme = useColorScheme();
   const local = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
@@ -91,7 +91,9 @@ export default function VocabularyExercises({
           ) : (
             <VocabularyExerciseUI
               exercise_id={parseInt(local.exercise_id as string)}
-              exercise_type={vocabExerType}
+              exercise_type={
+                VocabularyExerciseType.ChooseCebRepresentationForEngWord
+              }
               exercise={exercise || null}
             />
           )}

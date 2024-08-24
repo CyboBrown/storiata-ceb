@@ -35,7 +35,7 @@ export const ExercisePopover = ({
   exerciseType: number;
   locked?: boolean;
 }) => {
-  const TEMP_USER_UUID = "3ad19072-1877-415d-bf5e-61c4bfe03977";
+  const TEMP_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
   const [commonWrongWords, setCommonWrongWords] = useState<string[]>();
   const [accessed, setAccessed] = useState<boolean>(false);
 

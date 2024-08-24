@@ -38,7 +38,7 @@ export const VocabularyExerciseUI = ({
   exercise_type: number;
   exercise: VocabularyExercise | null;
 }) => {
-  const DEBUG_USER_UUID = "3ad19072-1877-415d-bf5e-61c4bfe03977";
+  const DEBUG_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
   const [itemIndex, setItemIndex] = useState(0); // Current exercise item number
   const [arrangement, setArrangement] = useState<Array<number>>([]);
   const [score, setScore] = useState(0);
@@ -262,7 +262,7 @@ export const VocabularyExerciseUI = ({
         borderRadius="$5"
         borderWidth="$1"
         width="90%"
-        backgroundColor={"$green7"}
+        backgroundColor={"$blue7"}
         display={reveal ? "unset" : "none"}
       >
         <Text
@@ -294,7 +294,7 @@ export const VocabularyExerciseUI = ({
     } else {
       ExerciseService.incrementUserExerciseProgress(
         exercise_id,
-        "3ad19072-1877-415d-bf5e-61c4bfe03977"
+        "ebabaa6c-4254-465e-9f2f-f285a2364277"
       );
     }
 
@@ -809,7 +809,7 @@ export const GrammarExerciseUI = ({
         borderRadius="$5"
         borderWidth="$1"
         width="90%"
-        backgroundColor={"$green7"}
+        backgroundColor={"$blue7"}
         display={reveal ? "unset" : "none"}
       >
         <Text
