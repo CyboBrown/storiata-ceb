@@ -9,6 +9,18 @@ import { VocabularyExerciseType } from "../utils/enums";
 import { supabase } from "../utils/supabase";
 
 export class ExerciseService {
+  public static getAllExercises = async () => {
+    console.log("GOT_ALL_EXERCISES");
+    const { data, error, status } = await supabase
+      .from("exercises")
+      .select(`*`)
+      .order("topic", { ascending: true });
+    if (error && status !== 406) {
+      console.log(error);
+    }
+    return data;
+  };
+
   public static getAllExercisesByType = async (type: number) => {
     console.log("GOT_ALL_EXERCISES_" + type);
     const { data, error, status } = await supabase

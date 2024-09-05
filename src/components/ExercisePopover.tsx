@@ -32,7 +32,7 @@ export const ExercisePopover = ({
   title: string;
   subTitle: string;
   index: number;
-  exerciseType: number;
+  exerciseType?: number;
   locked?: boolean;
 }) => {
   const TEMP_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
@@ -157,11 +157,14 @@ export const ExercisePopover = ({
           <Popover.Close>
             <Button
               size="$3"
-              onPress={() => {
+              onPress={async () => {
                 console.log("Exercises started.");
                 ExerciseService.hasUserAccessedExercise(index, user);
+                const exerType =
+                  exerciseType ||
+                  (await ExerciseService.getExerciseDetails(index))?.type;
                 /* Custom code goes here, does not interfere with popover closure */
-                switch (exerciseType) {
+                switch (exerType) {
                   case ExerciseTypes.Vocabulary:
                     router.navigate(`exercises/vocabulary/${index}`);
                     break;
