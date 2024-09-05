@@ -7,7 +7,9 @@ import {
   Text,
   TextArea,
   View,
+  XStack,
   YStack,
+  ZStack,
 } from "tamagui";
 import { OptionCard } from "./OptionCard";
 import { VocabularyExercise } from "../models/VocabularyExercise";
@@ -28,6 +30,7 @@ import {
 } from "../utils/compare";
 import { ExerciseService } from "../services/ExerciseService";
 import { red } from "@tamagui/themes";
+import { Check, X } from "@tamagui/lucide-icons";
 
 export const VocabularyExerciseUI = ({
   exercise_id,
@@ -94,7 +97,7 @@ export const VocabularyExerciseUI = ({
       setCorrect(-1);
       setCorrectAnswer(
         exercise && exercise.item_sets
-          ? exercise?.item_sets[arrangement[itemIndex]].eng_word
+          ? exercise?.item_sets[arrangement_temp[itemIndex]].eng_word
           : "~*~*~*~"
       );
     }
@@ -246,7 +249,7 @@ export const VocabularyExerciseUI = ({
         width="90%"
         fontSize={20}
         minHeight={"$8"}
-        value={input}
+        value={input + (reveal ? (correct == 1 ? " ✔️" : " ❌") : "")}
         disabled={reveal}
         backgroundColor={
           reveal ? (correct == 1 ? "$green7" : "$red7") : "unset"
@@ -484,7 +487,6 @@ export const VocabularyExerciseUI = ({
   }
 };
 
-// Not yet implemented
 export const GrammarExerciseUI = ({
   exercise_type,
   exercise,
@@ -793,7 +795,7 @@ export const GrammarExerciseUI = ({
         width="90%"
         fontSize={20}
         minHeight={"$8"}
-        value={input}
+        value={input + (reveal ? (correct == 1 ? " ✔️" : " ❌") : "")}
         disabled={reveal}
         backgroundColor={
           reveal ? (correct == 1 ? "$green7" : "$red7") : "unset"
