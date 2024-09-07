@@ -22,11 +22,12 @@ import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
 import { ExerciseService } from ".../../../src/services/ExerciseService";
 import { useLocalSearchParams } from "expo-router";
-import { GrammarExerciseUI } from "../../../src/components/ExerciseUI";
-import { GrammarExerciseType } from "../../../src/utils/enums";
-import { GrammarExercise } from "../../../src/models/GrammarExercise";
+import { VocabularyExercise } from "../../../../src/models/VocabularyExercise";
+import { VocabularyExerciseUI } from "../../../../src/components/ExerciseUI";
+import { VocabularyExerciseType } from "../../../../src/utils/enums";
+import { useSession } from "../../../../src/services/auth-context";
 
-export default function GrammarExercises({
+export default function VocabularyExercises({
   session,
   exercise_id,
 }: {
@@ -35,14 +36,19 @@ export default function GrammarExercises({
 }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
-    console.log("GRAMMAR_EXERCISES_" + local.exercise_id + " page loaded.");
+    console.log("VOCABULARY_EXERCISES_" + local.exercise_id + " page loaded.");
   }, []);
 
   const colorScheme = useColorScheme();
   const local = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Loading...");
-  const [exercise, setExercise] = useState<GrammarExercise | null>();
+  const [exercise, setExercise] = useState<VocabularyExercise | null>();
+  const [vocabExerType, setVocabExerType] = useState<VocabularyExerciseType>(
+    VocabularyExerciseType.ChooseCebRepresentationForEngWord
+  );
+
+  const { getUserUUID } = useSession();
 
   useEffect(() => {
     loadExercise();
@@ -52,10 +58,17 @@ export default function GrammarExercises({
     try {
       setLoadingText("Loading exercise...");
       setLoading(true);
-      let problems = await ExerciseService.getGrammarExerciseProblems(
+      let problems = await ExerciseService.getVocabularyExerciseProblems(
         parseInt(local.exercise_id as string)
       );
+      let exerType: VocabularyExerciseType =
+        await ExerciseService.getVocabularyExerciseType(
+          parseInt(local.exercise_id as string),
+          getUserUUID() ?? ""
+        );
+      setVocabExerType(exerType);
       setExercise(problems);
+      console.log(("EXERTPE IS CURRENTLY " + vocabExerType) as string);
       console.log("*****" + problems);
     } catch (error) {
       if (error instanceof Error) {
@@ -70,7 +83,7 @@ export default function GrammarExercises({
     <TamaguiProvider>
       <Theme name={colorScheme === "dark" ? "dark" : "light"}>
         <YStack f={1} jc="center" ai="stretch" backgroundColor={"$background"}>
-          {loading ? (
+          {loading && exercise ? (
             <YStack jc="flex-start" ai="center" padding="$5">
               <Spinner size="large" color="$blue9" m="$2" />
               <Text fontSize={20} fontWeight={400} color={"$color"}>
@@ -78,8 +91,9 @@ export default function GrammarExercises({
               </Text>
             </YStack>
           ) : (
-            <GrammarExerciseUI
-              exercise_type={GrammarExerciseType.InputEnglishSentence}
+            <VocabularyExerciseUI
+              exercise_id={parseInt(local.exercise_id as string)}
+              exercise_type={vocabExerType}
               exercise={exercise || null}
             />
           )}

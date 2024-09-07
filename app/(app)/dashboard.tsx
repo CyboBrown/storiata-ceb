@@ -17,11 +17,11 @@ import {
   Spacer,
 } from "tamagui";
 import { useEffect, useState } from "react";
-import LessonCard from "../src/components/LessonCard";
-import { ExercisePopover } from "../src/components/ExercisePopover";
-import { ExerciseTypes } from "../src/utils/enums";
-import { Exercise } from "../src/models/Exercise";
-import { ExerciseService } from "../src/services/ExerciseService";
+import LessonCard from "../../src/components/LessonCard";
+import { ExercisePopover } from "../../src/components/ExercisePopover";
+import { ExerciseTypes } from "../../src/utils/enums";
+import { Exercise } from "../../src/models/Exercise";
+import { ExerciseService } from "../../src/services/ExerciseService";
 
 export default function Dashboard({ session }: { session: Session }) {
   const DEBUG_USER_UUID = "3ad19072-1877-415d-bf5e-61c4bfe03977";
