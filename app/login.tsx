@@ -17,6 +17,7 @@ import { Session, User } from "@supabase/supabase-js";
 import logo from "../src/assets/StoriaTa-Logo.png";
 import { AppState } from "react-native";
 import { supabase } from "../src/utils/supabase";
+import { useSession } from "../src/services/auth-context";
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
@@ -39,6 +40,8 @@ export default function Login({
   // const [user, setUser] = useState<User>();
   const [session, setSession] = useState<Session>();
 
+  const { signIn } = useSession();
+
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
     console.log("LOGIN page loaded.");
@@ -46,16 +49,9 @@ export default function Login({
 
   const signin = async () => {
     setLoading(true);
-    const data = await UserAuthentication.signInWithEmail(email, password);
-    if (data?.user?.id) {
-      const isContrib: boolean = await UserAuthentication.getUserType(
-        data.user.id
-      );
-      console.log(isContrib);
-      setContrib(isContrib);
-      setSession(data.session);
-    }
+    signIn(email, password);
     setLoading(false);
+    router.replace("/");
   };
 
   return (
