@@ -18,6 +18,7 @@ import type { PopoverProps } from "tamagui";
 import { ExerciseTypes } from "../utils/enums";
 import { ExerciseService } from "../../src/services/ExerciseService";
 import { useState } from "react";
+import { useSession } from "../services/auth-context";
 
 export const ExercisePopover = ({
   user,
@@ -35,15 +36,16 @@ export const ExercisePopover = ({
   exerciseType: number;
   locked?: boolean;
 }) => {
-  const TEMP_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
   const [commonWrongWords, setCommonWrongWords] = useState<string[]>();
   const [accessed, setAccessed] = useState<boolean>(false);
+
+  const { getUserUUID } = useSession();
 
   const fetchAndSetCommonWrongWords = async () => {
     try {
       const words = await ExerciseService.getCommonMistakenWordsInExer(
         index,
-        TEMP_USER_UUID
+        getUserUUID() ?? ""
       );
       setCommonWrongWords(words);
     } catch (error) {

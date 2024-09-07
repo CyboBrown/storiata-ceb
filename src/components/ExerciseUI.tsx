@@ -28,6 +28,7 @@ import {
 } from "../utils/compare";
 import { ExerciseService } from "../services/ExerciseService";
 import { red } from "@tamagui/themes";
+import { useSession } from "../services/auth-context";
 
 export const VocabularyExerciseUI = ({
   exercise_id,
@@ -38,7 +39,6 @@ export const VocabularyExerciseUI = ({
   exercise_type: number;
   exercise: VocabularyExercise | null;
 }) => {
-  const DEBUG_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
   const [itemIndex, setItemIndex] = useState(0); // Current exercise item number
   const [arrangement, setArrangement] = useState<Array<number>>([]);
   const [score, setScore] = useState(0);
@@ -53,8 +53,9 @@ export const VocabularyExerciseUI = ({
   const [rendered, setRendered] = useState<boolean>(false); // Checks if page has been rendered
   const [input, setInput] = useState("");
   const [correctAnswer, setCorrectAnswer] = useState("error");
-
   const [wrongWords, setWrongWords] = useState<string[]>([]);
+
+  const { getUserUUID } = useSession();
 
   useEffect(() => {
     let arrangement_temp = arrangement;
@@ -160,7 +161,7 @@ export const VocabularyExerciseUI = ({
           ExerciseService.trackCorrectWord(
             exercise_id,
             correct_word,
-            DEBUG_USER_UUID
+            getUserUUID() ?? ""
           );
         } else {
           console.error("The correct word is undefined, cannot track.");
@@ -180,7 +181,7 @@ export const VocabularyExerciseUI = ({
           ExerciseService.trackWrongWord(
             exercise_id,
             wrongWord,
-            DEBUG_USER_UUID
+            getUserUUID() ?? ""
           );
         } else {
           console.error("The wrong word is undefined, cannot track.");
@@ -294,7 +295,7 @@ export const VocabularyExerciseUI = ({
     } else {
       ExerciseService.incrementUserExerciseProgress(
         exercise_id,
-        "ebabaa6c-4254-465e-9f2f-f285a2364277"
+        getUserUUID() ?? ""
       );
     }
 
