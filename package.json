@@ -41,6 +41,7 @@
     "react-native-screens": "3.31.1",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.10",
+    "storiata-ceb": "file:",
     "tamagui": "^1.94.4"
   },
   "devDependencies": {
