@@ -512,9 +512,23 @@ export const GrammarExerciseUI = ({
   const [rendered, setRendered] = useState<boolean>(false); // Checks if page has been rendered
   const [input, setInput] = useState(""); // Current input for identification questions
   const [correctAnswer, setCorrectAnswer] = useState("error");
-  const [wrongWords, setWrongWords] = useState<string[]>([]);
   const [questionDisplay, setQuestionDisplay] = useState("");
   const [options, setOptions] = useState<Array<string>>([]);
+  const [wordPairs, setWordPairs] = useState<{ [k: string]: Array<any> }>({
+    name: [
+      { en: "Juan", ceb: "Juan" },
+      { en: "Maria", ceb: "Maria" },
+      { en: "Carlos", ceb: "Carlos" },
+      { en: "Anna", ceb: "Anna" },
+    ],
+  });
+
+  useEffect(() => {
+    exercise?.exercise_words?.forEach((word) => {
+      if (wordPairs[word.role] === undefined) wordPairs[word.role] = [];
+      wordPairs[word.role].push({ en: word.eng_word, ceb: word.ceb_word });
+    });
+  }, []);
 
   useEffect(() => {
     let arrangement_temp = arrangement;
@@ -666,53 +680,13 @@ export const GrammarExerciseUI = ({
     setReveal(!reveal);
   };
 
-  // const generateSentences = (sentence: {
-  //   en: string;
-  //   ceb: string;
-  // }): { en: string; ceb: string } => {
-  //   const placeholders = extractPlaceholders(sentence.en);
-  //   const values = {
-  //     time_of_day: [
-  //       { en: "morning", ceb: "buntag" },
-  //       { en: "afternoon", ceb: "hapon" },
-  //       { en: "evening", ceb: "gabii" },
-  //     ],
-  //     name: [
-  //       { en: "Juan", ceb: "Juan" },
-  //       { en: "Maria", ceb: "Maria" },
-  //       { en: "Carlos", ceb: "Carlos" },
-  //       { en: "Anna", ceb: "Anna" },
-  //     ],
-  //   };
-  //   const newSentence: { en: string; ceb: string } = replacePlaceholders(
-  //     sentence,
-  //     values
-  //   );
-  //   console.log(placeholders);
-  //   console.log(newSentence);
-  //   return newSentence;
-  // };
-
   const generateSentences = (sentence: {
     en: string;
     ceb: string;
   }): { en: string; ceb: string } => {
-    const values = {
-      time_of_day: [
-        { en: "morning", ceb: "buntag" },
-        { en: "afternoon", ceb: "hapon" },
-        { en: "evening", ceb: "gabii" },
-      ],
-      name: [
-        { en: "Juan", ceb: "Juan" },
-        { en: "Maria", ceb: "Maria" },
-        { en: "Carlos", ceb: "Carlos" },
-        { en: "Anna", ceb: "Anna" },
-      ],
-    };
     const newSentence: { en: string; ceb: string } = replacePlaceholders(
       sentence,
-      values
+      wordPairs
     );
     console.log(newSentence);
     return newSentence;
