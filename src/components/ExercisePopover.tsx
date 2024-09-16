@@ -1,4 +1,18 @@
-import { ChevronRight, Hash, Lock, Unlock } from "@tamagui/lucide-icons";
+import {
+  BadgeCheck,
+  BookOpenCheck,
+  Check,
+  CheckCheck,
+  CheckSquare,
+  ChevronRight,
+  CopyCheck,
+  Hash,
+  Lock,
+  SpellCheck,
+  Trophy,
+  Unlock,
+  UserCheck,
+} from "@tamagui/lucide-icons";
 import { router } from "expo-router";
 import {
   Adapt,
@@ -26,6 +40,7 @@ export const ExercisePopover = ({
   index,
   exerciseType,
   locked,
+  finished,
   ...props
 }: PopoverProps & {
   user: string;
@@ -34,6 +49,7 @@ export const ExercisePopover = ({
   index: number;
   exerciseType?: number;
   locked?: boolean;
+  finished?: boolean;
 }) => {
   const TEMP_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
   const [commonWrongWords, setCommonWrongWords] = useState<string[]>();
@@ -71,7 +87,7 @@ export const ExercisePopover = ({
             pressTheme
             title={title}
             subTitle={subTitle}
-            icon={locked ? Lock : Unlock}
+            icon={finished ? Trophy : locked ? Lock : Unlock}
             iconAfter={ChevronRight}
             onPress={() => {
               console.log("You just touched me! How dare you?");

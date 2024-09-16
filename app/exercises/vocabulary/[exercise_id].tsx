@@ -57,7 +57,7 @@ export default function VocabularyExercises({
       let problems = await ExerciseService.getVocabularyExerciseProblems(
         parseInt(local.exercise_id as string)
       );
-      let exerLevel = await ExerciseService.getExerciseType(
+      let exerLevel = await ExerciseService.getExerciseLevel(
         parseInt(local.exercise_id as string),
         TEMP_USER_UUID
       );

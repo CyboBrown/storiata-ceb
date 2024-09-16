@@ -253,6 +253,7 @@ export const VocabularyExerciseUI = ({
         fontSize={20}
         minHeight={"$8"}
         value={input + (reveal ? (correct == 1 ? " ✔️" : " ❌") : "")}
+        autoCapitalize="none"
         disabled={reveal}
         backgroundColor={
           reveal ? (correct == 1 ? "$green7" : "$red7") : "unset"

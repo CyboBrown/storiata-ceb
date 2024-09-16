@@ -147,16 +147,13 @@ export class ExerciseService {
     return null;
   };
 
-  public static getExerciseType = async (
-    exer_id: number,
-    user_uuid: string
-  ) => {
+  public static getExerciseLevel = async (exer_id: number, user_id: string) => {
     try {
       const { data, error, status } = await supabase
         .from("user_exercises")
         .select(`level`)
         .eq("exercise_id", exer_id)
-        .eq("user_id", user_uuid)
+        .eq("user_id", user_id)
         .single();
       if (status === 406) {
         console.log("No entry, assume user has not accessed the exercise yet.");
@@ -181,6 +178,19 @@ export class ExerciseService {
       console.log("EXER_TYPE_ERROR: ", error);
       return 0;
     }
+  };
+
+  public static getUserExerciseProgress = async (user_id: string) => {
+    console.log("GOT_USER_EXERCISE_PROGRESS");
+    const { data, error, status } = await supabase
+      .from("user_exercises")
+      .select(`*`)
+      .eq("user_id", user_id)
+      .order("exercise_id", { ascending: true });
+    if (error && status !== 406) {
+      console.log(error);
+    }
+    return data;
   };
 
   // ***
