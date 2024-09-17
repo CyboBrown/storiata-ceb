@@ -18,6 +18,8 @@ export function compareEnglishWords(text1, text2) {
   return dl(text1, text2) <= 1;
 }
 
+// TODO: Add more conversion such as capitalization and space removal
+
 function phoneticize(text) {
   text = text.replace("e", "i");
   text = text.replace("o", "u");
