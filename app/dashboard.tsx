@@ -24,7 +24,7 @@ import { Exercise } from "../src/models/Exercise";
 import { ExerciseService } from "../src/services/ExerciseService";
 
 export default function Dashboard({ session }: { session: Session }) {
-  const DEBUG_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
+  const DEBUG_USER_UUID = "3ad19072-1877-415d-bf5e-61c4bfe03977";
   const [results, setResults] = useState<Exercise[]>([]);
   const [exerCompleted, setExerCompleted] = useState(0);
   const [wordsMistaken, setWordsMistaken] = useState(0);
@@ -37,7 +37,9 @@ export default function Dashboard({ session }: { session: Session }) {
   }, []);
 
   const loadAllExercises = async () => {
-    let data = await ExerciseService.getAllExercises();
+    let data = await ExerciseService.getAllExercisesByType(
+      ExerciseTypes.Vocabulary
+    );
     if (data) {
       setResults(data);
     }
@@ -111,10 +113,11 @@ export default function Dashboard({ session }: { session: Session }) {
               >
                 {results.map((result, index) => (
                   <ExercisePopover
-                    user="ebabaa6c-4254-465e-9f2f-f285a2364277"
+                    user="3ad19072-1877-415d-bf5e-61c4bfe03977"
                     title={result.topic}
                     subTitle={result.description}
                     index={result.id}
+                    exerciseType={ExerciseTypes.Vocabulary}
                     key={result.id}
                   />
                 ))}

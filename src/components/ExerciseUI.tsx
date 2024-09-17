@@ -7,9 +7,7 @@ import {
   Text,
   TextArea,
   View,
-  XStack,
   YStack,
-  ZStack,
 } from "tamagui";
 import { OptionCard } from "./OptionCard";
 import { VocabularyExercise } from "../models/VocabularyExercise";
@@ -29,11 +27,14 @@ import {
   compareEnglishWords,
 } from "../utils/compare";
 import { ExerciseService } from "../services/ExerciseService";
+import { red } from "@tamagui/themes";
 
 export const VocabularyExerciseUI = ({
+  exercise_id,
   exercise_type,
   exercise,
 }: {
+  exercise_id: number;
   exercise_type: number;
   exercise: VocabularyExercise | null;
 }) => {
@@ -42,21 +43,21 @@ export const VocabularyExerciseUI = ({
   const [arrangement, setArrangement] = useState<Array<number>>([]);
   const [score, setScore] = useState(0);
   const [buttonText, setButtonText] = useState("Submit");
-  const [correct, setCorrect] = useState(-1); // Index of correct answer for multiple choice questions
-  const [incorrect, setIncorrect] = useState(0); // Number of incorrect answers
+  const [correct, setCorrect] = useState(-1);
+  const [incorrect, setIncorrect] = useState(0);
   const [hasFailed, setHasFailed] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [randomArray, setRandomArray] = useState<Array<number>>([0, 1, 2, 3]);
   const [reveal, setReveal] = useState<boolean>(false);
   const [finished, setFinished] = useState<boolean>(false);
   const [rendered, setRendered] = useState<boolean>(false); // Checks if page has been rendered
-  const [input, setInput] = useState(""); // Current input for identification questions
+  const [input, setInput] = useState("");
   const [correctAnswer, setCorrectAnswer] = useState("error");
+
   const [wrongWords, setWrongWords] = useState<string[]>([]);
 
   useEffect(() => {
     let arrangement_temp = arrangement;
-    let newRandomArray = [];
     if (!rendered) {
       try {
         console.log(exercise);
@@ -77,22 +78,6 @@ export const VocabularyExerciseUI = ({
         setRendered(true);
       }
     }
-    if (exercise?.item_sets?.length) {
-      const allIndices = Array.from(Array(exercise.item_sets.length).keys()); // Generates an array of numbers from 0 to size - 1
-      const filteredIndices = allIndices.filter(
-        // Filters the array of numbers that does not include the current item number
-        (index) =>
-          arrangement_temp == null
-            ? index != arrangement[itemIndex]
-            : index != arrangement_temp[itemIndex]
-      );
-      // console.log(
-      //   "~*~*~*~*~*~*~*~*~* " + test + " ~*~*~*~*~*~*~*~*~*"
-      // );
-      const shuffledIndices = shuffleArray(filteredIndices); // Shuffles the filtered array and selects the first four elements
-      newRandomArray = shuffledIndices.slice(0, 4);
-      setRandomArray(newRandomArray);
-    }
     // console.log("Previous correct: " + correct);
     if (exercise_type < 4) {
       const current = randomIndex(4);
@@ -109,9 +94,25 @@ export const VocabularyExerciseUI = ({
       setCorrect(-1);
       setCorrectAnswer(
         exercise && exercise.item_sets
-          ? exercise?.item_sets[arrangement_temp[itemIndex]].eng_word
+          ? exercise?.item_sets[arrangement[itemIndex]].eng_word
           : "~*~*~*~"
       );
+    }
+    if (exercise?.item_sets?.length) {
+      const allIndices = Array.from(Array(exercise.item_sets.length).keys()); // Generates an array of numbers from 0 to size -1
+      const filteredIndices = allIndices.filter(
+        // Filters the array of numbers that does not include the current item number
+        (index) =>
+          arrangement_temp == null
+            ? index != arrangement[itemIndex]
+            : index != arrangement_temp[itemIndex]
+      );
+      // console.log(
+      //   "~*~*~*~*~*~*~*~*~* " + test + " ~*~*~*~*~*~*~*~*~*"
+      // );
+      const shuffledIndices = shuffleArray(filteredIndices); // Shuffles the filtered array and selects the first four elements
+      const newRandomArray = shuffledIndices.slice(0, 4);
+      setRandomArray(newRandomArray);
     }
   }, [itemIndex]);
 
@@ -133,37 +134,31 @@ export const VocabularyExerciseUI = ({
       }
     } else {
       setButtonText("Next");
-      let correct_now = false;
       if (exercise_type < 4) {
-        if (selectedIndex == correct) {
-          setScore(score + 1);
-          correct_now = true;
-        }
+        if (selectedIndex == correct) setScore(score + 1);
       } else if (exercise_type == 4) {
         console.log(input + " =? " + correctAnswer);
         console.log(compareCebuanoWords(input, correctAnswer));
         if (compareCebuanoWords(input, correctAnswer)) {
           setScore(score + 1);
           setCorrect(1);
-          correct_now = true;
         }
       } else if (exercise_type == 5) {
         if (compareEnglishWords(input, correctAnswer)) {
           setScore(score + 1);
           setCorrect(1);
-          correct_now = true;
         }
       }
-      if (correct_now) {
-        console.log("Correct Word Tracked!");
+      if (selectedIndex == correct) {
+        setScore(score + 1);
         const correct_word = exercise?.item_sets?.at(
           arrangement[itemIndex]
         )?.ceb_word;
+
         // Revert mistake points from this word, if there was any.
         if (correct_word) {
-          console.log("Tracking...");
           ExerciseService.trackCorrectWord(
-            exercise.id,
+            exercise_id,
             correct_word,
             DEBUG_USER_UUID
           );
@@ -171,7 +166,7 @@ export const VocabularyExerciseUI = ({
           console.error("The correct word is undefined, cannot track.");
         }
       } else {
-        console.log("Wrong Word Tracked!");
+        if (incorrect >= 3) setHasFailed(true);
         const wrongWord = exercise?.item_sets?.at(
           arrangement[itemIndex]
         )?.ceb_word;
@@ -179,12 +174,11 @@ export const VocabularyExerciseUI = ({
           return wrongWord ? [...prevWords, wrongWord] : prevWords;
         });
         setIncorrect(incorrect + 1);
-        if (incorrect >= 2) setHasFailed(true);
+
         // Push updates to DB regarding this mistake.
         if (wrongWord) {
-          console.log("Tracking...");
           ExerciseService.trackWrongWord(
-            exercise.id,
+            exercise_id,
             wrongWord,
             DEBUG_USER_UUID
           );
@@ -252,8 +246,7 @@ export const VocabularyExerciseUI = ({
         width="90%"
         fontSize={20}
         minHeight={"$8"}
-        value={input + (reveal ? (correct == 1 ? " ✔️" : " ❌") : "")}
-        autoCapitalize="none"
+        value={input}
         disabled={reveal}
         backgroundColor={
           reveal ? (correct == 1 ? "$green7" : "$red7") : "unset"
@@ -300,7 +293,7 @@ export const VocabularyExerciseUI = ({
       console.log("YOU ARE A FAILURE!!!!");
     } else {
       ExerciseService.incrementUserExerciseProgress(
-        exercise!.id,
+        exercise_id,
         "ebabaa6c-4254-465e-9f2f-f285a2364277"
       );
     }
@@ -491,6 +484,7 @@ export const VocabularyExerciseUI = ({
   }
 };
 
+// Not yet implemented
 export const GrammarExerciseUI = ({
   exercise_type,
   exercise,
@@ -498,38 +492,20 @@ export const GrammarExerciseUI = ({
   exercise_type: number;
   exercise: GrammarExercise | null;
 }) => {
-  const DEBUG_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
   const [itemIndex, setItemIndex] = useState(0); // Current exercise item number
   const [arrangement, setArrangement] = useState<Array<number>>([]);
   const [score, setScore] = useState(0);
   const [buttonText, setButtonText] = useState("Submit");
-  const [correct, setCorrect] = useState(-1); // Index of correct answer for multiple choice questions
-  const [incorrect, setIncorrect] = useState(0); // Number of incorrect answers
-  const [hasFailed, setHasFailed] = useState(false);
+  const [correct, setCorrect] = useState(-1);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [randomArray, setRandomArray] = useState<Array<number>>([0, 1, 2, 3]);
   const [reveal, setReveal] = useState<boolean>(false);
   const [finished, setFinished] = useState<boolean>(false);
   const [rendered, setRendered] = useState<boolean>(false); // Checks if page has been rendered
-  const [input, setInput] = useState(""); // Current input for identification questions
+  const [input, setInput] = useState("");
   const [correctAnswer, setCorrectAnswer] = useState("error");
   const [questionDisplay, setQuestionDisplay] = useState("");
   const [options, setOptions] = useState<Array<string>>([]);
-  const [wordPairs, setWordPairs] = useState<{ [k: string]: Array<any> }>({
-    name: [
-      { en: "Juan", ceb: "Juan" },
-      { en: "Maria", ceb: "Maria" },
-      { en: "Carlos", ceb: "Carlos" },
-      { en: "Anna", ceb: "Anna" },
-    ],
-  });
-
-  useEffect(() => {
-    exercise?.exercise_words?.forEach((word) => {
-      if (wordPairs[word.role] === undefined) wordPairs[word.role] = [];
-      wordPairs[word.role].push({ en: word.eng_word, ceb: word.ceb_word });
-    });
-  }, []);
 
   useEffect(() => {
     let arrangement_temp = arrangement;
@@ -640,23 +616,17 @@ export const GrammarExerciseUI = ({
       }
     } else {
       setButtonText("Next");
-      let correct_now = false;
       if (exercise_type < 2) {
-        if (selectedIndex == correct) {
-          setScore(score + 1);
-          correct_now = true;
-        }
+        if (selectedIndex == correct) setScore(score + 1);
       } else if (exercise_type == 2) {
         if (compareCebuanoWords(input, correctAnswer)) {
           setScore(score + 1);
           setCorrect(1);
-          correct_now = true;
         }
       } else if (exercise_type == 3) {
         if (compareEnglishWords(input, correctAnswer)) {
           setScore(score + 1);
           setCorrect(1);
-          correct_now = true;
         }
       } else if (exercise_type == 4) {
         console.log(input + " =? " + correctAnswer);
@@ -664,30 +634,64 @@ export const GrammarExerciseUI = ({
         if (compareCebuanoSentences(input, correctAnswer)) {
           setScore(score + 1);
           setCorrect(1);
-          correct_now = true;
         }
       } else if (exercise_type == 5) {
         if (compareEnglishSentences(input, correctAnswer)) {
           setScore(score + 1);
           setCorrect(1);
-          correct_now = true;
         }
-      }
-      if (!correct_now) {
-        setIncorrect(incorrect + 1);
-        if (incorrect >= 2) setHasFailed(true);
       }
     }
     setReveal(!reveal);
   };
 
+  // const generateSentences = (sentence: {
+  //   en: string;
+  //   ceb: string;
+  // }): { en: string; ceb: string } => {
+  //   const placeholders = extractPlaceholders(sentence.en);
+  //   const values = {
+  //     time_of_day: [
+  //       { en: "morning", ceb: "buntag" },
+  //       { en: "afternoon", ceb: "hapon" },
+  //       { en: "evening", ceb: "gabii" },
+  //     ],
+  //     name: [
+  //       { en: "Juan", ceb: "Juan" },
+  //       { en: "Maria", ceb: "Maria" },
+  //       { en: "Carlos", ceb: "Carlos" },
+  //       { en: "Anna", ceb: "Anna" },
+  //     ],
+  //   };
+  //   const newSentence: { en: string; ceb: string } = replacePlaceholders(
+  //     sentence,
+  //     values
+  //   );
+  //   console.log(placeholders);
+  //   console.log(newSentence);
+  //   return newSentence;
+  // };
+
   const generateSentences = (sentence: {
     en: string;
     ceb: string;
   }): { en: string; ceb: string } => {
+    const values = {
+      time_of_day: [
+        { en: "morning", ceb: "buntag" },
+        { en: "afternoon", ceb: "hapon" },
+        { en: "evening", ceb: "gabii" },
+      ],
+      name: [
+        { en: "Juan", ceb: "Juan" },
+        { en: "Maria", ceb: "Maria" },
+        { en: "Carlos", ceb: "Carlos" },
+        { en: "Anna", ceb: "Anna" },
+      ],
+    };
     const newSentence: { en: string; ceb: string } = replacePlaceholders(
       sentence,
-      wordPairs
+      values
     );
     console.log(newSentence);
     return newSentence;
@@ -789,7 +793,7 @@ export const GrammarExerciseUI = ({
         width="90%"
         fontSize={20}
         minHeight={"$8"}
-        value={input + (reveal ? (correct == 1 ? " ✔️" : " ❌") : "")}
+        value={input}
         disabled={reveal}
         backgroundColor={
           reveal ? (correct == 1 ? "$green7" : "$red7") : "unset"
@@ -829,14 +833,6 @@ export const GrammarExerciseUI = ({
   );
 
   if (finished) {
-    // Increment level if exercise passed and don't otherwise:
-    if (!hasFailed) {
-      ExerciseService.incrementUserExerciseProgress(
-        exercise!.id,
-        "ebabaa6c-4254-465e-9f2f-f285a2364277"
-      );
-    }
-
     // Show results if finished
     return (
       <>
@@ -847,40 +843,14 @@ export const GrammarExerciseUI = ({
           p="$5"
           my="$5"
           gap="$2"
-          // borderColor={"$color5"}
-          // borderRadius="$5"
-          // borderWidth="$1"
+          borderColor={"$color5"}
+          borderRadius="$5"
+          borderWidth="$1"
           width="90%"
         >
-          <SizableText
-            alignSelf="center"
-            fontSize={28}
-            lineHeight={32}
-            fontWeight={900}
-          >
-            YOUR FINAL SCORE
-          </SizableText>
-          <SizableText
-            alignSelf="center"
-            fontSize={32}
-            lineHeight={32}
-            color={hasFailed ? "$red10Light" : "$green10Light"}
-          >
-            {score + " / " + exercise?.item_sets?.length}
-          </SizableText>
-          <Spacer></Spacer>
-          {hasFailed && (
-            <SizableText
-              alignSelf="center"
-              textAlign="center"
-              fontSize={12}
-              lineHeight={13}
-              color={hasFailed ? "$red10Light" : "$green10Light"}
-            >
-              Your efforts were recognized but weren't enough to pass the
-              exercise. Let's try again, shall we?
-            </SizableText>
-          )}
+          <Text fontSize={20}>
+            {"Score: " + score + "/" + exercise?.item_sets?.length}
+          </Text>
         </View>
         <Link href="/exercises/grammar" asChild>
           <Button alignSelf="center" width="90%" size="$6">

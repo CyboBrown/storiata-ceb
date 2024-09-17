@@ -87,12 +87,10 @@ export default function GrammarExercises({ session }: { session: Session }) {
             >
               {results.map((result, index) => (
                 <ExercisePopover
-                  user="ebabaa6c-4254-465e-9f2f-f285a2364277"
                   title={result.topic}
                   subTitle={result.description}
                   index={result.id}
                   exerciseType={ExerciseTypes.Grammar}
-                  key={result.id}
                 />
               ))}
             </YGroup>

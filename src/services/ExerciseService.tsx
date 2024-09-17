@@ -9,18 +9,6 @@ import { VocabularyExerciseType } from "../utils/enums";
 import { supabase } from "../utils/supabase";
 
 export class ExerciseService {
-  public static getAllExercises = async () => {
-    console.log("GOT_ALL_EXERCISES");
-    const { data, error, status } = await supabase
-      .from("exercises")
-      .select(`*`)
-      .order("topic", { ascending: true });
-    if (error && status !== 406) {
-      console.log(error);
-    }
-    return data;
-  };
-
   public static getAllExercisesByType = async (type: number) => {
     console.log("GOT_ALL_EXERCISES_" + type);
     const { data, error, status } = await supabase
@@ -147,50 +135,42 @@ export class ExerciseService {
     return null;
   };
 
-  public static getExerciseLevel = async (exer_id: number, user_id: string) => {
+  public static getVocabularyExerciseType = async (
+    exer_id: number,
+    user_uuid: string
+  ) => {
     try {
+      let exerTypeInInt = 0;
       const { data, error, status } = await supabase
         .from("user_exercises")
         .select(`level`)
         .eq("exercise_id", exer_id)
-        .eq("user_id", user_id)
+        .eq("user_id", user_uuid)
         .single();
+
       if (status === 406) {
         console.log("No entry, assume user has not accessed the exercise yet.");
+        return VocabularyExerciseType.ChooseCebRepresentationForEngWord;
       }
-      if (data) return data.level;
-      return 0;
+
       // You have no fucking idea how this shit is making me want to shoot up a fucking place.
       // Enjoy this scotch-tape solution for now cuz I ain't touching this shit in the near future.
-      // const vocabTypeMap: VocabularyExerciseType[] = [
-      //   VocabularyExerciseType.ChooseCebRepresentationForEngWord,
-      //   VocabularyExerciseType.ChooseCebWordForEngWord,
-      //   VocabularyExerciseType.ChooseEngWordForCebWord,
-      //   VocabularyExerciseType.ChooseRepresentationForCebWord,
-      //   VocabularyExerciseType.InputCebWordForEngWord,
-      //   VocabularyExerciseType.InputEngWordForCebWord,
-      // ];
+      const vocabTypeMap: VocabularyExerciseType[] = [
+        VocabularyExerciseType.ChooseCebRepresentationForEngWord,
+        VocabularyExerciseType.ChooseCebWordForEngWord,
+        VocabularyExerciseType.ChooseEngWordForCebWord,
+        VocabularyExerciseType.ChooseRepresentationForCebWord,
+        VocabularyExerciseType.InputCebWordForEngWord,
+        VocabularyExerciseType.InputEngWordForCebWord,
+      ];
 
-      // if (data && data.level) exerTypeInInt = data.level % 6;
-      // console.log(vocabTypeMap[exerTypeInInt]);
-      // return vocabTypeMap[exerTypeInInt];
+      if (data && data.level) exerTypeInInt = data.level % 6;
+      console.log(vocabTypeMap[exerTypeInInt]);
+      return vocabTypeMap[exerTypeInInt];
     } catch (error) {
       console.log("EXER_TYPE_ERROR: ", error);
-      return 0;
+      return VocabularyExerciseType.ChooseCebRepresentationForEngWord;
     }
-  };
-
-  public static getUserExerciseProgress = async (user_id: string) => {
-    console.log("GOT_USER_EXERCISE_PROGRESS");
-    const { data, error, status } = await supabase
-      .from("user_exercises")
-      .select(`*`)
-      .eq("user_id", user_id)
-      .order("exercise_id", { ascending: true });
-    if (error && status !== 406) {
-      console.log(error);
-    }
-    return data;
   };
 
   // ***
