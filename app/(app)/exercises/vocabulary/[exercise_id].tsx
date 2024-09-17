@@ -22,9 +22,10 @@ import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
 import { ExerciseService } from ".../../../src/services/ExerciseService";
 import { useLocalSearchParams } from "expo-router";
-import { VocabularyExercise } from "../../../src/models/VocabularyExercise";
-import { VocabularyExerciseUI } from "../../../src/components/ExerciseUI";
-import { VocabularyExerciseType } from "../../../src/utils/enums";
+import { VocabularyExercise } from "../../../../src/models/VocabularyExercise";
+import { VocabularyExerciseUI } from "../../../../src/components/ExerciseUI";
+import { VocabularyExerciseType } from "../../../../src/utils/enums";
+import { useSession } from "../../../../src/services/auth-context";
 
 export default function VocabularyExercises({
   session,
@@ -38,13 +39,14 @@ export default function VocabularyExercises({
     console.log("VOCABULARY_EXERCISES_" + local.exercise_id + " page loaded.");
   }, []);
 
-  const TEMP_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
   const colorScheme = useColorScheme();
   const local = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Loading...");
   const [exercise, setExercise] = useState<VocabularyExercise | null>();
   const [exerciseLevel, setExerciseLevel] = useState(0);
+
+  const { getUserUUID } = useSession();
 
   useEffect(() => {
     loadExercise();
@@ -59,7 +61,7 @@ export default function VocabularyExercises({
       );
       let exerLevel = await ExerciseService.getExerciseLevel(
         parseInt(local.exercise_id as string),
-        TEMP_USER_UUID
+        getUserUUID() ?? ""
       );
       setExerciseLevel(exerLevel);
       setExercise(problems);
