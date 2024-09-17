@@ -1,14 +1,14 @@
 import "react-native-url-polyfill/auto";
 import { useState, useEffect } from "react";
-import { supabase } from "../../src/utils/supabase";
-import Login from "../login";
+import { supabase } from "../src/utils/supabase";
+import Login from "./login";
 import Main from "./main";
 import { Session } from "@supabase/supabase-js";
 import { useColorScheme } from "react-native";
 import { TamaguiProvider, Theme } from "tamagui";
 import { useFonts } from "expo-font";
-import config from "../../tamagui.config";
-import { UserAuthentication } from "../../src/services/UserAuthentication";
+import config from "../tamagui.config";
+import { UserAuthentication } from "../src/services/UserAuthentication";
 
 export default function Page() {
   const [session, setSession] = useState<Session | null>(null);
