@@ -9,7 +9,8 @@ import Dictionary from "./dictionary";
 import Account from "./account";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { compareCebuanoWords } from "../src/utils/compare";
+import { compareCebuanoWords } from "../../src/utils/compare";
+import { useSession } from "../../src/services/auth-context";
 
 export default function Main({
   session,
@@ -18,8 +19,11 @@ export default function Main({
   session: Session;
   contribMode: boolean;
 }) {
+  const { getUserUUID } = useSession();
+
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
+    console.log(getUserUUID() + " is currently the user for this session.");
     console.log("MAIN page loaded.");
   }, []);
 

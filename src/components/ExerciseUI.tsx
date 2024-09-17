@@ -29,6 +29,7 @@ import {
   compareEnglishWords,
 } from "../utils/compare";
 import { ExerciseService } from "../services/ExerciseService";
+import { useSession } from "../services/auth-context";
 
 export const VocabularyExerciseUI = ({
   exercise_type,
@@ -37,7 +38,6 @@ export const VocabularyExerciseUI = ({
   exercise_type: number;
   exercise: VocabularyExercise | null;
 }) => {
-  const DEBUG_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
   const [itemIndex, setItemIndex] = useState(0); // Current exercise item number
   const [arrangement, setArrangement] = useState<Array<number>>([]);
   const [score, setScore] = useState(0);
@@ -53,6 +53,8 @@ export const VocabularyExerciseUI = ({
   const [input, setInput] = useState(""); // Current input for identification questions
   const [correctAnswer, setCorrectAnswer] = useState("error");
   const [wrongWords, setWrongWords] = useState<string[]>([]);
+
+  const { getUserUUID } = useSession();
 
   useEffect(() => {
     let arrangement_temp = arrangement;
@@ -165,7 +167,7 @@ export const VocabularyExerciseUI = ({
           ExerciseService.trackCorrectWord(
             exercise.id,
             correct_word,
-            DEBUG_USER_UUID
+            getUserUUID() ?? ""
           );
         } else {
           console.error("The correct word is undefined, cannot track.");
@@ -186,7 +188,7 @@ export const VocabularyExerciseUI = ({
           ExerciseService.trackWrongWord(
             exercise.id,
             wrongWord,
-            DEBUG_USER_UUID
+            getUserUUID() ?? ""
           );
         } else {
           console.error("The wrong word is undefined, cannot track.");
@@ -301,7 +303,7 @@ export const VocabularyExerciseUI = ({
     } else {
       ExerciseService.incrementUserExerciseProgress(
         exercise!.id,
-        "ebabaa6c-4254-465e-9f2f-f285a2364277"
+        getUserUUID() ?? ""
       );
     }
 

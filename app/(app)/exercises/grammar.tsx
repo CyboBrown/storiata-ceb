@@ -19,16 +19,16 @@ import {
 } from "tamagui";
 import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
-import { Exercise } from "../../src/models/Exercise";
-import { ExerciseService } from "../../src/services/ExerciseService";
+import { Exercise } from "../../../src/models/Exercise";
+import { ExerciseService } from "../../../src/services/ExerciseService";
 import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
-import { ExercisePopover } from "../../src/components/ExercisePopover";
-import { ExerciseTypes } from "../../src/utils/enums";
+import { ExercisePopover } from "../../../src/components/ExercisePopover";
+import { ExerciseTypes } from "../../../src/utils/enums";
 
-export default function ListeningExercises({ session }: { session: Session }) {
+export default function GrammarExercises({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
-    console.log("LISTENING_EXERCISES page loaded.");
+    console.log("GRAMMAR_EXERCISES page loaded.");
   }, []);
 
   const colorScheme = useColorScheme();
@@ -44,7 +44,7 @@ export default function ListeningExercises({ session }: { session: Session }) {
     try {
       setLoading(true);
       let data = await ExerciseService.getAllExercisesByType(
-        ExerciseTypes.Listening
+        ExerciseTypes.Grammar
       );
       if (data) {
         setResults(data);
@@ -69,7 +69,7 @@ export default function ListeningExercises({ session }: { session: Session }) {
         >
           <XStack jc="space-between" ai="flex-start" padding="$5">
             <Text fontSize={20} fontWeight={800} color={"$color"}>
-              Listening Exercises
+              Grammar Exercises
             </Text>
             <RefreshCw
               onPress={loadExercises}
@@ -87,9 +87,12 @@ export default function ListeningExercises({ session }: { session: Session }) {
             >
               {results.map((result, index) => (
                 <ExercisePopover
+                  user="ebabaa6c-4254-465e-9f2f-f285a2364277"
                   title={result.topic}
                   subTitle={result.description}
                   index={result.id}
+                  exerciseType={ExerciseTypes.Grammar}
+                  key={result.id}
                 />
               ))}
             </YGroup>
