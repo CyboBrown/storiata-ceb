@@ -19,12 +19,11 @@ import { ExerciseTypes } from "../utils/enums";
 import { ExerciseService } from "../../src/services/ExerciseService";
 import { useState } from "react";
 
-export const ExercisePopover = ({
+export const ExercisePopover2 = ({
   user,
   title,
   subTitle,
   index,
-  exerciseType,
   locked,
   ...props
 }: PopoverProps & {
@@ -32,10 +31,9 @@ export const ExercisePopover = ({
   title: string;
   subTitle: string;
   index: number;
-  exerciseType: number;
   locked?: boolean;
 }) => {
-  const TEMP_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
+  const TEMP_USER_UUID = "3ad19072-1877-415d-bf5e-61c4bfe03977";
   const [commonWrongWords, setCommonWrongWords] = useState<string[]>();
   const [accessed, setAccessed] = useState<boolean>(false);
 

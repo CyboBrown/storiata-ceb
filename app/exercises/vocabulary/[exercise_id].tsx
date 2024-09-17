@@ -44,7 +44,9 @@ export default function VocabularyExercises({
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Loading...");
   const [exercise, setExercise] = useState<VocabularyExercise | null>();
-  const [exerciseLevel, setExerciseLevel] = useState(0);
+  const [vocabExerType, setVocabExerType] = useState<VocabularyExerciseType>(
+    VocabularyExerciseType.ChooseCebRepresentationForEngWord
+  );
 
   useEffect(() => {
     loadExercise();
@@ -57,13 +59,14 @@ export default function VocabularyExercises({
       let problems = await ExerciseService.getVocabularyExerciseProblems(
         parseInt(local.exercise_id as string)
       );
-      let exerLevel = await ExerciseService.getExerciseLevel(
-        parseInt(local.exercise_id as string),
-        TEMP_USER_UUID
-      );
-      setExerciseLevel(exerLevel);
+      let exerType: VocabularyExerciseType =
+        await ExerciseService.getVocabularyExerciseType(
+          parseInt(local.exercise_id as string),
+          TEMP_USER_UUID
+        );
+      setVocabExerType(exerType);
       setExercise(problems);
-      console.log(("EXERCISE LEVEL IS CURRENTLY " + exerLevel) as string);
+      console.log(("EXERTPE IS CURRENTLY " + vocabExerType) as string);
       console.log("*****" + problems);
     } catch (error) {
       if (error instanceof Error) {
@@ -87,7 +90,8 @@ export default function VocabularyExercises({
             </YStack>
           ) : (
             <VocabularyExerciseUI
-              exercise_type={exerciseLevel % 6}
+              exercise_id={parseInt(local.exercise_id as string)}
+              exercise_type={vocabExerType}
               exercise={exercise || null}
             />
           )}
