@@ -22,9 +22,15 @@ import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
 import { ExerciseService } from ".../../../src/services/ExerciseService";
 import { useLocalSearchParams } from "expo-router";
+<<<<<<< HEAD:app/(app)/exercises/grammar/[exercise_id].tsx
 import { GrammarExerciseUI } from "../../../../src/components/ExerciseUI";
 import { GrammarExerciseType } from "../../../../src/utils/enums";
 import { GrammarExercise } from "../../../../src/models/GrammarExercise";
+=======
+import { GrammarExercise } from "../../../src/models/GrammarExercise";
+import { GrammarExerciseUI } from "../../../src/components/ExerciseUI";
+import { GrammarExerciseType } from "../../../src/utils/enums";
+>>>>>>> master:app/exercises/grammar/[exercise_id].tsx
 
 export default function GrammarExercises({
   session,
@@ -38,11 +44,13 @@ export default function GrammarExercises({
     console.log("GRAMMAR_EXERCISES_" + local.exercise_id + " page loaded.");
   }, []);
 
+  const TEMP_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
   const colorScheme = useColorScheme();
   const local = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Loading...");
   const [exercise, setExercise] = useState<GrammarExercise | null>();
+  const [exerciseLevel, setExerciseLevel] = useState(0);
 
   useEffect(() => {
     loadExercise();
@@ -55,7 +63,13 @@ export default function GrammarExercises({
       let problems = await ExerciseService.getGrammarExerciseProblems(
         parseInt(local.exercise_id as string)
       );
+      let exerLevel = await ExerciseService.getExerciseLevel(
+        parseInt(local.exercise_id as string),
+        TEMP_USER_UUID
+      );
+      setExerciseLevel(exerLevel);
       setExercise(problems);
+      console.log(("EXERCISE LEVEL IS CURRENTLY " + exerLevel) as string);
       console.log("*****" + problems);
     } catch (error) {
       if (error instanceof Error) {
@@ -79,7 +93,7 @@ export default function GrammarExercises({
             </YStack>
           ) : (
             <GrammarExerciseUI
-              exercise_type={GrammarExerciseType.InputEnglishSentence}
+              exercise_type={exerciseLevel % 6}
               exercise={exercise || null}
             />
           )}

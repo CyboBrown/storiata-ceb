@@ -1,4 +1,18 @@
-import { ChevronRight, Hash, Lock, Unlock } from "@tamagui/lucide-icons";
+import {
+  BadgeCheck,
+  BookOpenCheck,
+  Check,
+  CheckCheck,
+  CheckSquare,
+  ChevronRight,
+  CopyCheck,
+  Hash,
+  Lock,
+  SpellCheck,
+  Trophy,
+  Unlock,
+  UserCheck,
+} from "@tamagui/lucide-icons";
 import { router } from "expo-router";
 import {
   Adapt,
@@ -27,14 +41,16 @@ export const ExercisePopover = ({
   index,
   exerciseType,
   locked,
+  finished,
   ...props
 }: PopoverProps & {
   user: string;
   title: string;
   subTitle: string;
   index: number;
-  exerciseType: number;
+  exerciseType?: number;
   locked?: boolean;
+  finished?: boolean;
 }) => {
   const [commonWrongWords, setCommonWrongWords] = useState<string[]>();
   const [accessed, setAccessed] = useState<boolean>(false);
@@ -73,7 +89,7 @@ export const ExercisePopover = ({
             pressTheme
             title={title}
             subTitle={subTitle}
-            icon={locked ? Lock : Unlock}
+            icon={finished ? Trophy : locked ? Lock : Unlock}
             iconAfter={ChevronRight}
             onPress={() => {
               console.log("You just touched me! How dare you?");
@@ -159,11 +175,14 @@ export const ExercisePopover = ({
           <Popover.Close>
             <Button
               size="$3"
-              onPress={() => {
+              onPress={async () => {
                 console.log("Exercises started.");
                 ExerciseService.hasUserAccessedExercise(index, user);
+                const exerType =
+                  exerciseType ||
+                  (await ExerciseService.getExerciseDetails(index))?.type;
                 /* Custom code goes here, does not interfere with popover closure */
-                switch (exerciseType) {
+                switch (exerType) {
                   case ExerciseTypes.Vocabulary:
                     router.navigate(`exercises/vocabulary/${index}`);
                     break;
