@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../../src/utils/supabase";
-import { Alert } from "react-native";
-import { Button, Image, View } from "tamagui";
+import { supabase } from "../src/utils/supabase";
+import { Alert} from "react-native";
+import { Button, Image, View } from "tamagui"
 import * as ImagePicker from "expo-image-picker";
 
 interface Props {
@@ -95,7 +95,7 @@ export default function Avatar({ url, size = 150, onUpload }: Props) {
 
   return (
     <View flex={1} alignItems="center" justifyContent="center">
-      <View
+      <View 
         width={size}
         height={size}
         borderRadius={5}
@@ -111,15 +111,19 @@ export default function Avatar({ url, size = 150, onUpload }: Props) {
             source={{ uri: avatarUrl }}
             accessibilityLabel="Avatar"
             width="100%"
-            height="100%"
-          />
+            height="100%"/>
         )}
       </View>
       <View marginTop="$4">
-        <Button onPress={uploadAvatar} disabled={uploading} width={200}>
+        <Button
+          onPress={uploadAvatar}
+          disabled={uploading}
+          width={200}
+        >
           {uploading ? "Uploading ..." : "Upload"}
         </Button>
       </View>
     </View>
   );
 }
+
