@@ -22,15 +22,9 @@ import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
 import { ExerciseService } from ".../../../src/services/ExerciseService";
 import { useLocalSearchParams } from "expo-router";
-<<<<<<< HEAD:app/(app)/exercises/grammar/[exercise_id].tsx
-import { GrammarExerciseUI } from "../../../../src/components/ExerciseUI";
-import { GrammarExerciseType } from "../../../../src/utils/enums";
-import { GrammarExercise } from "../../../../src/models/GrammarExercise";
-=======
 import { GrammarExercise } from "../../../src/models/GrammarExercise";
 import { GrammarExerciseUI } from "../../../src/components/ExerciseUI";
 import { GrammarExerciseType } from "../../../src/utils/enums";
->>>>>>> master:app/exercises/grammar/[exercise_id].tsx
 
 export default function GrammarExercises({
   session,

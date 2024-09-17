@@ -22,15 +22,10 @@ import { Alert, useColorScheme } from "react-native";
 import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from "../../../src/services/ExerciseService";
 import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
-<<<<<<< HEAD:app/(app)/exercises/vocabulary.tsx
 import { ExercisePopover } from "../../../src/components/ExercisePopover";
 import { ExerciseTypes } from "../../../src/utils/enums";
-import { useSession } from "../../../src/services/auth-context";
-=======
-import { ExercisePopover } from "../../src/components/ExercisePopover";
-import { ExerciseTypes } from "../../src/utils/enums";
 import { UserExercise } from "../../src/models/UserExercise";
->>>>>>> master:app/exercises/vocabulary.tsx
+import { useSession } from "../../../src/services/auth-context";
 
 export default function VocabularyExercises({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION

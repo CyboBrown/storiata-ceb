@@ -88,7 +88,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
   };
 
   const getUserUUID = () => {
-    return user?.id ?? null;
+    return user?.id ?? "";
   };
 
   return (
