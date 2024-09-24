@@ -49,7 +49,7 @@ export default function VocabularyExercises({ session }: { session: Session }) {
     try {
       setLoading(true);
       let progress = await ExerciseService.getUserExerciseProgress(
-        TEMP_USER_UUID
+        getUserUUID() ?? ""
       );
       if (progress) {
         setProgress(progress);

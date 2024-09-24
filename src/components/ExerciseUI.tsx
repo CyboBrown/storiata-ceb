@@ -2,6 +2,7 @@ import {
   Button,
   Input,
   Progress,
+  Separator,
   SizableText,
   Spacer,
   Text,
@@ -500,7 +501,6 @@ export const GrammarExerciseUI = ({
   exercise_type: number;
   exercise: GrammarExercise | null;
 }) => {
-  const DEBUG_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
   const [itemIndex, setItemIndex] = useState(0); // Current exercise item number
   const [arrangement, setArrangement] = useState<Array<number>>([]);
   const [score, setScore] = useState(0);
@@ -525,6 +525,11 @@ export const GrammarExerciseUI = ({
       { en: "Anna", ceb: "Anna" },
     ],
   });
+  const [removeIndex, setRemoveIndex] = useState(0); // Sets the index of removed word for fill the blank questions
+  // const [preInput, setPreInput] = useState(""); // Sets the string before the blank for fill the blank questions
+  // const [postInput, setPostInput] = useState(""); // Sets the string before the blank for fill the blank questions
+
+  const { getUserUUID } = useSession();
 
   useEffect(() => {
     exercise?.exercise_words?.forEach((word) => {
@@ -617,6 +622,32 @@ export const GrammarExerciseUI = ({
       //     exercise?.item_sets[
       //       correct === index ? arrangement[itemIndex] : randomArray[index]
       //     ].translated_sentence,
+    } else if (exercise_type < 4) {
+      setCorrect(-1);
+      setQuestionDisplay(exercise_type % 2 == 0 ? sentences.en : sentences.ceb);
+      setCorrectAnswer(exercise_type % 2 == 0 ? sentences.ceb : sentences.en);
+      setRemoveIndex(
+        randomIndex(
+          (exercise_type % 2 == 0 ? sentences.ceb : sentences.en).split(" ")
+            .length
+        )
+      );
+      // setPreInput(
+      //   correctAnswer.split(" ").reduce((text, word, index) => {
+      //     if (index < removeIndex) {
+      //       return text + word + " ";
+      //     }
+      //     return text;
+      //   })
+      // );
+      // setPostInput(
+      //   correctAnswer.split(" ").reduce((text, word, index) => {
+      //     if (index > removeIndex) {
+      //       return text + " " + word;
+      //     }
+      //     return text;
+      //   })
+      // );
     } else if (exercise_type < 6) {
       setCorrect(-1);
       setQuestionDisplay(exercise_type % 2 == 0 ? sentences.en : sentences.ceb);
@@ -649,13 +680,47 @@ export const GrammarExerciseUI = ({
           correct_now = true;
         }
       } else if (exercise_type == 2) {
-        if (compareCebuanoWords(input, correctAnswer)) {
+        let preInput = correctAnswer.split(" ").reduce((text, word, index) => {
+          if (index < removeIndex) {
+            return text + word + " ";
+          }
+          return text + "";
+        }, "");
+        let postInput = correctAnswer.split(" ").reduce((text, word, index) => {
+          if (index > removeIndex) {
+            return text + " " + word;
+          }
+          return text + "";
+        }, "");
+        console.log("Remove Index: " + removeIndex);
+        console.log("Input: " + preInput + "-" + input + "-" + postInput);
+        console.log("Correct: " + correctAnswer);
+        if (
+          compareCebuanoSentences(preInput + input + postInput, correctAnswer)
+        ) {
           setScore(score + 1);
           setCorrect(1);
           correct_now = true;
         }
       } else if (exercise_type == 3) {
-        if (compareEnglishWords(input, correctAnswer)) {
+        let preInput = correctAnswer.split(" ").reduce((text, word, index) => {
+          if (index < removeIndex) {
+            return text + word + " ";
+          }
+          return text + "";
+        }, "");
+        let postInput = correctAnswer.split(" ").reduce((text, word, index) => {
+          if (index > removeIndex) {
+            return text + " " + word;
+          }
+          return text + "";
+        }, "");
+        console.log("Remove Index: " + removeIndex);
+        console.log("Input: " + preInput + "-" + input + "-" + postInput);
+        console.log("Correct: " + correctAnswer);
+        if (
+          compareEnglishSentences(preInput + input + postInput, correctAnswer)
+        ) {
           setScore(score + 1);
           setCorrect(1);
           correct_now = true;
@@ -730,6 +795,32 @@ export const GrammarExerciseUI = ({
 
   const fillBar = (
     <>
+      <YStack
+        alignSelf="center"
+        jc="flex-start"
+        ai="flex-start"
+        // gap="$2"
+        borderColor={"$color5"}
+        borderRadius="$5"
+        borderWidth="$1"
+        width="90%"
+      >
+        <Text fontSize={20} m="$5">
+          {questionDisplay}
+        </Text>
+        <Separator alignSelf="stretch" m="$0" />
+        <Text fontSize={20} m="$5">
+          {correctAnswer
+            .split(" ")
+            .map(
+              (word, index) =>
+                (index == 0 ? "" : " ") +
+                (index == removeIndex ? "_____" : word)
+            )}
+
+          {/* index == 0 || " " + */}
+        </Text>
+      </YStack>
       <Input
         size={"$5"}
         placeholder={"Type here..."}
@@ -835,7 +926,7 @@ export const GrammarExerciseUI = ({
     if (!hasFailed) {
       ExerciseService.incrementUserExerciseProgress(
         exercise!.id,
-        "ebabaa6c-4254-465e-9f2f-f285a2364277"
+        getUserUUID() ?? ""
       );
     }
 
@@ -922,32 +1013,26 @@ export const GrammarExerciseUI = ({
                 [
                   "Choose the correct translation for",
                   "Choose the correct translation for",
-                  "Fill the missing word to complete the translation of",
-                  "Fill the missing word to complete the translation of",
+                  "Fill the missing word to complete the sentence",
+                  "Fill the missing word to complete the sentence",
                   "Input the correct translation for",
                   "Input the English equivalent of",
                 ][exercise_type]
               }
-              <Text fontSize={20} fontWeight={600} color={"$color"}>
-                &nbsp;"
-                {questionDisplay}
-                {/*!(
-                  exercise?.item_sets &&
-                  arrangement.length === exercise?.item_sets.length
-                ) ||
-                  [
-                    exercise?.item_sets[arrangement[itemIndex]]
-                      .translated_sentence,
-                    exercise?.item_sets[arrangement[itemIndex]].sentence,
-                    exercise?.item_sets[arrangement[itemIndex]]
-                      .translated_sentence,
-                    exercise?.item_sets[arrangement[itemIndex]].sentence,
-                    exercise?.item_sets[arrangement[itemIndex]]
-                      .translated_sentence,
-                    exercise?.item_sets[arrangement[itemIndex]].sentence,
-                  ][exercise_type]*/}
-                "
-              </Text>
+              {[2, 3].some((n) => exercise_type == n) ? (
+                ""
+              ) : (
+                <Text
+                  fontSize={20}
+                  fontWeight={600}
+                  color={"$color"}
+                  display="none"
+                >
+                  &nbsp;"
+                  {questionDisplay}"
+                </Text>
+              )}
+              .
             </Text>
           </View>
           <View
@@ -959,7 +1044,11 @@ export const GrammarExerciseUI = ({
             ai="center"
             rowGap="$2"
           >
-            {exercise_type < 2 ? optionCards : inputBar}
+            {exercise_type < 2
+              ? optionCards
+              : exercise_type < 4
+              ? fillBar
+              : inputBar}
           </View>
           <Button
             alignSelf="center"
