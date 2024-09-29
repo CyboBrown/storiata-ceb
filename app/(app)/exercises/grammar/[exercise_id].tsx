@@ -20,13 +20,14 @@ import {
 } from "tamagui";
 import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
-import { ExerciseService } from ".../../../src/services/ExerciseService";
 import { useLocalSearchParams } from "expo-router";
-import { VocabularyExercise } from "../../../src/models/VocabularyExercise";
-import { VocabularyExerciseUI } from "../../../src/components/ExerciseUI";
-import { VocabularyExerciseType } from "../../../src/utils/enums";
+import { ExerciseService } from "../../../../src/services/ExerciseService";
+import { GrammarExercise } from "../../../../src/models/GrammarExercise";
+import { GrammarExerciseUI } from "../../../../src/components/ExerciseUI";
+import { GrammarExerciseType } from "../../../../src/utils/enums";
+import { useSession } from "../../../../src/services/auth-context";
 
-export default function VocabularyExercises({
+export default function GrammarExercises({
   session,
   exercise_id,
 }: {
@@ -35,16 +36,17 @@ export default function VocabularyExercises({
 }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
-    console.log("VOCABULARY_EXERCISES_" + local.exercise_id + " page loaded.");
+    console.log("GRAMMAR_EXERCISES_" + local.exercise_id + " page loaded.");
   }, []);
 
-  const TEMP_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
   const colorScheme = useColorScheme();
   const local = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Loading...");
-  const [exercise, setExercise] = useState<VocabularyExercise | null>();
+  const [exercise, setExercise] = useState<GrammarExercise | null>();
   const [exerciseLevel, setExerciseLevel] = useState(0);
+
+  const { getUserUUID } = useSession();
 
   useEffect(() => {
     loadExercise();
@@ -54,12 +56,12 @@ export default function VocabularyExercises({
     try {
       setLoadingText("Loading exercise...");
       setLoading(true);
-      let problems = await ExerciseService.getVocabularyExerciseProblems(
+      let problems = await ExerciseService.getGrammarExerciseProblems(
         parseInt(local.exercise_id as string)
       );
       let exerLevel = await ExerciseService.getExerciseLevel(
         parseInt(local.exercise_id as string),
-        TEMP_USER_UUID
+        getUserUUID() ?? ""
       );
       setExerciseLevel(exerLevel);
       setExercise(problems);
@@ -78,7 +80,7 @@ export default function VocabularyExercises({
     <TamaguiProvider>
       <Theme name={colorScheme === "dark" ? "dark" : "light"}>
         <YStack f={1} jc="center" ai="stretch" backgroundColor={"$background"}>
-          {loading && exercise ? (
+          {loading ? (
             <YStack jc="flex-start" ai="center" padding="$5">
               <Spinner size="large" color="$blue9" m="$2" />
               <Text fontSize={20} fontWeight={400} color={"$color"}>
@@ -86,7 +88,7 @@ export default function VocabularyExercises({
               </Text>
             </YStack>
           ) : (
-            <VocabularyExerciseUI
+            <GrammarExerciseUI
               exercise_type={exerciseLevel % 6}
               exercise={exercise || null}
             />

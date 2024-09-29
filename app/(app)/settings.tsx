@@ -1,4 +1,4 @@
-import config from "../tamagui.config";
+import config from "../../tamagui.config";
 import { Switch, TamaguiProvider, Text, View, XStack, YStack } from "tamagui";
 
 export default function Settings() {

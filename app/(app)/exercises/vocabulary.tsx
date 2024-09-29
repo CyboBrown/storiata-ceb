@@ -19,12 +19,13 @@ import {
 } from "tamagui";
 import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
-import { Exercise } from "../../src/models/Exercise";
-import { ExerciseService } from "../../src/services/ExerciseService";
+import { Exercise } from "../../../src/models/Exercise";
+import { ExerciseService } from "../../../src/services/ExerciseService";
 import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
-import { ExercisePopover } from "../../src/components/ExercisePopover";
-import { ExerciseTypes } from "../../src/utils/enums";
-import { UserExercise } from "../../src/models/UserExercise";
+import { ExercisePopover } from "../../../src/components/ExercisePopover";
+import { ExerciseTypes } from "../../../src/utils/enums";
+import { UserExercise } from "../../../src/models/UserExercise";
+import { useSession } from "../../../src/services/auth-context";
 
 export default function VocabularyExercises({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
@@ -34,10 +35,10 @@ export default function VocabularyExercises({ session }: { session: Session }) {
 
   const colorScheme = useColorScheme();
 
-  const TEMP_USER_UUID = "ebabaa6c-4254-465e-9f2f-f285a2364277";
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<Exercise[]>([]);
   const [progress, setProgress] = useState<UserExercise[]>([]);
+  const { getUserUUID } = useSession();
 
   useEffect(() => {
     loadExercises();
@@ -47,7 +48,7 @@ export default function VocabularyExercises({ session }: { session: Session }) {
     try {
       setLoading(true);
       let progress = await ExerciseService.getUserExerciseProgress(
-        TEMP_USER_UUID
+        getUserUUID() ?? ""
       );
       if (progress) {
         setProgress(progress);
@@ -103,7 +104,7 @@ export default function VocabularyExercises({ session }: { session: Session }) {
             >
               {results.map((result, index) => (
                 <ExercisePopover
-                  user="ebabaa6c-4254-465e-9f2f-f285a2364277"
+                  user={getUserUUID() ?? ""}
                   title={result.topic}
                   subTitle={result.description}
                   index={result.id}

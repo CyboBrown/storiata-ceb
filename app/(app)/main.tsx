@@ -9,7 +9,6 @@ import Dictionary from "./dictionary";
 import Account from "./account";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { compareCebuanoWords } from "../src/utils/compare";
 
 export default function Main({
   session,

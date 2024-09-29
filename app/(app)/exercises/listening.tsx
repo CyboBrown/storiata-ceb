@@ -19,22 +19,24 @@ import {
 } from "tamagui";
 import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
-import { Exercise } from "../../src/models/Exercise";
-import { ExerciseService } from "../../src/services/ExerciseService";
+import { Exercise } from "../../../src/models/Exercise";
+import { ExerciseService } from "../../../src/services/ExerciseService";
 import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
-import { ExercisePopover } from "../../src/components/ExercisePopover";
-import { ExerciseTypes } from "../../src/utils/enums";
+import { ExercisePopover } from "../../../src/components/ExercisePopover";
+import { ExerciseTypes } from "../../../src/utils/enums";
+import { useSession } from "../../../src/services/auth-context";
 
-export default function GrammarExercises({ session }: { session: Session }) {
+export default function ListeningExercises({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
-    console.log("GRAMMAR_EXERCISES page loaded.");
+    console.log("LISTENING_EXERCISES page loaded.");
   }, []);
 
   const colorScheme = useColorScheme();
 
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<Exercise[]>([]);
+  const { getUserUUID } = useSession();
 
   useEffect(() => {
     loadExercises();
@@ -44,7 +46,7 @@ export default function GrammarExercises({ session }: { session: Session }) {
     try {
       setLoading(true);
       let data = await ExerciseService.getAllExercisesByType(
-        ExerciseTypes.Grammar
+        ExerciseTypes.Listening
       );
       if (data) {
         setResults(data);
@@ -69,7 +71,7 @@ export default function GrammarExercises({ session }: { session: Session }) {
         >
           <XStack jc="space-between" ai="flex-start" padding="$5">
             <Text fontSize={20} fontWeight={800} color={"$color"}>
-              Grammar Exercises
+              Listening Exercises
             </Text>
             <RefreshCw
               onPress={loadExercises}
@@ -87,11 +89,11 @@ export default function GrammarExercises({ session }: { session: Session }) {
             >
               {results.map((result, index) => (
                 <ExercisePopover
-                  user="ebabaa6c-4254-465e-9f2f-f285a2364277"
+                  user={getUserUUID() ?? ""}
                   title={result.topic}
                   subTitle={result.description}
                   index={result.id}
-                  exerciseType={ExerciseTypes.Grammar}
+                  exerciseType={ExerciseTypes.Listening}
                   key={result.id}
                 />
               ))}

@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../src/utils/supabase";
+import { supabase } from "../../src/utils/supabase";
 import { Alert } from "react-native";
 import { Button, Input, Text, View } from "tamagui";
 import { Session } from "@supabase/supabase-js";
 import Avatar from "./avatar";
 import { router } from "expo-router";
-import { UserAuthentication } from "../src/services/UserAuthentication";
-import { AccountService } from "../src/services/AccountService";
-import { Profile } from "../src/models/Profile";
+import { UserAuthentication } from "../../src/services/UserAuthentication";
+import { AccountService } from "../../src/services/AccountService";
+import { Profile } from "../../src/models/Profile";
 
 export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);

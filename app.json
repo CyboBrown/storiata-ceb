@@ -1,23 +1,23 @@
 {
   "expo": {
-    "name": "storiata-ceb",
+    "name": "StoriaTa",
+    "description": "A language learning app dedicated to learning and practicing Cebuano.",
     "slug": "storiata-ceb",
     "scheme": "storiata",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./src/assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
+    "assetBundlePatterns": ["**/*"],
+    "platforms": ["android"],
+    // "ios": {
+    //   "supportsTablet": true
+    // },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
@@ -25,13 +25,10 @@
       },
       "package": "com.salibo.storiata"
     },
-    "web": {
-      "favicon": "./src/assets/favicon.png"
-    },
-    "plugins": [
-      "expo-font",
-      "expo-router"
-    ],
+    // "web": {
+    //   "favicon": "./src/assets/favicon.png"
+    // },
+    "plugins": ["expo-font", "expo-router"],
     "extra": {
       "eas": {
         "projectId": "04770a1e-dc21-4feb-a08e-a25a8d62a179"
