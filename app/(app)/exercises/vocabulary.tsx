@@ -21,8 +21,6 @@ import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
 import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from "../../../src/services/ExerciseService";
-import { Exercise } from "../../../src/models/Exercise";
-import { ExerciseService } from "../../../src/services/ExerciseService";
 import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
 import { ExercisePopover } from "../../../src/components/ExercisePopover";
 import { ExerciseTypes } from "../../../src/utils/enums";
@@ -36,8 +34,6 @@ export default function VocabularyExercises({ session }: { session: Session }) {
   }, []);
 
   const colorScheme = useColorScheme();
-  const { getUserUUID } = useSession();
-
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<Exercise[]>([]);
   const [progress, setProgress] = useState<UserExercise[]>([]);
@@ -51,7 +47,6 @@ export default function VocabularyExercises({ session }: { session: Session }) {
     try {
       setLoading(true);
       let progress = await ExerciseService.getUserExerciseProgress(
-        getUserUUID() ?? ""
         getUserUUID() ?? ""
       );
       if (progress) {
