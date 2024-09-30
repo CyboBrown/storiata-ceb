@@ -515,7 +515,7 @@ export const GrammarExerciseUI = ({
   const [rendered, setRendered] = useState<boolean>(false); // Checks if page has been rendered
   const [input, setInput] = useState(""); // Current input for identification questions
   const [correctAnswer, setCorrectAnswer] = useState("error");
-  const [questionDisplay, setQuestionDisplay] = useState("");
+  const [questionDisplay, setQuestionDisplay] = useState<string>("");
   const [options, setOptions] = useState<Array<string>>([]);
   const [wordPairs, setWordPairs] = useState<{ [k: string]: Array<any> }>({
     name: [
@@ -624,36 +624,24 @@ export const GrammarExerciseUI = ({
       //     ].translated_sentence,
     } else if (exercise_type < 4) {
       setCorrect(-1);
-      setQuestionDisplay(exercise_type % 2 == 0 ? sentences.en : sentences.ceb);
-      setCorrectAnswer(exercise_type % 2 == 0 ? sentences.ceb : sentences.en);
+      setQuestionDisplay(exercise_type == 2 ? sentences.en : sentences.ceb);
+      setCorrectAnswer(exercise_type == 2 ? sentences.ceb : sentences.en);
       setRemoveIndex(
         randomIndex(
           (exercise_type % 2 == 0 ? sentences.ceb : sentences.en).split(" ")
             .length
         )
       );
-      // setPreInput(
-      //   correctAnswer.split(" ").reduce((text, word, index) => {
-      //     if (index < removeIndex) {
-      //       return text + word + " ";
-      //     }
-      //     return text;
-      //   })
-      // );
-      // setPostInput(
-      //   correctAnswer.split(" ").reduce((text, word, index) => {
-      //     if (index > removeIndex) {
-      //       return text + " " + word;
-      //     }
-      //     return text;
-      //   })
-      // );
     } else if (exercise_type < 6) {
       setCorrect(-1);
-      setQuestionDisplay(exercise_type % 2 == 0 ? sentences.en : sentences.ceb);
-      setCorrectAnswer(exercise_type % 2 == 0 ? sentences.ceb : sentences.en);
+      setQuestionDisplay(exercise_type == 2 ? sentences.en : sentences.ceb);
+      setCorrectAnswer(exercise_type == 2 ? sentences.ceb : sentences.en);
     }
   }, [itemIndex]);
+
+  // useEffect(() => {
+  //   console.log("Changed: " + questionDisplay);
+  // }, [questionDisplay]);
 
   const handleSubmit = () => {
     if (reveal) {
@@ -692,9 +680,10 @@ export const GrammarExerciseUI = ({
           }
           return text + "";
         }, "");
-        console.log("Remove Index: " + removeIndex);
-        console.log("Input: " + preInput + "-" + input + "-" + postInput);
-        console.log("Correct: " + correctAnswer);
+        // console.log("Remove Index: " + removeIndex);
+        // console.log("Question: " + questionDisplay);
+        // console.log("Input: " + preInput + "-" + input + "-" + postInput);
+        // console.log("Correct: " + correctAnswer);
         if (
           compareCebuanoSentences(preInput + input + postInput, correctAnswer)
         ) {
@@ -715,9 +704,10 @@ export const GrammarExerciseUI = ({
           }
           return text + "";
         }, "");
-        console.log("Remove Index: " + removeIndex);
-        console.log("Input: " + preInput + "-" + input + "-" + postInput);
-        console.log("Correct: " + correctAnswer);
+        // console.log("Remove Index: " + removeIndex);
+        // console.log("Question: " + questionDisplay);
+        // console.log("Input: " + preInput + "-" + input + "-" + postInput);
+        // console.log("Correct: " + correctAnswer);
         if (
           compareEnglishSentences(preInput + input + postInput, correctAnswer)
         ) {
@@ -799,26 +789,39 @@ export const GrammarExerciseUI = ({
         alignSelf="center"
         jc="flex-start"
         ai="flex-start"
-        // gap="$2"
         borderColor={"$color5"}
         borderRadius="$5"
         borderWidth="$1"
         width="90%"
+        backgroundColor={reveal ? "$blue7" : "unset"}
       >
-        <Text fontSize={20} m="$5">
+        <Text fontSize={20} alignSelf="stretch" m="$5">
           {questionDisplay}
         </Text>
-        <Separator alignSelf="stretch" m="$0" />
-        <Text fontSize={20} m="$5">
-          {correctAnswer
-            .split(" ")
-            .map(
-              (word, index) =>
-                (index == 0 ? "" : " ") +
-                (index == removeIndex ? "_____" : word)
-            )}
-
-          {/* index == 0 || " " + */}
+        <Separator alignSelf="stretch" m="$0"></Separator>
+        <Text fontSize={20} alignSelf="stretch" m="$5">
+          {reveal ? (
+            correctAnswer.split(" ").map((word, index) => (
+              <Text>
+                {index == 0 ? "" : " "}
+                {index == removeIndex ? (
+                  <Text textDecorationLine="underline">{word}</Text>
+                ) : (
+                  <Text>{word}</Text>
+                )}
+              </Text>
+            ))
+          ) : (
+            <Text>
+              {correctAnswer
+                .split(" ")
+                .map(
+                  (word, index) =>
+                    (index == 0 ? "" : " ") +
+                    (index == removeIndex ? "_____" : word)
+                )}
+            </Text>
+          )}
         </Text>
       </YStack>
       <Input
@@ -831,42 +834,14 @@ export const GrammarExerciseUI = ({
         width="90%"
         fontSize={20}
         minHeight={"$8"}
-        value={input}
+        autoCapitalize="none"
+        value={input + (reveal ? (correct == 1 ? " ✔️" : " ❌") : "")}
         disabled={reveal}
         backgroundColor={
           reveal ? (correct == 1 ? "$green7" : "$red7") : "unset"
         }
         onChangeText={(input) => setInput(input)}
       />
-      <YStack
-        jc="flex-start"
-        ai="center"
-        p="$5"
-        gap="$2"
-        borderColor={"$color5"}
-        borderRadius="$5"
-        borderWidth="$1"
-        width="90%"
-        backgroundColor={"$green7"}
-        display={reveal ? "unset" : "none"}
-      >
-        <Text
-          fontSize={20}
-          fontWeight={800}
-          color={"$color"}
-          alignSelf="flex-start"
-        >
-          Correct Answer:
-        </Text>
-        <Text
-          fontSize={20}
-          fontWeight={400}
-          color={"$color"}
-          alignSelf="flex-start"
-        >
-          {correctAnswer}
-        </Text>
-      </YStack>
     </>
   );
 
@@ -1007,7 +982,7 @@ export const GrammarExerciseUI = ({
             borderWidth="$1"
             width="90%"
           >
-            <Text fontSize={20}>
+            <Text fontSize={20} alignSelf="stretch">
               {itemIndex + 1 + ") "}
               {
                 [

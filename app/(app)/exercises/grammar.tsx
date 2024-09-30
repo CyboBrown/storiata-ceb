@@ -24,6 +24,7 @@ import { ExerciseService } from "../../../src/services/ExerciseService";
 import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
 import { ExercisePopover } from "../../../src/components/ExercisePopover";
 import { ExerciseTypes } from "../../../src/utils/enums";
+import { UserExercise } from "../../../src/models/UserExercise";
 import { useSession } from "../../../src/services/auth-context";
 
 export default function GrammarExercises({ session }: { session: Session }) {
@@ -36,6 +37,7 @@ export default function GrammarExercises({ session }: { session: Session }) {
 
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<Exercise[]>([]);
+  const [progress, setProgress] = useState<UserExercise[]>([]);
   const { getUserUUID } = useSession();
 
   useEffect(() => {
@@ -45,6 +47,12 @@ export default function GrammarExercises({ session }: { session: Session }) {
   const loadExercises = async () => {
     try {
       setLoading(true);
+      let progress = await ExerciseService.getUserExerciseProgress(
+        getUserUUID() ?? ""
+      );
+      if (progress) {
+        setProgress(progress);
+      }
       let data = await ExerciseService.getAllExercisesByType(
         ExerciseTypes.Grammar
       );
@@ -58,6 +66,13 @@ export default function GrammarExercises({ session }: { session: Session }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const checkExerciseCompletion = (exercise_id: number) => {
+    const level = progress.find((exercise) => {
+      return exercise.exercise_id == exercise_id;
+    })?.level;
+    return !!level && level >= 6;
   };
 
   return (
@@ -95,6 +110,7 @@ export default function GrammarExercises({ session }: { session: Session }) {
                   index={result.id}
                   exerciseType={ExerciseTypes.Grammar}
                   key={result.id}
+                  finished={checkExerciseCompletion(result.id)}
                 />
               ))}
             </YGroup>
