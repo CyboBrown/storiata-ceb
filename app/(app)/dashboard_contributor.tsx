@@ -15,11 +15,7 @@ import {
 } from "tamagui";
 import LessonCard from "../../src/components/LessonCard";
 
-export default function ContributorDashboard({
-  session,
-}: {
-  session: Session;
-}) {
+export default function ContributorDashboard() {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
     console.log("CONTRIBUTOR_DASHBOARD page loaded.");

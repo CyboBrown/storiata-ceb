@@ -14,7 +14,7 @@ import { ChevronDown } from "@tamagui/lucide-icons";
 import { useEffect } from "react";
 import { Link } from "expo-router";
 
-export default function Exercises({ session }: { session: Session }) {
+export default function Exercises() {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
     console.log("EXERCISES page loaded.");
