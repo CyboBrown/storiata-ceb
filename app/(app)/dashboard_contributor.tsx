@@ -1,81 +1,89 @@
 import React, { useEffect, useState } from "react";
-import config from "../../tamagui.config";
-import { Session } from "@supabase/supabase-js";
-import {
-  YStack,
-  Text,
-  View,
-  Input,
-  Card,
-  CardHeader,
-  CardFooter,
-  CardBackground,
-  ScrollView,
-  XStack,
-} from "tamagui";
-import LessonCard from "../../src/components/LessonCard";
+import { View, Text, StyleSheet } from "react-native";
+import { useSession } from "../../src/services/auth-context";
+import NavAvatarIcon from "../../src/components/NavAvatarIcon";
+import { AccountService } from "../../src/services/AccountService";
 
 export default function ContributorDashboard() {
-  // DO NOT DELETE: FOR TESTING AND INITIALIZATION
-  useEffect(() => {
-    console.log("CONTRIBUTOR_DASHBOARD page loaded.");
-  }, []);
+  const { session, getUserUUID } = useSession();
+  const [loading, setLoading] = useState(true);
+  const [username, setUsername] = useState("USER#0000");
+  const userUUID = getUserUUID();
 
-  const [search, setSearch] = useState("");
+  useEffect(() => {
+    if (session) getUsername();
+  }, [session]);
+
+  async function getUsername() {
+    try {
+      setLoading(true);
+      if (!session) throw new Error("No user on the session!");
+
+      let data = await AccountService.getProfile(getUserUUID());
+      if (data?.username) {
+        setUsername(data.username);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <>
-      <View justifyContent="center" alignItems="center" overflow="scroll">
-        <Text color={"$color"} fontSize={40}>
-          STORIATA
-        </Text>
+    <View style={styles.container}>
+      <View style={styles.leftColumn}>
+        <NavAvatarIcon userID={userUUID} size={90} />
       </View>
-      <ScrollView>
-        <View marginStart="$2" marginTop="$3" marginEnd="$2">
-          <Card elevate size={4} bordered height={200}>
-            <CardHeader padded>
-              <Text color={"$color"} fontSize={26}>
-                Contributor Dashboard
-              </Text>
-              <XStack marginTop={"$3"}>
-                <Text color={"$color"} fontSize={"$7"} flex={1}>
-                  Total Contribution:{" "}
-                </Text>
-                <Text color={"$color"} fontSize={"$7"}>
-                  50
-                </Text>
-              </XStack>
-              <XStack marginTop={"$3"}>
-                <Text color={"$color"} fontSize={"$7"} flex={1}>
-                  Total Views:{" "}
-                </Text>
-                <Text color={"$color"} fontSize={"$7"}>
-                  50
-                </Text>
-              </XStack>
-              <XStack marginTop={"$3"}>
-                <Text color={"$color"} fontSize={"$7"} flex={1}>
-                  Total Likes:{" "}
-                </Text>
-                <Text color={"$color"} fontSize={"$7"}>
-                  50
-                </Text>
-              </XStack>
-            </CardHeader>
-            <CardFooter padded></CardFooter>
-            <CardBackground></CardBackground>
-          </Card>
+      <View style={styles.rightColumn}>
+        <View style={styles.textContainer}>
+          <Text style={styles.headerText}>{username}</Text>
+          <Text style={styles.text}>CONTRIBUTOR</Text>
         </View>
-        <View marginStart="$2" marginTop="$5" marginEnd="$2">
-          <Text color={"$color"} fontSize={25}>
-            {" "}
-            Recent Contributions
-          </Text>
-        </View>
-        <LessonCard title="Sample" details="Sample Details" />
-        <LessonCard title="Sample" details="Sample Details" />
-        <LessonCard title="Sample" details="Sample Details" />
-      </ScrollView>
+      </View>
+    </View>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    width: "95%",
+    height: 100,
+    alignSelf: "center",
+    marginTop: 15,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  leftColumn: {
+    flex: 0.3,
+    marginRight: 10,
+    justifyContent: "center",
+  },
+  rightColumn: {
+    flex: 0.7,
+  },
+  textContainer: {
+    justifyContent: "center",
+  },
+  headerText: {
+    marginTop: 20,
+    color: "black",
+    fontWeight: "bold",
+    fontSize: 24,
+    lineHeight: 24,
+  },
+  text: {
+    color: "gray",
+    fontWeight: "bold",
+  },
+});
