@@ -30,10 +30,8 @@ import { RevPartsOfSpeech } from "../../src/utils/enums";
 import ConjugationTable from "../../src/components/ConjugationTable";
 
 export default function Dictionary({
-  session,
   contribMode,
 }: {
-  session: Session;
   contribMode: boolean;
 }) {
   const [loading, setLoading] = useState(false);
