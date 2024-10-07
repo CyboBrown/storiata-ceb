@@ -15,6 +15,7 @@ import { UserAuthentication } from "../src/services/UserAuthentication";
 import config from "../tamagui.config";
 import { Session, User } from "@supabase/supabase-js";
 import logo from "../src/assets/StoriaTa-Logo.png";
+
 import { AppState } from "react-native";
 import { supabase } from "../src/utils/supabase";
 import { useSession } from "../src/services/auth-context";
@@ -58,7 +59,7 @@ export default function Login({
     <ScrollView backgroundColor={"$background"}>
       <View flex={1} padding="$4" marginTop="$10">
         <View justifyContent="center" alignItems="center">
-          <Image source={logo} width="$15" height="$15" />
+          <Image source={logo} width="$15" height="$15" borderRadius={"$10"} />
         </View>
         <View justifyContent="center" alignItems="center">
           <Text color="$color" fontSize={30} fontFamily={"$heading"}>
@@ -73,7 +74,8 @@ export default function Login({
           </Text>
           <Input
             size="$4"
-            placeholder="email@gmail.com"
+            placeholder="name@email.com"
+            autoCapitalize="none"
             value={email}
             onChangeText={(text) => setEmail(text)}
           />
@@ -85,7 +87,8 @@ export default function Login({
           </Text>
           <Input
             size="$4"
-            placeholder="Password"
+            placeholder="Enter 8 characters or more"
+            autoCapitalize="none"
             secureTextEntry
             value={password}
             onChangeText={(text) => setPassword(text)}

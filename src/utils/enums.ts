@@ -1,5 +1,5 @@
 export enum PartsOfSpeech {
-  "uncategorized" = "",
+  " " = " ",
   "adjective" = "adj",
   "noun" = "n",
   "number" = "num",
@@ -7,7 +7,7 @@ export enum PartsOfSpeech {
 }
 
 export enum RevPartsOfSpeech {
-  " " = "uncategorized",
+  " " = " ",
   "adj" = "adjective",
   "n" = "noun",
   "num" = "number",
@@ -74,4 +74,13 @@ export enum GrammarExerciseType {
   InputMissingEnglishWord,
   InputCebuanoSentence,
   InputEnglishSentence,
+}
+
+export enum ListeningExerciseType {
+  ChooseTranscription,
+  ChooseTranslation,
+  InputMissingCebuanoWord,
+  InputMissingEnglishWord,
+  InputTranscription,
+  InputTranslation,
 }

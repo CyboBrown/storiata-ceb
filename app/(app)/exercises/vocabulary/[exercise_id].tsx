@@ -20,8 +20,8 @@ import {
 } from "tamagui";
 import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
-import { ExerciseService } from "../../../../src/services/ExerciseService";
 import { useLocalSearchParams } from "expo-router";
+import { ExerciseService } from "../../../../src/services/ExerciseService";
 import { VocabularyExercise } from "../../../../src/models/VocabularyExercise";
 import { VocabularyExerciseUI } from "../../../../src/components/ExerciseUI";
 import { VocabularyExerciseType } from "../../../../src/utils/enums";

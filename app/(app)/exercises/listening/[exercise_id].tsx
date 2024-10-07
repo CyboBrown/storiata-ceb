@@ -22,12 +22,12 @@ import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { ExerciseService } from "../../../../src/services/ExerciseService";
-import { GrammarExercise } from "../../../../src/models/GrammarExercise";
-import { GrammarExerciseUI } from "../../../../src/components/ExerciseUI";
-import { GrammarExerciseType } from "../../../../src/utils/enums";
+import { ListeningExercise } from "../../../../src/models/ListeningExercise";
+import { ListeningExerciseUI } from "../../../../src/components/ExerciseUI";
+import { ListeningExerciseType } from "../../../../src/utils/enums";
 import { useSession } from "../../../../src/services/auth-context";
 
-export default function GrammarExercises({
+export default function ListeningExercises({
   session,
   exercise_id,
 }: {
@@ -36,14 +36,14 @@ export default function GrammarExercises({
 }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
-    console.log("GRAMMAR_EXERCISES_" + local.exercise_id + " page loaded.");
+    console.log("LISTENING_EXERCISES_" + local.exercise_id + " page loaded.");
   }, []);
 
   const colorScheme = useColorScheme();
   const local = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Loading...");
-  const [exercise, setExercise] = useState<GrammarExercise | null>();
+  const [exercise, setExercise] = useState<ListeningExercise | null>();
   const [exerciseLevel, setExerciseLevel] = useState(0);
 
   const { getUserUUID } = useSession();
@@ -56,7 +56,7 @@ export default function GrammarExercises({
     try {
       setLoadingText("Loading exercise...");
       setLoading(true);
-      let problems = await ExerciseService.getGrammarExerciseProblems(
+      let problems = await ExerciseService.getListeningExerciseProblems(
         parseInt(local.exercise_id as string)
       );
       let exerLevel = await ExerciseService.getExerciseLevel(
@@ -88,7 +88,7 @@ export default function GrammarExercises({
               </Text>
             </YStack>
           ) : (
-            <GrammarExerciseUI
+            <ListeningExerciseUI
               exercise_type={exerciseLevel % 6}
               exercise={exercise || null}
             />
