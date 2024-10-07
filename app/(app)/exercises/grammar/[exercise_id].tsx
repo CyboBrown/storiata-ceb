@@ -20,7 +20,7 @@ import {
 } from "tamagui";
 import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
-import { ExerciseService } from ".../../../src/services/ExerciseService";
+import { ExerciseService } from "../../../../src/services/ExerciseService";
 import { useLocalSearchParams } from "expo-router";
 import { GrammarExercise } from "../../../../src/models/GrammarExercise";
 import { GrammarExerciseUI } from "../../../../src/components/ExerciseUI";
