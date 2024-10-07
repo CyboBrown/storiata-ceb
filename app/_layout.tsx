@@ -5,9 +5,7 @@ import { TamaguiProvider, Theme } from "tamagui";
 import config from "../tamagui.config";
 
 export default function Root() {
-  // Set up the auth context and render our layout inside of it.
   const colorScheme = useColorScheme();
-
   return (
     <SessionProvider>
       <TamaguiProvider config={config}>
