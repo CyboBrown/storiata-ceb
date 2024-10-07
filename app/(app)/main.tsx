@@ -14,6 +14,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet, SafeAreaView, useColorScheme } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons";
+import ContributorDashboard from "./dashboard_contributor";
 
 export default function Main({contribMode}: {contribMode: boolean;}) {
   const { getUserUUID } = useSession();
@@ -21,9 +22,7 @@ export default function Main({contribMode}: {contribMode: boolean;}) {
   const colorScheme = useColorScheme();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor="skyblue" />
-      <HeaderTitle />
+    <>
       <NavigationContainer independent={true}>
         <BtmTabNavigator.Navigator
           screenOptions={({ route }) => ({
@@ -46,15 +45,24 @@ export default function Main({contribMode}: {contribMode: boolean;}) {
               return <Icon name={iconName} size={size} color={color} />;
             },
             swipeEnabled: true,
-            tabBarActiveTintColor: "skyblue",
+            tabBarActiveTintColor: "dodgerblue",
             tabBarInactiveTintColor: "gray",
             headerShown: false,
           })}
         >
-          <BtmTabNavigator.Screen
-            name="Home"
-            children={() => <Dashboard />}
-          />
+
+          {contribMode ? (
+            <BtmTabNavigator.Screen
+              name="Home"
+              children={() => <ContributorDashboard />}
+            />
+          ) : (
+            <BtmTabNavigator.Screen
+              name="Home"
+              children={() => <Dashboard />}
+            />
+          )}
+
           <BtmTabNavigator.Screen
             name="Exercises"
             children={() => <Exercises />}
@@ -69,7 +77,7 @@ export default function Main({contribMode}: {contribMode: boolean;}) {
           />
         </BtmTabNavigator.Navigator>
       </NavigationContainer>
-    </SafeAreaView>
+        </>
   );
 }
 
