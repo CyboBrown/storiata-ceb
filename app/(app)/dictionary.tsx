@@ -13,10 +13,12 @@ import {
   ZStack,
   Text,
   Spinner,
+  Tabs,
+  View,
 } from "tamagui";
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../src/utils/supabase";
-import { Alert } from "react-native";
+import { Alert, FlatList } from "react-native";
 import { Word } from "../../src/models/Word";
 import AddWordDialog from "../../src/components/AddWordDialog";
 import { WordSearchResult } from "../../src/components/WordSearchResult";
@@ -24,6 +26,8 @@ import { DictionaryService } from "../../src/services/DictionaryService";
 import { Link } from "expo-router";
 import EditWordDialog from "../../src/components/EditWordDialog";
 import EditTranslationDialog from "../../src/components/EditTranslationDialog";
+import { RevPartsOfSpeech } from "../../src/utils/enums";
+import ConjugationTable from "../../src/components/ConjugationTable";
 
 export default function Dictionary({
   session,
@@ -161,8 +165,8 @@ export default function Dictionary({
         modal={true}
         open={open}
         onOpenChange={setOpen}
-        snapPoints={[30, 50]}
-        snapPointsMode={"percent"}
+        // snapPoints={[30, 50]}
+        snapPointsMode={"fit"}
         dismissOnSnapToBottom
         position={position}
         onPositionChange={setPosition}
@@ -181,33 +185,92 @@ export default function Dictionary({
           alignItems="stretch"
           space="$5"
         >
-          <YStack space="$2" jc="center" alignItems="center">
-            <XStack space="$4" jc="center" alignItems="center">
-              <SizableText size="$10" fontWeight="800">
-                {results[selected] ? results[selected].representation : "none"}
-              </SizableText>
-              <YStack space="$2" alignItems="center">
-                <Paragraph size="$3" fontWeight="800">
+          <Tabs
+            defaultValue="tab1"
+            orientation="horizontal"
+            flexDirection="column"
+            borderRadius="$4"
+            borderWidth="$0.25"
+            overflow="hidden"
+            borderColor="$borderColor"
+          >
+            <Tabs.List
+              separator={<Separator vertical />}
+              disablePassBorderRadius="bottom"
+              aria-label="Manage your account"
+            >
+              <Tabs.Tab flex={1} value="tab1">
+                <SizableText fontFamily="$body">Details</SizableText>
+              </Tabs.Tab>
+              <Tabs.Tab flex={1} value="tab2">
+                <SizableText fontFamily="$body">Conjugations</SizableText>
+              </Tabs.Tab>
+            </Tabs.List>
+            <Separator />
+            {/* Details */}
+            <Tabs.Content
+              value="tab1"
+              backgroundColor="$background"
+              key="tab1"
+              padding="$2"
+              alignItems="stretch"
+              justifyContent="center"
+              flex={1}
+            >
+              <YStack space="$2" jc="center" alignItems="stretch" p="$4">
+                {/* Representation */}
+                <Text
+                  alignSelf="flex-start"
+                  fontSize={
+                    ["$16", "$16", "$12", "$8", "$12"].at(
+                      (results[selected]
+                        ? results[selected].representation?.length ?? 1
+                        : 1) - 1
+                    ) ?? "$1"
+                  }
+                  fontWeight="800"
+                  borderColor="$color10"
+                  borderWidth="$1"
+                  borderRadius="$4"
+                  textAlign="center"
+                  p="$2.5"
+                >
+                  {results[selected]
+                    ? results[selected].representation
+                    : "none"}
+                </Text>
+                {/* Word */}
+                <Text fontSize="$10">
                   {results[selected] ? results[selected].normal_form : "none"}
-                </Paragraph>
-                <SizableText size="$2" fontStyle="italic">
+                </Text>
+                {/* Pronunciation */}
+                <Text fontSize="$8" fontStyle="italic">
+                  /
                   {results[selected] ? results[selected].phonetic_form : "none"}
-                </SizableText>
-              </YStack>
-            </XStack>
-            <XStack space>
-              {results[selected]
-                ? results[selected].translations.map((translation) => (
-                    <SizableText theme="alt1" size="$3">
-                      {translation.word}
-                    </SizableText>
-                  ))
-                : null}
-            </XStack>
-
-            {contribMode && (
-              <XStack gap="$4">
-                {/* <Link
+                  /
+                </Text>
+                <Text fontSize="$8" color="$color10">
+                  {results[selected]
+                    ? RevPartsOfSpeech[
+                        `${results[selected].part_of_speech}` as keyof typeof RevPartsOfSpeech
+                      ]
+                    : ""}
+                </Text>
+                <Separator borderColor="$color10"></Separator>
+                {/* Translations */}
+                <Text fontSize="$8" fontWeight={500}>
+                  {results[selected]
+                    ? results[selected].translations
+                        .reduce(
+                          (acc, translation) => acc + translation.word + ", ",
+                          ""
+                        )
+                        .slice(0, -2)
+                    : null}
+                </Text>
+                {contribMode && (
+                  <XStack gap="$4">
+                    {/* <Link
                   href={{
                     pathname: "/add_translation/[id]",
                     params: {
@@ -224,52 +287,67 @@ export default function Dictionary({
                     + Edit Translations
                   </Text>
                 </Link> */}
-                <EditTranslationDialog
-                  selected_word={
-                    results[selected]
-                      ? results[selected]
-                      : {
-                          added_by: null,
-                          created_at: "",
-                          description: null,
-                          id: -1,
-                          normal_form: "",
-                          part_of_speech: "",
-                          phonetic_form: "",
-                          representation: null,
-                          suffix_form: null,
-                          translations: null,
-                        }
-                  }
-                />
-                <EditWordDialog
-                  selected_word={
-                    results[selected]
-                      ? results[selected]
-                      : {
-                          added_by: null,
-                          created_at: "",
-                          description: null,
-                          id: -1,
-                          normal_form: "",
-                          part_of_speech: "",
-                          phonetic_form: "",
-                          representation: null,
-                          suffix_form: null,
-                          translations: null,
-                        }
-                  }
-                />
-              </XStack>
-            )}
-            <SizableText size="$2" fontWeight="800">
-              {results[selected]
-                ? results[selected].suffix_form
-                  ? results[selected].suffix_form + "an"
-                  : results[selected].normal_form + "an"
-                : "none"}
-            </SizableText>
-          </YStack>
+                    <EditTranslationDialog
+                      selected_word={
+                        results[selected]
+                          ? results[selected]
+                          : {
+                              added_by: null,
+                              created_at: "",
+                              description: null,
+                              id: -1,
+                              normal_form: "",
+                              part_of_speech: "",
+                              phonetic_form: "",
+                              representation: null,
+                              suffix_form: null,
+                              translations: null,
+                            }
+                      }
+                    />
+                    <EditWordDialog
+                      selected_word={
+                        results[selected]
+                          ? results[selected]
+                          : {
+                              added_by: null,
+                              created_at: "",
+                              description: null,
+                              id: -1,
+                              normal_form: "",
+                              part_of_speech: "",
+                              phonetic_form: "",
+                              representation: null,
+                              suffix_form: null,
+                              translations: null,
+                            }
+                      }
+                    />
+                  </XStack>
+                )}
+              </YStack>
+            </Tabs.Content>
+            {/* Conjugations */}
+            <Tabs.Content
+              value="tab2"
+              backgroundColor="$background"
+              key="tab2"
+              padding="$2"
+              alignItems="stretch"
+              justifyContent="center"
+              flex={1}
+              p="$2"
+            >
+              <ConjugationTable word={results[selected]}></ConjugationTable>
+              {/* <SizableText size="$2" fontWeight="800">
+                {results[selected]
+                  ? results[selected].suffix_form
+                    ? results[selected].suffix_form + "an"
+                    : results[selected].normal_form + "an"
+                  : "none"}
+              </SizableText> */}
+            </Tabs.Content>
+          </Tabs>
         </Sheet.Frame>
       </Sheet>
     </>
