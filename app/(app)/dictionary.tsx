@@ -26,10 +26,8 @@ import EditWordDialog from "../../src/components/EditWordDialog";
 import EditTranslationDialog from "../../src/components/EditTranslationDialog";
 
 export default function Dictionary({
-  session,
   contribMode,
 }: {
-  session: Session;
   contribMode: boolean;
 }) {
   const [loading, setLoading] = useState(false);

@@ -8,12 +8,14 @@ import { router } from "expo-router";
 import { UserAuthentication } from "../../src/services/UserAuthentication";
 import { AccountService } from "../../src/services/AccountService";
 import { Profile } from "../../src/models/Profile";
+import { useSession } from "../../src/services/auth-context";
 
-export default function Account({ session }: { session: Session }) {
+export default function Account() {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
   const [website, setWebsite] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
+  const { session } = useSession();
 
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
@@ -27,9 +29,9 @@ export default function Account({ session }: { session: Session }) {
   async function showProfile() {
     try {
       setLoading(true);
-      if (!session?.user) throw new Error("No user on the session!");
+      if (!session) throw new Error("No user on the session!");
 
-      let data = await AccountService.getProfile(session?.user.id);
+      let data = await AccountService.getProfile(session);
 
       if (data?.avatar_url) {
         setAvatarUrl(data.avatar_url);
