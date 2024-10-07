@@ -15,7 +15,7 @@ export default function Account() {
   const [username, setUsername] = useState("");
   const [website, setWebsite] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
-  const { session } = useSession();
+  const { session, getUserUUID } = useSession();
 
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function Account() {
       setLoading(true);
       if (!session) throw new Error("No user on the session!");
 
-      let data = await AccountService.getProfile(session);
+      let data = await AccountService.getProfile(getUserUUID());
 
       if (data?.avatar_url) {
         setAvatarUrl(data.avatar_url);

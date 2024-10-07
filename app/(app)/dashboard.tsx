@@ -59,12 +59,6 @@ export default function Dashboard() {
 
   return (
     <View justifyContent="center" alignItems="center">
-      <View justifyContent="center" alignItems="center">
-        <Text color={"$color"} fontSize={"$10"}>
-          {" "}
-          STORIATA{" "}
-        </Text>
-      </View>
       <ScrollView marginBottom="$5">
         <View marginStart="$2" marginTop="$3" marginEnd="$2">
           <Card elevate height={"$15"} bordered>
