@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: "8%",
     elevation: 2,
+    backgroundColor: "white",
   },
   headerTitleText: {
     fontSize: 21,
