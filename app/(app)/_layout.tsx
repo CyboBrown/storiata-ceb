@@ -3,6 +3,8 @@ import { Redirect, Stack } from "expo-router";
 import { useSession } from "../../src/services/auth-context";
 import { StatusBar } from "expo-status-bar";
 
+import Main from "./main";
+
 export default function AppLayout() {
   const { session, isLoading } = useSession();
 
@@ -19,13 +21,14 @@ export default function AppLayout() {
       <StatusBar backgroundColor="dodgerblue" />
       <Stack
         screenOptions={{
-          headerShown: true,
-          headerStyle: {backgroundColor: 'dodgerblue'},
+          headerShown: false,
+          headerStyle: { backgroundColor: 'dodgerblue' },
           headerTintColor: 'white',
-          headerTitleStyle: {fontWeight: 'bold'}
+          headerTitleStyle: { fontWeight: 'bold' },
         }}
       >
+        <Stack.Screen name="main" options={{ title: 'App Home' }} />
       </Stack>
-  </SafeAreaView>
+    </SafeAreaView>
   );
 }
