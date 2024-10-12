@@ -7,7 +7,7 @@ export class AccountService {
     console.log("GOT_PROFILE");
     const { data, error, status } = await supabase
       .from("profiles")
-      .select(`username, website, avatar_url`)
+      .select(`username, website, avatar_url, full_name, is_contributor`)
       .eq("id", userID)
       .single();
     if (error && status !== 406) {
@@ -15,6 +15,20 @@ export class AccountService {
     }
     return data;
   };
+
+  public static getUserEmail = async () => {
+    const { data, error } = await supabase.auth.getUser();
+  
+    if (error) {
+      console.error('Error fetching user:', error.message);
+      return null;
+    }
+  
+    if (data?.user) {
+      console.log('User email:', data.user.email);
+      return data.user.email; // Correct access to email
+    }
+  }
 
   public static updateProfile = async (profile: Profile) => {
     console.log("UPDATED_PROFILE");

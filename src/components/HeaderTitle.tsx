@@ -1,29 +1,40 @@
-import React from "react";
-import { Image } from "tamagui";
-import { View, Text, StyleSheet } from "react-native";
-import logo from "../assets/StoriaTa-Logo.png";
+// CustomHeader.tsx
+import React from 'react';
+import { View, Text, Image, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import icon from "../../src/assets/icon-baybayin.png";
 
-export default function HeaderTitle() {
-  return (
-    <View style={styles.headerTitleContainer}>
-      <Image source={logo} height="$5" width="$5" />
-      <Text style={styles.headerTitleText}>STORIATA</Text>
-    </View>
-  );
+interface CustomHeaderProps {
+  pageTitle: string;
 }
 
+export default function CustomHeader ({ pageTitle }: CustomHeaderProps) {
+  return (
+    <View style={styles.container}>
+      <Image
+        source={icon}  // Adjust path to your logo
+        style={styles.logo}
+        resizeMode="contain"
+      />
+      <Text style={styles.title}>StoriaTa | {pageTitle}</Text>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
-  headerTitleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "8%",
-    elevation: 2,
-    backgroundColor: "white",
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  headerTitleText: {
-    fontSize: 21,
-    fontWeight: "bold",
-    color: "black", // Adjust this color as needed
+  logo: {
+    width: 32,
+    height: 32,
+    marginRight: 10,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
   },
 });
