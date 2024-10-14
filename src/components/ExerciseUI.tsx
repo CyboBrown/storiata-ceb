@@ -30,7 +30,7 @@ import {
   compareEnglishWords,
 } from "../utils/compare";
 import { ExerciseService } from "../services/ExerciseService";
-import { useSession } from "../services/auth-context";
+import { useSession } from "../contexts/AuthContext";
 import { ListeningExercise } from "../models/ListeningExercise";
 import { supabase } from "../utils/supabase";
 import { Audio } from "expo-av";

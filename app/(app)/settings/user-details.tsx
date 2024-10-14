@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import { Stack, useRouter } from "expo-router";
+import CustomHeader from "../../../src/components/HeaderTitle";
 
 export default function UserDetails() {
   const router = useRouter();
@@ -14,37 +15,32 @@ export default function UserDetails() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Edit User Details</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Full Name"
-        value={fullname}
-        onChangeText={setFullname}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Website"
-        value={website}
-        onChangeText={setWebsite}
-      />
-      <Button title="Save" onPress={handleSave} />
-    </View>
+    <>
+      <View style={styles.container}>
+        <Text style={styles.header}>Edit User Details</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Full Name"
+          value={fullname}
+          onChangeText={setFullname}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          value={username}
+          onChangeText={setUsername}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Website"
+          value={website}
+          onChangeText={setWebsite}
+        />
+        <Button title="Save" onPress={handleSave} />
+      </View>
+    </>
   );
 }
-
-// Static export for navigation options in expo-router
-export const UserDetailsOptions = {
-  title: 'Edit User Details',
-  headerStyle: { backgroundColor: 'dodgerblue' },
-  headerTintColor: 'white',
-};
 
 const styles = StyleSheet.create({
   container: {

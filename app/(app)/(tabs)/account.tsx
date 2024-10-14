@@ -1,14 +1,14 @@
 import { useState, useEffect, useLayoutEffect } from "react";
 import { ActivityIndicator, StyleSheet, Alert, View, Text, ScrollView } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
-import { AccountService } from "../../src/services/AccountService";
-import { useSession } from "../../src/services/auth-context";
-import AvatarDisplay from "../../src/components/AvatarDisplay";
-import BackgroundCircle from "../../src/components/BackgroundCircle";
-import ProfileInfoCard from "../../src/components/ProfileInfoCard";
-import ProfileInteractableCard from "../../src/components/ProfileInteractableCard";
-import CustomHeader from "../../src/components/HeaderTitle";
-import LogoutModal from "../../src/components/LogoutModal";
+import { AccountService } from "../../../src/services/AccountService";
+import { useSession } from "../../../src/contexts/AuthContext";
+import AvatarDisplay from "../../../src/components/AvatarDisplay";
+import BackgroundCircle from "../../../src/components/BackgroundCircle";
+import ProfileInfoCard from "../../../src/components/ProfileInfoCard";
+import ProfileInteractableCard from "../../../src/components/ProfileInteractableCard";
+import CustomHeader from "../../../src/components/HeaderTitle";
+import LogoutModal from "../../../src/components/LogoutModal";
 
 export default function Account() {
   const [loading, setLoading] = useState(true);
@@ -115,7 +115,7 @@ export default function Account() {
       <ProfileInfoCard iconName="at" title="Username" description={username}/>
       <ProfileInfoCard iconName="email" title="Email" description={email}/>
       <ProfileInfoCard iconName="web" title="Website" description={website}/>
-      <ProfileInteractableCard iconName="account-cog" title="Change User Details" onPress={() => router.push("/edit_user_details")} />
+      <ProfileInteractableCard iconName="account-cog" title="Change User Details" onPress={() => router.push("/settings/user-details")} />
     </View>
 
     <View style={{margin: 10, marginLeft: 15}}>

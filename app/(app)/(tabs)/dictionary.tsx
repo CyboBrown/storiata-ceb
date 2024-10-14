@@ -17,17 +17,17 @@ import {
   View,
 } from "tamagui";
 import React, { useState, useEffect } from "react";
-import { supabase } from "../../src/utils/supabase";
+import { supabase } from "../../../src/utils/supabase";
 import { Alert, FlatList } from "react-native";
-import { Word } from "../../src/models/Word";
-import AddWordDialog from "../../src/components/AddWordDialog";
-import { WordSearchResult } from "../../src/components/WordSearchResult";
-import { DictionaryService } from "../../src/services/DictionaryService";
+import { Word } from "../../../src/models/Word";
+import AddWordDialog from "../../../src/components/AddWordDialog";
+import { WordSearchResult } from "../../../src/components/WordSearchResult";
+import { DictionaryService } from "../../../src/services/DictionaryService";
 import { Link } from "expo-router";
-import EditWordDialog from "../../src/components/EditWordDialog";
-import EditTranslationDialog from "../../src/components/EditTranslationDialog";
-import { RevPartsOfSpeech } from "../../src/utils/enums";
-import ConjugationTable from "../../src/components/ConjugationTable";
+import EditWordDialog from "../../../src/components/EditWordDialog";
+import EditTranslationDialog from "../../../src/components/EditTranslationDialog";
+import { RevPartsOfSpeech } from "../../../src/utils/enums";
+import ConjugationTable from "../../../src/components/ConjugationTable";
 
 export default function Dictionary({
   contribMode,
