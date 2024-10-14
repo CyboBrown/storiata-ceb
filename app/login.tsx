@@ -18,7 +18,7 @@ import logo from "../src/assets/StoriaTa-Logo.png";
 
 import { AppState } from "react-native";
 import { supabase } from "../src/utils/supabase";
-import { useSession } from "../src/services/auth-context";
+import { useSession } from "../src/contexts/AuthContext";
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {

@@ -25,7 +25,7 @@ import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
 import { ExercisePopover } from "../../../src/components/ExercisePopover";
 import { ExerciseTypes } from "../../../src/utils/enums";
 import { UserExercise } from "../../../src/models/UserExercise";
-import { useSession } from "../../../src/services/auth-context";
+import { useSession } from "../../../src/contexts/AuthContext";
 
 export default function VocabularyExercises({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION

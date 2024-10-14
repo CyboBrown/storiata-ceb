@@ -25,7 +25,7 @@ import { ExerciseService } from "../../../../src/services/ExerciseService";
 import { VocabularyExercise } from "../../../../src/models/VocabularyExercise";
 import { VocabularyExerciseUI } from "../../../../src/components/ExerciseUI";
 import { VocabularyExerciseType } from "../../../../src/utils/enums";
-import { useSession } from "../../../../src/services/auth-context";
+import { useSession } from "../../../../src/contexts/AuthContext";
 
 export default function VocabularyExercises({
   session,

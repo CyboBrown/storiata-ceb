@@ -32,7 +32,7 @@ import type { PopoverProps } from "tamagui";
 import { ExerciseTypes } from "../utils/enums";
 import { ExerciseService } from "../../src/services/ExerciseService";
 import { useState } from "react";
-import { useSession } from "../services/auth-context";
+import { useSession } from "../contexts/AuthContext";
 
 export const ExercisePopover = ({
   user,

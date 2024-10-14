@@ -25,7 +25,7 @@ import { ExerciseService } from "../../../../src/services/ExerciseService";
 import { GrammarExercise } from "../../../../src/models/GrammarExercise";
 import { GrammarExerciseUI } from "../../../../src/components/ExerciseUI";
 import { GrammarExerciseType } from "../../../../src/utils/enums";
-import { useSession } from "../../../../src/services/auth-context";
+import { useSession } from "../../../../src/contexts/AuthContext";
 
 export default function GrammarExercises({
   session,

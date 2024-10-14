@@ -25,7 +25,7 @@ import { ExerciseService } from "../../../../src/services/ExerciseService";
 import { ListeningExercise } from "../../../../src/models/ListeningExercise";
 import { ListeningExerciseUI } from "../../../../src/components/ExerciseUI";
 import { ListeningExerciseType } from "../../../../src/utils/enums";
-import { useSession } from "../../../../src/services/auth-context";
+import { useSession } from "../../../../src/contexts/AuthContext";
 
 export default function ListeningExercises({
   session,
