@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { UserAuthentication } from "./UserAuthentication";
+import { UserAuthentication } from "../services/UserAuthentication";
 import { useStorageState } from "../utils/use-storage-state";
 import { supabase } from "../utils/supabase";
 
