@@ -5,16 +5,15 @@ import { useEffect } from "react";
 import { Link } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView, Image, View, Text, StyleSheet } from "react-native";
-import BackgroundCircle from "../../src/components/BackgroundCircle";
-import SquareItem from "../../src/components/SquareItem";
-import PHCebFlag from "../../src/assets/ph_ceb_flag.png";
-import PHCeb1 from "../../src/assets/ph_cebu_1.png";
-import PHCeb2 from "../../src/assets/ph_cebu_2.png";
-import PHCeb3 from "../../src/assets/ph_cebu_3.png";
-import PHCeb4 from "../../src/assets/ph_cebu_4.png";
+import BackgroundCircle from "../../../src/components/BackgroundCircle";
+import SquareItem from "../../../src/components/SquareItem";
+import PHCebFlag from "../../../src/assets/ph_ceb_flag.png";
+import PHCeb1 from "../../../src/assets/ph_cebu_1.png";
+import PHCeb2 from "../../../src/assets/ph_cebu_2.png";
+import PHCeb3 from "../../../src/assets/ph_cebu_3.png";
+import PHCeb4 from "../../../src/assets/ph_cebu_4.png";
 
 export default function Exercises() {
-  const navigator = useNavigation();
 
   return (
     <>
