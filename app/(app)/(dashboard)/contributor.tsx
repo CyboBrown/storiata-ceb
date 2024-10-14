@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useLayoutEffect } from "react";
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
-import { useSession } from "../../src/services/auth-context";
-import NavAvatarIcon from "../../src/components/NavAvatarIcon";
-import { AccountService } from "../../src/services/AccountService";
-import WordStatIcon from "../../src/assets/contr_stat_word_icon.png";
-import ExerStatIcon from "../../src/assets/contr_stat_exercises_icon.png";
-import FavStatIcon from "../../src/assets/contr_stat_favs_icon.png";
+import { useSession } from "../../../src/contexts/AuthContext";
+import NavAvatarIcon from "../../../src/components/NavAvatarIcon";
+import { AccountService } from "../../../src/services/AccountService";
+import WordStatIcon from "../../../src/assets/contr_stat_word_icon.png";
+import ExerStatIcon from "../../../src/assets/contr_stat_exercises_icon.png";
+import FavStatIcon from "../../../src/assets/contr_stat_favs_icon.png";
 
 export default function ContributorDashboard() {
   const { session, getUserUUID } = useSession();
