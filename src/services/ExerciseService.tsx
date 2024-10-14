@@ -109,7 +109,6 @@ export class ExerciseService {
     return null;
   };
 
-  // ***
   public static getListeningExerciseProblems = async (id: number) => {
     console.log("GOT_LISTENING_EXERCISE_PROBLEMS");
     const { data, error, status } = await supabase
@@ -172,7 +171,7 @@ export class ExerciseService {
     return null;
   };
 
-  // ***
+  // ***DISCONTINUED***
   public static getSpeakingExerciseProblems = async (id: number) => {
     console.log("GOT_SPEAKING_EXERCISE_PROBLEMS");
     return null;
@@ -250,15 +249,53 @@ export class ExerciseService {
     return data;
   };
 
+  public static createVocabularyExercise = async (
+    exercise: VocabularyExercise
+  ) => {
+    console.log("CREATED_VOCABULARY_EXERCISE");
+    const { data: data1, error: error1 } = await supabase
+      .from("exercises")
+      .insert([
+        { topic: exercise.topic, type: 1, description: exercise.description },
+      ])
+      .select();
+    if (error1) {
+      console.log(error1);
+    }
+    const wordpairs = exercise.item_sets?.map((item) => {
+      return {
+        exercise_id: data1?.at(0)?.id ?? Number.MIN_SAFE_INTEGER,
+        word_id: item.id ?? Number.MIN_SAFE_INTEGER,
+      };
+    });
+    if (wordpairs) {
+      const { data: data2, error: error2 } = await supabase
+        .from("exercise_words")
+        .insert(wordpairs)
+        .select();
+      if (error1) {
+        console.log(error1);
+      }
+    }
+  };
+
   // ***
-  public static updateExerciseDetails = async (exercise: Exercise) => {
-    console.log("UPDATED_EXERCISE_DETAILS");
+  public static createGrammarExercise = async (exercise: GrammarExercise) => {
+    console.log("CREATED_GRAMMAR_EXERCISE");
     return null;
   };
 
   // ***
-  public static createExercise = async (exercise: Exercise) => {
-    console.log("CREATED_EXERCISE");
+  public static updateVocabularyExercise = async (
+    exercise: VocabularyExercise
+  ) => {
+    console.log("UPDATED_VOCABULARY_EXERCISE");
+    return null;
+  };
+
+  // ***
+  public static updateGrammarExercise = async (exercise: GrammarExercise) => {
+    console.log("UPDATED_GRAMMAR_EXERCISE");
     return null;
   };
 
@@ -267,24 +304,20 @@ export class ExerciseService {
     console.log("DELETED_EXERCISE");
   };
 
-  // ***
-  // public static getVocabularyExerciseProgress = async (
-  //   user_id: string,
-  //   exercise_id: number
-  // ) => {
-  //   console.log("GOT_VOCABULARY_EXERCISE_PROGRESS");
-  //   // const { data, error, status } = await supabase
-  //   //   .from("vocabulary_exercise_words")
-  //   //   .select(
-  //   //     `id, exercise_id, word_translations(words(normal_form, phonetic_form, representation, part_of_speech), translations(word))`
-  //   //   )
-  //   //   .eq("exercise_id", id);
-  //   // // .order("id", { ascending: true })
-  //   // if (error && status !== 406) {
-  //   //   console.log(error);
-  //   // }
-  //   // return data;
-  // };
+  public static searchWordPair = async (word: string) => {
+    console.log("SEARCHED_WORD_PAIR");
+    const { data, error, status } = await supabase
+      .from("word_translations")
+      .select(`*, words!inner(normal_form), translations(word)`)
+      .ilike("words.normal_form", word + "%")
+      // .order("normal_form", { foreignTable: "words", ascending: true })
+      // .order("word", { referencedTable: "translations", ascending: true })
+      .limit(20);
+    if (error && status !== 406) {
+      console.log(error);
+    }
+    return data;
+  };
 
   // **********************************************************
   // Tracking progression levels in exercises.
