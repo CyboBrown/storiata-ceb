@@ -1,6 +1,5 @@
-import { ChevronRight, Minus, Plus, Star } from "@tamagui/lucide-icons";
+import { Plus } from "@tamagui/lucide-icons";
 import { Dialog, ListItem, YGroup } from "tamagui";
-import { DictionaryService } from "../services/DictionaryService";
 import { VocabularyExercise } from "../models/VocabularyExercise";
 import { WordTranslation } from "../models/WordTranslation";
 

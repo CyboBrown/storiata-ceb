@@ -14,20 +14,23 @@ import {
 import { useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
 import { Link, useLocalSearchParams } from "expo-router";
-import { ExerciseService } from "../../../../src/services/ExerciseService";
-import { VocabularyExercise } from "../../../../src/models/VocabularyExercise";
-import { ExerciseTypes } from "../../../../src/utils/enums";
-import { useSession } from "../../../../src/services/auth-context";
-import AddWordToExerciseDialog from "../../../../src/components/AddWordToExerciseDialog";
+import { ExerciseService } from "../../../../../src/services/ExerciseService";
+import { VocabularyExercise } from "../../../../../src/models/VocabularyExercise";
+import { ExerciseTypes } from "../../../../../src/utils/enums";
+import { useSession } from "../../../../../src/services/auth-context";
+import AddWordToExerciseDialog from "../../../../../src/components/AddWordToExerciseDialog";
 
-export default function CreateVocabularyExercise({
+export default function EditVocabularyExercise({
   session,
 }: {
   session: Session;
 }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
-    console.log("CREATE_VOCABULARY_EXERCISE page loaded.");
+    console.log(
+      "EDIT_VOCABULARY_EXERCISE_" + local.exercise_id + " page loaded."
+    );
+    displayDetails();
   }, []);
 
   const { getUserUUID } = useSession();
@@ -56,12 +59,24 @@ export default function CreateVocabularyExercise({
     }
   }, [exercise]);
 
+  const displayDetails = async () => {
+    let exercise_details = await ExerciseService.getVocabularyExerciseProblems(
+      parseInt(local.exercise_id as string)
+    );
+    console.log(exercise_details);
+    if (exercise_details) {
+      setExercise(exercise_details);
+    }
+  };
+
   const save = async () => {
-    setDisabled(true);
-    setLoading(true);
-    await ExerciseService.createVocabularyExercise(exercise);
-    setLoading(false);
-    setSaved(true);
+    if (exercise) {
+      setDisabled(true);
+      setLoading(true);
+      await ExerciseService.updateVocabularyExercise(exercise);
+      setLoading(false);
+      setSaved(true);
+    }
   };
 
   return (
@@ -76,7 +91,7 @@ export default function CreateVocabularyExercise({
           gap="$4"
         >
           <Text fontSize={20} fontWeight={900} color={"$color"}>
-            Create New Vocabulary Exercise
+            Edit Vocabulary Exercise No. {local.exercise_id as string}
           </Text>
           <Fieldset horizontal ai="stretch">
             <Label width="30%" htmlFor="topic_input">
@@ -87,7 +102,7 @@ export default function CreateVocabularyExercise({
               id="topic_input"
               defaultValue=""
               placeholder=""
-              value={exercise.topic}
+              value={exercise.topic ?? ""}
               onChangeText={(text) => {
                 let updated_exercise = { ...exercise };
                 updated_exercise.topic = text;

@@ -4,10 +4,7 @@ import {
   Dialog,
   Adapt,
   Sheet,
-  Fieldset,
-  Label,
   Input,
-  TooltipSimple,
   Paragraph,
   XStack,
   Unspaced,
@@ -20,19 +17,8 @@ import {
   Separator,
 } from "tamagui";
 
-import { SelectItem } from "./SelectItem";
 import { useEffect, useState } from "react";
-import { Word } from "../models/Word";
-import { DictionaryService } from "../services/DictionaryService";
-import {
-  PartsOfSpeech,
-  RevEngPartsOfSpeech,
-  RevPartsOfSpeech,
-} from "../utils/enums";
 import { Alert, Pressable } from "react-native";
-import { Translation } from "../models/Translation";
-import { WordSearchResult } from "./WordSearchResult";
-import { TranslationSearchResult } from "./TranslationSearchResult";
 import { WordTranslationSearchResult } from "./WordTranslationSearchResult";
 import { ExerciseService } from "../services/ExerciseService";
 import { WordTranslation } from "../models/WordTranslation";

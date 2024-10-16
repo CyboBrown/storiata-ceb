@@ -46,6 +46,7 @@ export const structurizeVocabularyExercise = (
   });
 
   const structured_data: VocabularyExercise = {
+    added_by: details.added_by,
     created_at: details.created_at || "error",
     description: details.description,
     id: details.id,
@@ -156,6 +157,7 @@ export const structurizeGrammarExercise = (
     : null;
 
   const structured_data: GrammarExercise = {
+    added_by: details.added_by,
     created_at: details.created_at || "error",
     description: details.description,
     id: details.id,
