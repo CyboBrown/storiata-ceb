@@ -1,4 +1,4 @@
-import { Button } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { Stack, useNavigation } from "expo-router";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -22,13 +22,12 @@ export default function SettingsLayout() {
           headerBackTitle: 'Back',
           headerTintColor: 'white',
           headerStyle: { backgroundColor: 'dodgerblue' },
-          headerTitleStyle: { fontWeight: 'bold', fontSize: 18 },
+          headerTitleStyle: { fontWeight: 'bold', fontSize: 21 },
+          headerTitleAlign: "center",
           headerRight: () => (
-            <Button 
-              onPress={() => alert('Save Changes')}
-              title="Save" 
-              color="dodgerblue"
-            />
+            <TouchableOpacity onPress={() => alert('Save Changes')}>
+              <Text style={{color: "white", fontSize: 15}}>SAVE</Text>
+            </TouchableOpacity>
           ),
           headerLeft: () => (
             <Icon 
