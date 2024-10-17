@@ -1,68 +1,75 @@
 import { Session } from "@supabase/supabase-js";
 import { Button, H5, Paragraph, YStack, Accordion, XStack } from "tamagui";
 import { ChevronDown } from "@tamagui/lucide-icons";
-import { useEffect } from "react";
-import { Link } from "expo-router";
+import { useEffect, useLayoutEffect } from "react";
+import { Link, useRouter } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView, Image, View, Text, StyleSheet } from "react-native";
-import BackgroundCircle from "../../../src/components/BackgroundCircle";
-import SquareItem from "../../../src/components/SquareItem";
-import PHCebFlag from "../../../src/assets/ph_ceb_flag.png";
 import PHCeb1 from "../../../src/assets/ph_cebu_1.png";
 import PHCeb2 from "../../../src/assets/ph_cebu_2.png";
 import PHCeb3 from "../../../src/assets/ph_cebu_3.png";
 import PHCeb4 from "../../../src/assets/ph_cebu_4.png";
+import CustomHeader from "../../../src/components/HeaderTitle";
+import ExerciseTypeCard from "../../../src/components/ExerciseTypeCard";
 
 export default function Exercises() {
+  const navigation = useNavigation();
+  const router = useRouter();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <CustomHeader pageTitle="Exercises" />,  // Use Custom Header
+      headerStyle: { backgroundColor: 'dodgerblue' },
+      headerTintColor: 'white',
+    });
+  }, [navigation]);
 
   return (
     <>
-      <BackgroundCircle size={500} color="dodgerblue" top={-285} left={-150} />
-      <BackgroundCircle size={200} color="dodgerblue" top={545} left={60} />
-      <BackgroundCircle size={300} color="dodgerblue" top={400} left={200} />
       <View style={styles.headerTitleContainer}>
-        <Image source={PHCebFlag} style={styles.flagIcon} />
-        <Text style={styles.title}>{"  "}Cebuano Exercises</Text>
-      </View>
-      <View>
-        <Text style={styles.subtitle}>
-          How confident are you with your Cebuano? Plunge and take on our
-          exercises! Practice makes perfect, does it not?
+        <Text style={styles.headerTitle}>Ready for a language challenge?</Text>
+        <Text style={styles.headerSubtitle}>
+          Take on the various exercises and challenges 
+          on the fundamental areas of Cebuano. Practice makes perfect, is it not?
         </Text>
       </View>
 
-      <ScrollView horizontal={true} contentContainerStyle={styles.container}>
-        <Link href="/exercises/grammar" asChild>
-          <SquareItem
-            imageSource={PHCeb3}
-            title="Grammar"
-            description="A good grasp of the language's structure can give way to understanding as a whole."
-          />
-        </Link>
-
-        <Link href="/exercises/vocabulary" asChild>
-          <SquareItem
-            imageSource={PHCeb4}
-            title="Vocabulary"
-            description="What good is comprehension when you don't know what words mean?"
-          />
-        </Link>
-
-        <Link href="/exercises/listening" asChild>
-          <SquareItem
-            imageSource={PHCeb1}
-            title="Listening"
-            description="Sometimes, simply staying back and listening to things around you can help."
-          />
-        </Link>
-
-        <Link href="/exercises/speaking" asChild>
-          <SquareItem 
-            imageSource={PHCeb2}
-            title="Speaking"
-            description="It's time to get used to speaking with the locals and get to know them better than before."
-          />
-        </Link>
+      <ScrollView style={styles.exerciseCategoryContainer}>
+        <View style={styles.barContainer}>
+          <View style={styles.randomHorizontalBar}>
+            <Text>{" " /* Please do not ask why this is here. */ }</Text>
+          </View>
+        </View>
+        <ExerciseTypeCard 
+          imageUrl={PHCeb4} 
+          title="Vocabulary Exercises" 
+          subtitle="Let's get to know basic everyday things in the Cebuano language!"
+          onTextPress={() => router.push({
+            pathname: "/exercises/vocabulary",
+          })}
+        />
+        <ExerciseTypeCard 
+          imageUrl={PHCeb3} 
+          title="Grammar Exercises" 
+          subtitle="It's time to piece together these words we've learned together into something more meaningful!"
+          onTextPress={() => router.push({
+            pathname: "/exercises/grammar",
+          })}
+        />
+        <ExerciseTypeCard 
+          imageUrl={PHCeb1} 
+          title="Listening Exercises" 
+          subtitle="To be natural at something, you have to simply observe and listen. The same way as learning Cebuano!"
+          onTextPress={() => router.push({
+            pathname: "/exercises/listening",
+          })}
+        />
+        <ExerciseTypeCard 
+          imageUrl={PHCeb2} 
+          title="Speaking Exercises" 
+          subtitle="Coming soon..."
+          onTextPress={() => alert('Speaking exercises coming soon...')}
+        />
       </ScrollView>
     </>
   );
@@ -70,39 +77,42 @@ export default function Exercises() {
 
 const styles = StyleSheet.create({
   headerTitleContainer: {
+    paddingTop: "8%",
+    paddingBottom: "15%",
+    justifyContent: "center",
+    backgroundColor: "dodgerblue",
+  },
+  headerTitle: {
     paddingLeft: "6%",
     paddingRight: "6%",
-    flexDirection: "row",
-    alignItems: "center",
-    height: "15%",
-  },
-  container: {
-    flexGrow: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
-  },
-  content: {
-    alignItems: "center",
-  },
-  text: {
-    textAlign: "center",
-    marginBottom: 10,
-  },
-  flagIcon: {
-    width: 50,
-    height: 50,
-  },
-  title: {
     color: "azure",
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: "bold",
   },
-  subtitle: {
+  headerSubtitle: {
+    marginTop: "2.5%",
+    paddingLeft: "6%",
+    paddingRight: "10%",
     color: "azure",
     fontSize: 14,
-    paddingLeft: "8%",
-    paddingRight: "7%",
-    marginTop: -12,
+  },
+  exerciseCategoryContainer: {
+    padding: "3%",
+    marginTop: "-5%",
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  barContainer: {
+    marginTop: "3%",
+    marginBottom: "6.5%",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "1%",
+  },
+  randomHorizontalBar: {
+    borderRadius: 30,
+    width: "15%",
+    backgroundColor: "lightgray",
   },
 });
