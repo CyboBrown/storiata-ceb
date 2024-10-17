@@ -1,4 +1,5 @@
 export interface VocabularyExercise {
+  added_by: string;
   created_at: string;
   description: string;
   id: number;

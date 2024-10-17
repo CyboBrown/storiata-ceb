@@ -16,16 +16,18 @@ import {
   Separator,
   ListItem,
   ButtonIcon,
+  ZStack,
 } from "tamagui";
 import { useEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
 import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from "../../../src/services/ExerciseService";
-import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
+import { ChevronRight, Hash, Plus, RefreshCw } from "@tamagui/lucide-icons";
 import { ExercisePopover } from "../../../src/components/ExercisePopover";
 import { ExerciseTypes } from "../../../src/utils/enums";
 import { UserExercise } from "../../../src/models/UserExercise";
 import { useSession } from "../../../src/contexts/AuthContext";
+import { Link } from "expo-router";
 
 export default function VocabularyExercises({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
@@ -77,44 +79,64 @@ export default function VocabularyExercises({ session }: { session: Session }) {
   return (
     <TamaguiProvider>
       <Theme name={colorScheme === "dark" ? "dark" : "light"}>
-        <YStack
+        <ZStack
           f={1}
           jc="flex-start"
           ai="stretch"
-          backgroundColor={"$background"}
+          gap="$2"
+          backgroundColor={"$backgroundSoft"}
         >
-          <XStack jc="space-between" ai="flex-start" padding="$5">
-            <Text fontSize={20} fontWeight={800} color={"$color"}>
-              Vocabulary Exercises
-            </Text>
-            <RefreshCw
-              onPress={loadExercises}
-              disabled={loading}
-              color={loading ? "$color5" : "$color"}
-            />
-          </XStack>
+          <YStack
+            f={1}
+            jc="flex-start"
+            ai="stretch"
+            backgroundColor={"$background"}
+          >
+            <XStack jc="space-between" ai="flex-start" padding="$5">
+              <Text fontSize={20} fontWeight={800} color={"$color"}>
+                Vocabulary Exercises
+              </Text>
+              <RefreshCw
+                onPress={loadExercises}
+                disabled={loading}
+                color={loading ? "$color5" : "$color"}
+              />
+            </XStack>
 
-          <ScrollView>
-            <YGroup
-              alignSelf="center"
-              bordered
-              size="$5"
-              separator={<Separator />}
-            >
-              {results.map((result, index) => (
-                <ExercisePopover
-                  user={getUserUUID() ?? ""}
-                  title={result.topic}
-                  subTitle={result.description}
-                  index={result.id}
-                  exerciseType={ExerciseTypes.Vocabulary}
-                  key={result.id}
-                  finished={checkExerciseCompletion(result.id)}
-                />
-              ))}
-            </YGroup>
-          </ScrollView>
-        </YStack>
+            <ScrollView>
+              <YGroup
+                alignSelf="center"
+                bordered
+                size="$5"
+                separator={<Separator />}
+              >
+                {results.map((result, index) => (
+                  <ExercisePopover
+                    user={getUserUUID() ?? ""}
+                    title={result.topic}
+                    subTitle={result.description}
+                    index={result.id}
+                    exerciseType={ExerciseTypes.Vocabulary}
+                    key={result.id}
+                    finished={checkExerciseCompletion(result.id)}
+                  />
+                ))}
+              </YGroup>
+            </ScrollView>
+          </YStack>
+          <YStack
+            f={1}
+            jc="flex-end"
+            ai="flex-end"
+            gap="$2"
+            backgroundColor={"$backgroundSoft"}
+            m="$2"
+          >
+            <Link href="/exercises/vocabulary/create" asChild>
+              <Button icon={Plus} size="$6" circular></Button>
+            </Link>
+          </YStack>
+        </ZStack>
       </Theme>
     </TamaguiProvider>
   );

@@ -50,3 +50,21 @@ export const conjugateEnglish = (
       return null;
   }
 };
+
+export const nasalize = (word: string) => {
+  if (["p", "b"].includes(word.charAt(0))) {
+    return "m" + word.substring(1);
+  } else if (["t", "d", "s"].includes(word.charAt(0))) {
+    return "n" + word.substring(1);
+  } else if (["k"].includes(word.charAt(0))) {
+    return "ng" + word.substring(1);
+  } else if (["a", "e", "i", "o", "u"].includes(word.charAt(0))) {
+    return "ng-" + word;
+  } else {
+    return "ng" + word;
+  }
+};
+
+export const startsWithVowel = (word: string) => {
+  return ["a", "e", "i", "o", "u"].includes(word.charAt(0));
+};
