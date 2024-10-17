@@ -17,7 +17,7 @@ import { Link, useLocalSearchParams } from "expo-router";
 import { ExerciseService } from "../../../../../src/services/ExerciseService";
 import { VocabularyExercise } from "../../../../../src/models/VocabularyExercise";
 import { ExerciseTypes } from "../../../../../src/utils/enums";
-import { useSession } from "../../../../../src/services/auth-context";
+import { useSession } from "../../../../../src/contexts/AuthContext";
 import AddWordToExerciseDialog from "../../../../../src/components/AddWordToExerciseDialog";
 
 export default function EditVocabularyExercise({
