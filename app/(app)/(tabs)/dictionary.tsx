@@ -31,11 +31,7 @@ import ConjugationTable from "../../../src/components/ConjugationTable";
 import CustomHeader from "../../../src/components/HeaderTitle";
 import { useContributorContext } from "../../../src/contexts/ContributorContext";
 
-<<<<<<< Updated upstream
-export default function Dictionary({ contribMode }: { contribMode: boolean }) {
-=======
 export default function Dictionary() {
->>>>>>> Stashed changes
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState("");
   const [results, setResults] = useState<Word[]>([]);
