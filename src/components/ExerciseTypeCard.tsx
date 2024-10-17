@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ImageSourcePropType } from 'react-native';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface ComponentProps {
   imageUrl: ImageSourcePropType;
@@ -19,8 +20,9 @@ export default function ExerciseTypeCard({ imageUrl, title, subtitle, onTextPres
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
 
-        <TouchableOpacity onPress={onTextPress}>
-          <Text style={styles.status}>ENTER EXERCISE</Text>
+        <TouchableOpacity onPress={onTextPress} style={{flexDirection: "row", alignItems: "center"}}>
+          <Icon name="arrow-right" size={28} color="dodgerblue" />
+          <Text style={styles.status}>GO TO EXERCISE</Text>
         </TouchableOpacity>
       </View>
     </View>
