@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Alert, View, Text, Image, ImageBackground, useColorScheme, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
 import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from "../../../src/services/ExerciseService";
-import { ChevronRight, Hash, RefreshCw } from "@tamagui/lucide-icons";
+import { RefreshCw } from "@tamagui/lucide-icons";
 import { ExercisePopover } from "../../../src/components/ExercisePopover";
 import { ExerciseTypes } from "../../../src/utils/enums";
 import { UserExercise } from "../../../src/models/UserExercise";

@@ -30,11 +30,7 @@ import { RevPartsOfSpeech } from "../../../src/utils/enums";
 import ConjugationTable from "../../../src/components/ConjugationTable";
 import CustomHeader from "../../../src/components/HeaderTitle";
 
-export default function Dictionary({
-  contribMode,
-}: {
-  contribMode: boolean;
-}) {
+export default function Dictionary({ contribMode }: { contribMode: boolean }) {
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState("");
   const [results, setResults] = useState<Word[]>([]);
@@ -201,13 +197,13 @@ export default function Dictionary({
             flexDirection="column"
             borderRadius="$4"
             borderWidth="$0.25"
-            overflow="hidden"
+            overflow="scroll"
             borderColor="$borderColor"
           >
             <Tabs.List
               separator={<Separator vertical />}
               disablePassBorderRadius="bottom"
-              aria-label="Manage your account"
+              aria-label="Display word information"
             >
               <Tabs.Tab flex={1} value="tab1">
                 <SizableText fontFamily="$body">Details</SizableText>
@@ -231,13 +227,7 @@ export default function Dictionary({
                 {/* Representation */}
                 <Text
                   alignSelf="flex-start"
-                  fontSize={
-                    ["$16", "$16", "$12", "$8", "$12"].at(
-                      (results[selected]
-                        ? results[selected].representation?.length ?? 1
-                        : 1) - 1
-                    ) ?? "$1"
-                  }
+                  fontSize="$15"
                   fontWeight="800"
                   borderColor="$color10"
                   borderWidth="$1"
@@ -344,18 +334,11 @@ export default function Dictionary({
               key="tab2"
               padding="$2"
               alignItems="stretch"
-              justifyContent="center"
+              justifyContent="flex-start"
               flex={1}
               p="$2"
             >
               <ConjugationTable word={results[selected]}></ConjugationTable>
-              {/* <SizableText size="$2" fontWeight="800">
-                {results[selected]
-                  ? results[selected].suffix_form
-                    ? results[selected].suffix_form + "an"
-                    : results[selected].normal_form + "an"
-                  : "none"}
-              </SizableText> */}
             </Tabs.Content>
           </Tabs>
         </Sheet.Frame>

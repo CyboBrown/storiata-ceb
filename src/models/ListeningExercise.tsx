@@ -1,4 +1,5 @@
 export interface ListeningExercise {
+  added_by: string;
   created_at: string;
   description: string;
   id: number;

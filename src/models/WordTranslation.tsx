@@ -5,4 +5,10 @@ export interface WordTranslation {
   language_code: string;
   translation_id: number;
   word_id: number;
+  words: {
+    normal_form: string;
+  } | null;
+  translations: {
+    word: string;
+  } | null;
 }

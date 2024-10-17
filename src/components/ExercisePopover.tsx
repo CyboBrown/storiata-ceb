@@ -92,7 +92,7 @@ export const ExercisePopover = ({
             icon={finished ? Trophy : locked ? Lock : Unlock}
             iconAfter={ChevronRight}
             onPress={() => {
-              console.log("You just touched me! How dare you?");
+              console.log("EXERCISE_POPOVER_TRIGGERED");
             }}
           />
         </Popover.Trigger>
@@ -148,7 +148,7 @@ export const ExercisePopover = ({
           >
             {subTitle}
           </SizableText>
-          <Spacer></Spacer>
+          {/* <Spacer></Spacer>
           <SizableText
             alignSelf="center"
             textAlign="center"
@@ -165,7 +165,7 @@ export const ExercisePopover = ({
             lineHeight={15}
           >
             {commonWrongWords?.join(", ")}
-          </SizableText>
+          </SizableText> */}
         </YStack>
         <Spacer></Spacer>
         <YStack space="$3">
@@ -201,6 +201,32 @@ export const ExercisePopover = ({
               Start Exercise
             </Button>
           </Popover.Close>
+          <Button
+            size="$3"
+            onPress={async () => {
+              console.log("Exercises edit displayed.");
+              const exerType =
+                exerciseType ||
+                (await ExerciseService.getExerciseDetails(index))?.type;
+              /* Custom code goes here, does not interfere with popover closure */
+              switch (exerType) {
+                case ExerciseTypes.Vocabulary:
+                  router.navigate(`exercises/vocabulary/${index}/edit`);
+                  break;
+                case ExerciseTypes.Listening:
+                  router.navigate(`exercises/listening`);
+                  break;
+                case ExerciseTypes.Grammar:
+                  router.navigate(`exercises/grammar/${index}/edit`);
+                  break;
+                case ExerciseTypes.Speaking:
+                  router.navigate(`exercises/speaking`);
+                  break;
+              }
+            }}
+          >
+            Edit Exercise
+          </Button>
         </YStack>
       </Popover.Content>
     </Popover>
