@@ -1,7 +1,14 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ImageSourcePropType } from 'react-native';
 
-export default function ExerciseTypeCard({ imageUrl, title, subtitle, onTextPress}) {
+interface ComponentProps {
+  imageUrl: ImageSourcePropType;
+  title: string;
+  subtitle: string,
+  onTextPress: any;
+}
+
+export default function ExerciseTypeCard({ imageUrl, title, subtitle, onTextPress}: ComponentProps) {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.imageContainer}>

@@ -1,9 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Progress } from 'tamagui';
 
-export default function ExerciseCard({ title, subtitle, onPress }) {
+interface ComponentProps {
+  title: string;
+  subtitle: string;
+  onPress: any;
+}
+
+export default function ExerciseCard({ title, subtitle, onPress }: ComponentProps) {
   return (
+    <>
     <TouchableOpacity style={styles.cardContainer} onPress={onPress}>
       <View style={styles.iconContainer}>
         <Icon name="book" size={50} color="gray" />
@@ -16,17 +24,21 @@ export default function ExerciseCard({ title, subtitle, onPress }) {
 
       <Icon name="chevron-right" size={30} color="gray" style={styles.arrow} />
     </TouchableOpacity>
+
+      </>
   );
 }
 
 const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: "white",
-    borderRadius: 25,
-    elevation: 5,
+    borderRadius: 10,
+    elevation: 2,
     flexDirection: 'row',
-    padding: 10,
-    marginBottom: 15,
+    padding: 6,
+    marginBottom: 10,
+    marginLeft: "1.25%",
+    marginRight: "1.25%",
     alignItems: 'center',
   },
   iconContainer: {
