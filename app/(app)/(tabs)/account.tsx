@@ -1,5 +1,5 @@
 import { useState, useEffect, useLayoutEffect } from "react";
-import { ActivityIndicator, StyleSheet, Alert, View, Text, ScrollView } from "react-native";
+import { ActivityIndicator, StyleSheet, Alert, View, Text, ScrollView, Image } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { AccountService } from "../../../src/services/AccountService";
 import { useSession } from "../../../src/contexts/AuthContext";
@@ -9,6 +9,7 @@ import ProfileInfoCard from "../../../src/components/ProfileInfoCard";
 import ProfileInteractableCard from "../../../src/components/ProfileInteractableCard";
 import CustomHeader from "../../../src/components/HeaderTitle";
 import LogoutModal from "../../../src/components/LogoutModal";
+import LoadingAnim from "../../../src/assets/walking.gif";
 
 export default function Account() {
   const [loading, setLoading] = useState(true);
@@ -73,6 +74,10 @@ export default function Account() {
     return (
       <>
       <View style={styles.defaultContainer}>
+        <Image
+          source={LoadingAnim} 
+          style={{ width: 100, height: 100 }}
+        />
         <Text style={styles.loadingText}>Please wait a moment while{"\n"} we prepare things around here...</Text>
         <ActivityIndicator size="large" color="white" />
       </View>
@@ -87,7 +92,9 @@ export default function Account() {
     <BackgroundCircle size={400} color="dodgerblue" top={-230} left ={140} />
 
     <View style={{alignItems: "center", justifyContent: "center", marginTop: 10, marginBottom: 12}}>
-        <AvatarDisplay userID={getUserUUID()} size={150} borderRadius={100} />
+        <View style={{backgroundColor: "white", borderRadius: 100}}>
+          <AvatarDisplay userID={getUserUUID()} size={150} borderRadius={100} />
+        </View>
     </View>
     <View style={{alignItems: "center", justifyContent: "center"}}>
       <Text style={{fontSize: 24, fontWeight: "900"}}>{fullname}</Text>
@@ -115,7 +122,14 @@ export default function Account() {
       <ProfileInfoCard iconName="at" title="Username" description={username}/>
       <ProfileInfoCard iconName="email" title="Email" description={email}/>
       <ProfileInfoCard iconName="web" title="Website" description={website}/>
-      <ProfileInteractableCard iconName="account-cog" title="Change User Details" onPress={() => router.push("/settings/user-details")} />
+      <ProfileInteractableCard 
+        iconName="account-cog" 
+        title="Change User Details" 
+        onPress={() => router.push({
+          pathname: "/settings/user-details",
+          params: { currAvatarURL: avatarUrl, currFullname: fullname, currUsername: username, currEmail: email, currWebsite: website }
+        })}
+      />
     </View>
 
     <View style={{margin: 10, marginLeft: 15}}>

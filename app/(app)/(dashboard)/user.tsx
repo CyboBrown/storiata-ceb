@@ -58,67 +58,6 @@ export default function Dashboard() {
   };
 
   return (
-    <View justifyContent="center" alignItems="center">
-      <ScrollView marginBottom="$5">
-        <View marginStart="$2" marginTop="$3" marginEnd="$2">
-          <Card elevate height={"$15"} bordered>
-            <CardHeader padded>
-              <Text color={"$color"} fontSize={26}>
-                StoriaTa Exercises{" "}
-              </Text>
-              <XStack marginTop={"$3"}>
-                <Text color={"$color"} fontSize={"$7"} flex={1}>
-                  Exercises Completed:{" "}
-                </Text>
-                <Text color={"$color"} fontSize={"$7"}>
-                  {exerCompleted}
-                </Text>
-              </XStack>
-              <XStack marginTop={"$3"}>
-                <Text color={"$color"} fontSize={"$7"} flex={1}>
-                  Total of Words Mistaken:{" "}
-                </Text>
-                <Text color={"$color"} fontSize={"$7"}>
-                  {wordsMistaken}
-                </Text>
-              </XStack>
-            </CardHeader>
-            <CardFooter padded></CardFooter>
-            <CardBackground></CardBackground>
-          </Card>
-        </View>
-        <View marginStart="$2" marginTop="$3" marginEnd="$2">
-          <Card elevate bordered height={500}>
-            <CardHeader padded>
-              <Text color={"$color"} fontSize={25}>
-                Explore More Exercises
-              </Text>
-              <Text color={"$color"} fontSize={20}>
-                To expand your skills in...
-              </Text>
-              <Spacer></Spacer>
-              <YGroup
-                alignSelf="center"
-                bordered
-                size="$5"
-                separator={<Separator />}
-              >
-                {results.map((result, index) => (
-                  <ExercisePopover
-                    user="ebabaa6c-4254-465e-9f2f-f285a2364277"
-                    title={result.topic}
-                    subTitle={result.description}
-                    index={result.id}
-                    key={result.id}
-                  />
-                ))}
-              </YGroup>
-            </CardHeader>
-
-            <CardBackground></CardBackground>
-          </Card>
-        </View>
-      </ScrollView>
-    </View>
+    <Text>Wow</Text>
   );
 }

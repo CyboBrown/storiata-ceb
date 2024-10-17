@@ -1,19 +1,16 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../../src/utils/supabase";
-import { Alert } from "react-native";
-import { Button, Image, View } from "tamagui";
+import { supabase } from "../utils/supabase";
+import { View, Text, Alert, Image, TouchableOpacity } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
 interface Props {
-  size: number;
   url: string | null;
   onUpload: (filePath: string) => void;
 }
 
-export default function Avatar({ url, size = 150, onUpload }: Props) {
+export default function Avatar({ url, onUpload }: Props) {
   const [uploading, setUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-  const avatarSize = { height: size, width: size };
 
   useEffect(() => {
     if (url) downloadImage(url);
@@ -94,31 +91,15 @@ export default function Avatar({ url, size = 150, onUpload }: Props) {
   }
 
   return (
-    <View flex={1} alignItems="center" justifyContent="center">
-      <View
-        width={size}
-        height={size}
-        borderRadius={5}
-        overflow="hidden"
-        maxWidth="100%"
-        backgroundColor={avatarUrl ? undefined : "#333"}
-        borderWidth={avatarUrl ? undefined : 1}
-        borderStyle={avatarUrl ? undefined : "solid"}
-        borderColor={avatarUrl ? undefined : "rgb(200, 200, 200)"}
-      >
-        {avatarUrl && (
-          <Image
-            source={{ uri: avatarUrl }}
-            accessibilityLabel="Avatar"
-            width="100%"
-            height="100%"
-          />
-        )}
-      </View>
-      <View marginTop="$4">
-        <Button onPress={uploadAvatar} disabled={uploading} width={200}>
-          {uploading ? "Uploading ..." : "Upload"}
-        </Button>
+    <View style={{alignItems: "center", justifyContent: "center"}}>
+      <Image
+        source={{ uri: avatarUrl }}
+        style={{ height: 150, width: 150, borderRadius: 100 }}
+      />
+      <View style={{marginTop: 15, alignItems: "center", justifyContent: "center"}}>
+        <TouchableOpacity onPress={uploadAvatar}>
+          <Text style={{color: "dodgerblue", fontSize: 20, fontWeight: "900"}}>CHANGE PROFILE PICTURE</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

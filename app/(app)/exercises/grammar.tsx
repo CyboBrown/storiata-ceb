@@ -1,24 +1,6 @@
 import { Session } from "@supabase/supabase-js";
-import {
-  Button,
-  H5,
-  Paragraph,
-  YStack,
-  Accordion,
-  Square,
-  XStack,
-  View,
-  Text,
-  TamaguiProvider,
-  Theme,
-  ScrollView,
-  YGroup,
-  Separator,
-  ListItem,
-  ButtonIcon,
-} from "tamagui";
 import { useEffect, useState } from "react";
-import { Alert, useColorScheme } from "react-native";
+import { Alert, View, Text, Image, ImageBackground, useColorScheme, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
 import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from "../../../src/services/ExerciseService";
 import { RefreshCw } from "@tamagui/lucide-icons";
@@ -26,6 +8,11 @@ import { ExercisePopover } from "../../../src/components/ExercisePopover";
 import { ExerciseTypes } from "../../../src/utils/enums";
 import { UserExercise } from "../../../src/models/UserExercise";
 import { useSession } from "../../../src/contexts/AuthContext";
+import ExerciseCard from "../../../src/components/ExerciseCard";
+import ExerciseModal from "../../../src/components/ExerciseModal";
+import LoadingAnim from "../../../src/assets/walking.gif";
+import PHCeb3 from "../../../src/assets/ph_cebu_3.png";
+import { useRouter } from "expo-router";
 
 export default function GrammarExercises({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
@@ -34,10 +21,15 @@ export default function GrammarExercises({ session }: { session: Session }) {
   }, []);
 
   const colorScheme = useColorScheme();
+  const router = useRouter();
 
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<Exercise[]>([]);
   const [progress, setProgress] = useState<UserExercise[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [exerIndexOnFocus, setExerIndexOnFocus] = useState();
+  const [exerIDOnFocus, setExerIDOnFocus] = useState();
+  const [exerTopicOnFocus, setExerTopicOnFocus] = useState("");
   const { getUserUUID } = useSession();
 
   useEffect(() => {
@@ -46,7 +38,7 @@ export default function GrammarExercises({ session }: { session: Session }) {
 
   const loadExercises = async () => {
     try {
-      setLoading(true);
+      setIsLoading(true);
       let progress = await ExerciseService.getUserExerciseProgress(
         getUserUUID() ?? ""
       );
@@ -64,7 +56,7 @@ export default function GrammarExercises({ session }: { session: Session }) {
         Alert.alert(error.message);
       }
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -75,48 +67,152 @@ export default function GrammarExercises({ session }: { session: Session }) {
     return !!level && level >= 6;
   };
 
-  return (
-    <TamaguiProvider>
-      <Theme name={colorScheme === "dark" ? "dark" : "light"}>
-        <YStack
-          f={1}
-          jc="flex-start"
-          ai="stretch"
-          backgroundColor={"$background"}
-        >
-          <XStack jc="space-between" ai="flex-start" padding="$5">
-            <Text fontSize={20} fontWeight={800} color={"$color"}>
-              Grammar Exercises
-            </Text>
-            <RefreshCw
-              onPress={loadExercises}
-              disabled={loading}
-              color={loading ? "$color5" : "$color"}
-            />
-          </XStack>
+  const handleExerciseEvent = (exerID, exerTopic) => {
+    router.push({
+      pathname: `exercises/grammar/${exerID}`,
+    });
+  }
 
-          <ScrollView>
-            <YGroup
-              alignSelf="center"
-              bordered
-              size="$5"
-              separator={<Separator />}
-            >
-              {results.map((result, index) => (
-                <ExercisePopover
-                  user={getUserUUID() ?? ""}
-                  title={result.topic}
-                  subTitle={result.description}
-                  index={result.id}
-                  exerciseType={ExerciseTypes.Grammar}
-                  key={result.id}
-                  finished={checkExerciseCompletion(result.id)}
-                />
-              ))}
-            </YGroup>
-          </ScrollView>
-        </YStack>
-      </Theme>
-    </TamaguiProvider>
+  const changeExerFocus = (exerID, exerTopic, index) => {
+    setExerIndexOnFocus(index);
+    setExerIDOnFocus(exerID);
+    setExerTopicOnFocus(exerTopic);
+    setModalVisible(true);
+  }
+
+  if (isLoading) {
+    return (
+      <>
+        <ImageBackground
+          source={PHCeb3}
+          style={styles.headerTitleContainer}
+          resizeMode="cover"
+        >
+          {/* Overlay View */}
+          <View style={styles.overlay} />
+
+          <View style={styles.contentContainer}>
+            <Text style={styles.headerTitle}>Grammar</Text>
+            <Text style={styles.headerSubtitle}>
+              It's time to piece together these words we've learned together into something more meaningful! 
+            </Text>
+          </View>
+        </ImageBackground>
+
+        <View style={styles.exerciseCategoryContainerLoading}>
+          <Image
+            source={LoadingAnim} 
+            style={{ width: 100, height: 100 }}
+          />
+          <Text style={styles.loadingText}>Please wait a moment while{"\n"} we prepare things around here...</Text>
+          <ActivityIndicator size="large" color="dodgerblue" />
+        </View>
+      </>
+    )
+  }
+
+  return (
+    <>
+    <ImageBackground
+      source={PHCeb3}
+      style={styles.headerTitleContainer}
+      resizeMode="cover"
+    >
+      {/* Overlay View */}
+      <View style={styles.overlay} />
+
+      <View style={styles.contentContainer}>
+        <Text style={styles.headerTitle}>Grammar</Text>
+        <Text style={styles.headerSubtitle}>
+          It's time to piece together these words we've learned together into something more meaningful! 
+        </Text>
+      </View>
+    </ImageBackground>
+
+    <ScrollView style={styles.exerciseCategoryContainer}>
+      <View style={styles.barContainer}>
+        <View style={styles.randomHorizontalBar}>
+          <Text>{" " /* Please do not ask why this is here. */ }</Text>
+        </View>
+      </View>
+
+      {results.map((result, index) => (
+        <ExerciseCard
+          key={result.id}
+          title={result.topic}
+          subtitle={result.description}
+          onPress={() => changeExerFocus(result.id, result.topic, index)}
+        />
+      ))}
+    </ScrollView>
+
+    <ExerciseModal 
+      exerciseTitle={`Grammar ${exerIndexOnFocus + 1} - ${exerTopicOnFocus}`} 
+      modalVisible={modalVisible} 
+      setModalVisible={setModalVisible} 
+      handleRedirect={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus)}/>
+    </>
   );
 }
+
+const styles = StyleSheet.create({
+  headerTitleContainer: {
+    paddingTop: "8%",
+    paddingBottom: "15%",
+    justifyContent: "center",
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'dodgerblue',
+    opacity: 0.65,
+  },
+  contentContainer: {
+    paddingLeft: "6%",
+    paddingRight: "6%",
+  },
+  headerTitle: {
+    color: "white",
+    fontSize: 40,
+    fontWeight: "bold",
+  },
+  headerSubtitle: {
+    marginTop: "2.5%",
+    color: "white",
+    fontSize: 14,
+  },
+  exerciseCategoryContainer: {
+    padding: "3%",
+    marginTop: "-5%",
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  exerciseCategoryContainerLoading: {
+    flex: 1,
+    marginTop: "-5%",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  loadingText: {
+    fontSize: 18,
+    fontWeight: "400",
+    color: 'gray',
+    textAlign: "center",
+    marginBottom: 25,
+  },
+  barContainer: {
+    marginTop: "3%",
+    marginBottom: "6.5%",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "1%",
+  },
+  randomHorizontalBar: {
+    borderRadius: 30,
+    width: "15%",
+    backgroundColor: "lightgray",
+  },
+});
