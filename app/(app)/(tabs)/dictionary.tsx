@@ -16,18 +16,19 @@ import {
   Tabs,
   View,
 } from "tamagui";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { supabase } from "../../../src/utils/supabase";
 import { Alert, FlatList } from "react-native";
 import { Word } from "../../../src/models/Word";
 import AddWordDialog from "../../../src/components/AddWordDialog";
 import { WordSearchResult } from "../../../src/components/WordSearchResult";
 import { DictionaryService } from "../../../src/services/DictionaryService";
-import { Link } from "expo-router";
+import { Link, useNavigation, useRouter } from "expo-router";
 import EditWordDialog from "../../../src/components/EditWordDialog";
 import EditTranslationDialog from "../../../src/components/EditTranslationDialog";
 import { RevPartsOfSpeech } from "../../../src/utils/enums";
 import ConjugationTable from "../../../src/components/ConjugationTable";
+import CustomHeader from "../../../src/components/HeaderTitle";
 
 export default function Dictionary({
   contribMode,
@@ -42,10 +43,21 @@ export default function Dictionary({
   const [position, setPosition] = useState(0);
   const [searched, setSearched] = useState(false);
 
+  const navigation = useNavigation();
+  const router = useRouter();
+
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
   useEffect(() => {
     console.log("DICTIONARY page loaded.");
   }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <CustomHeader pageTitle="Dictionary" />,  // Use Custom Header
+      headerStyle: { backgroundColor: 'dodgerblue' },
+      headerTintColor: 'white',
+    });
+  }, [navigation]);
 
   async function search(text: string) {
     try {
