@@ -8,7 +8,7 @@ interface ComponentProps {
   handleRedirect: any;
 }
 
-export default function ExerciseModal({ exerciseTitle, modalVisible, setModalVisible, handleRedirect }: ComponentProps) {
+export default function ExerciseModal({ userIsContributor, exerciseTitle, modalVisible, setModalVisible, handleRedirect, handleRedirectEdit }: ComponentProps) {
   return (
     <Modal
       animationType="fade"
@@ -31,6 +31,14 @@ export default function ExerciseModal({ exerciseTitle, modalVisible, setModalVis
             >
               <Text style={styles.buttonText}>BEGIN EXERCISE</Text>
             </TouchableOpacity>
+            { userIsContributor && (
+              <TouchableOpacity
+              style={[styles.button, styles.buttonConfirm]}
+              onPress={handleRedirectEdit}
+              >
+                <Text style={styles.buttonText}>EDIT EXERCISE</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </View>

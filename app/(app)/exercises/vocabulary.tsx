@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, useColorScheme, View, Text, StyleSheet, ImageBackground, ScrollView, ActivityIndicator, Image } from "react-native";
+import { Alert, useColorScheme, View, Text, StyleSheet, ImageBackground, ScrollView, ActivityIndicator, Image, TouchableOpacity } from "react-native";
 import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from "../../../src/services/ExerciseService";
 import { ExerciseTypes } from "../../../src/utils/enums";
@@ -10,6 +10,7 @@ import PHCeb4 from "../../../src/assets/ph_cebu_4.png";
 import ExerciseCard from "../../../src/components/ExerciseCard";
 import ExerciseModal from "../../../src/components/ExerciseModal";
 import { useRouter } from "expo-router";
+import { useContributorContext } from "../../../src/contexts/ContributorContext";
 
 export default function VocabularyExercises() {
   const colorScheme = useColorScheme();
@@ -21,6 +22,7 @@ export default function VocabularyExercises() {
   const [exerIDOnFocus, setExerIDOnFocus] = useState();
   const [exerTopicOnFocus, setExerTopicOnFocus] = useState("");
   const { getUserUUID } = useSession();
+  const { isContributor } = useContributorContext();
 
   const router = useRouter();
 
@@ -59,10 +61,18 @@ export default function VocabularyExercises() {
     return !!level && level >= 6;
   };
 
-  const handleExerciseEvent = (exerID, exerTopic) => {
-    router.push({
-      pathname: `exercises/vocabulary/${exerID}`,
-    });
+  const handleExerciseEvent = (exerID, exerTopic, eventType) => {
+    {/*Edit to enum later?? This is garbage*/}
+    if (eventType == "START") {
+      router.push({
+        pathname: `exercises/vocabulary/${exerID}`,
+      });
+    } else if (eventType == "EDIT") {
+      router.push({
+        pathname: `exercises/vocabulary/${exerID}/edit`,
+      });
+    }
+
   }
 
   const changeExerFocus = (exerID, exerTopic, index) => {
@@ -120,6 +130,13 @@ export default function VocabularyExercises() {
           Let's get to know basic everyday things in the Cebuano language! 
           What good is comprehension when you don't know what words mean?
         </Text>
+        { isContributor && 
+        (<TouchableOpacity onPress={() => router.push({pathname: "/exercises/vocabulary/create"})}>
+          <Text style={{color: "aqua", marginTop: 15, fontSize: 18, fontWeight: "900"}}>
+            CREATE EXERCISE
+          </Text>
+        </TouchableOpacity>
+        )}
       </View>
     </ImageBackground>
 
@@ -141,10 +158,13 @@ export default function VocabularyExercises() {
     </ScrollView>
 
     <ExerciseModal 
+      userIsContributor={isContributor}
       exerciseTitle={`Vocabulary ${exerIndexOnFocus + 1} - ${exerTopicOnFocus}`} 
       modalVisible={modalVisible} 
       setModalVisible={setModalVisible} 
-      handleRedirect={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus)}/>
+      handleRedirect={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "START")}
+      handleRedirectEdit={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "EDIT")}
+    />
     </>
   );
 }

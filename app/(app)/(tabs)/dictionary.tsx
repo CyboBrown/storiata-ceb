@@ -29,8 +29,9 @@ import EditTranslationDialog from "../../../src/components/EditTranslationDialog
 import { RevPartsOfSpeech } from "../../../src/utils/enums";
 import ConjugationTable from "../../../src/components/ConjugationTable";
 import CustomHeader from "../../../src/components/HeaderTitle";
+import { useContributorContext } from "../../../src/contexts/ContributorContext";
 
-export default function Dictionary({ contribMode }: { contribMode: boolean }) {
+export default function Dictionary() {
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState("");
   const [results, setResults] = useState<Word[]>([]);
@@ -38,6 +39,7 @@ export default function Dictionary({ contribMode }: { contribMode: boolean }) {
   const [selected, setSelected] = useState(-1);
   const [position, setPosition] = useState(0);
   const [searched, setSearched] = useState(false);
+  const { isContributor } = useContributorContext();
 
   const navigation = useNavigation();
   const router = useRouter();
@@ -153,7 +155,7 @@ export default function Dictionary({ contribMode }: { contribMode: boolean }) {
             </YGroup>
           </ScrollView>
         </YStack>
-        {contribMode && (
+        {isContributor && (
           <YStack
             f={1}
             jc="flex-end"
@@ -268,7 +270,7 @@ export default function Dictionary({ contribMode }: { contribMode: boolean }) {
                         .slice(0, -2)
                     : null}
                 </Text>
-                {contribMode && (
+                {isContributor && (
                   <XStack gap="$4">
                     {/* <Link
                   href={{
