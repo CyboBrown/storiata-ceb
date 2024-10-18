@@ -2,7 +2,16 @@ import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function LabeledTextInput ({ title, iconName, value, onChangeText, placeholder, enabled }) {
+interface ComponentProps {
+  title: string;
+  iconName: string;
+  value: string;
+  onChangeText: any;
+  placeholder: any;
+  enabled: boolean;
+}
+
+export default function LabeledTextInput ({ title, iconName, value, onChangeText, placeholder, enabled }: ComponentProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{title}</Text>

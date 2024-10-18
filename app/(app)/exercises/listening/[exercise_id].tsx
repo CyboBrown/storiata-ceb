@@ -78,7 +78,7 @@ export default function ListeningExercises({
 
   return (
     <TamaguiProvider>
-      <Theme name={colorScheme === "dark" ? "dark" : "light"}>
+      <Theme name={colorScheme === "dark" ? "light" : "light"}>
         <YStack f={1} jc="center" ai="stretch" backgroundColor={"$background"}>
           {loading ? (
             <YStack jc="flex-start" ai="center" padding="$5">
