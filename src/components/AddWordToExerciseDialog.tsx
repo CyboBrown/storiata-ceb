@@ -15,6 +15,8 @@ import {
   ScrollView,
   YGroup,
   Separator,
+  Fieldset,
+  Label,
 } from "tamagui";
 
 import { useEffect, useState } from "react";
@@ -23,19 +25,23 @@ import { WordTranslationSearchResult } from "./WordTranslationSearchResult";
 import { ExerciseService } from "../services/ExerciseService";
 import { WordTranslation } from "../models/WordTranslation";
 import { VocabularyExercise } from "../models/VocabularyExercise";
+import { GrammarExercise, isGrammarExercise } from "../models/GrammarExercise";
 
 export default function AddWordToExerciseDialog({
   exercise,
   setExercise,
 }: {
-  exercise: VocabularyExercise;
-  setExercise: React.Dispatch<React.SetStateAction<VocabularyExercise>>;
+  exercise: VocabularyExercise | GrammarExercise;
+  setExercise: React.Dispatch<
+    React.SetStateAction<VocabularyExercise | GrammarExercise>
+  >;
 }) {
   const [wordPair, setWordPair] = useState<WordTranslation>();
   const [loading, setLoading] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [results, setResults] = useState<WordTranslation[]>([]);
   const [input, setInput] = useState("");
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     // setWord(selected_word);
@@ -119,6 +125,9 @@ export default function AddWordToExerciseDialog({
         >
           <Dialog.Title>Add Word To Exercise</Dialog.Title>
           <Dialog.Description>
+            {isGrammarExercise(exercise)
+              ? "Specify the role of the word in the sentence. "
+              : ""}
             Browse for a suitable word pair and click to add to the current
             exercise.
           </Dialog.Description>
@@ -129,10 +138,32 @@ export default function AddWordToExerciseDialog({
             gap="$2"
             backgroundColor={"$backgroundSoft"}
           >
+            {isGrammarExercise(exercise) ? (
+              <Fieldset horizontal ai="stretch">
+                <Label width="20%" htmlFor="role_input">
+                  Role:
+                </Label>
+                <Input
+                  width="80%"
+                  id="role_input"
+                  defaultValue=""
+                  placeholder="Specify the word's role in the sentence"
+                  value={role}
+                  onChangeText={(text) => {
+                    setRole(text);
+                  }}
+                />
+              </Fieldset>
+            ) : (
+              ""
+            )}
+            <Separator />
+
             <XStack alignItems="center" gap="$2">
               <Input
                 flex={1}
                 size="$4"
+                ai="stretch"
                 placeholder={`Enter Word...`}
                 onChangeText={(input) => setInput(input)}
               />
@@ -185,6 +216,7 @@ export default function AddWordToExerciseDialog({
                     wordPair={result}
                     exercise={exercise}
                     setExercise={setExercise}
+                    role={role}
                   />
                 ))}
               </YGroup>

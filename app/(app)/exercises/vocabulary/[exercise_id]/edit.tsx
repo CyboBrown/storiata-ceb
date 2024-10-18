@@ -143,22 +143,24 @@ export default function EditVocabularyExercise({
               ai="flex-start"
               gap="$2"
             >
-              {exercise.item_sets?.map((item, index) => (
-                <Text
-                  backgroundColor={"$gray5"}
-                  borderRadius={"$8"}
-                  py="$1"
-                  px="$2"
-                  fontSize={"$5"}
-                  onPress={() => {
-                    let updated_exercise = { ...exercise };
-                    updated_exercise.item_sets?.splice(index, 1);
-                    setExercise(updated_exercise);
-                  }}
-                >
-                  {item.ceb_word + " → " + item.eng_word}
-                </Text>
-              ))}
+              {exercise.item_sets
+                ?.sort((a, b) => a.ceb_word.localeCompare(b.ceb_word))
+                .map((item, index) => (
+                  <Text
+                    backgroundColor={"$gray5"}
+                    borderRadius={"$8"}
+                    py="$1"
+                    px="$2"
+                    fontSize={"$5"}
+                    onPress={() => {
+                      let updated_exercise = { ...exercise };
+                      updated_exercise.item_sets?.splice(index, 1);
+                      setExercise(updated_exercise);
+                    }}
+                  >
+                    {item.ceb_word + " → " + item.eng_word}
+                  </Text>
+                ))}
               <AddWordToExerciseDialog
                 exercise={exercise}
                 setExercise={setExercise}

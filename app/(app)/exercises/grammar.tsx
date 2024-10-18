@@ -1,18 +1,27 @@
-import { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
-import { Alert, View, Text, Image, ImageBackground, useColorScheme, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
+import {
+  Alert,
+  useColorScheme,
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  ScrollView,
+  ActivityIndicator,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from "../../../src/services/ExerciseService";
-import { RefreshCw } from "@tamagui/lucide-icons";
-import { ExercisePopover } from "../../../src/components/ExercisePopover";
 import { ExerciseTypes } from "../../../src/utils/enums";
 import { UserExercise } from "../../../src/models/UserExercise";
 import { useSession } from "../../../src/contexts/AuthContext";
-import ExerciseCard from "../../../src/components/ExerciseCard";
-import ExerciseModal from "../../../src/components/ExerciseModal";
 import LoadingAnim from "../../../src/assets/walking.gif";
 import PHCeb3 from "../../../src/assets/ph_cebu_3.png";
+import ExerciseCard from "../../../src/components/ExerciseCard";
+import ExerciseModal from "../../../src/components/ExerciseModal";
 import { useRouter } from "expo-router";
+import { useContributorContext } from "../../../src/contexts/ContributorContext";
 
 export default function GrammarExercises({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
@@ -22,7 +31,6 @@ export default function GrammarExercises({ session }: { session: Session }) {
 
   const colorScheme = useColorScheme();
   const router = useRouter();
-
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<Exercise[]>([]);
   const [progress, setProgress] = useState<UserExercise[]>([]);
@@ -31,6 +39,7 @@ export default function GrammarExercises({ session }: { session: Session }) {
   const [exerIDOnFocus, setExerIDOnFocus] = useState();
   const [exerTopicOnFocus, setExerTopicOnFocus] = useState("");
   const { getUserUUID } = useSession();
+  const { isContributor } = useContributorContext();
 
   useEffect(() => {
     loadExercises();
@@ -67,18 +76,27 @@ export default function GrammarExercises({ session }: { session: Session }) {
     return !!level && level >= 6;
   };
 
-  const handleExerciseEvent = (exerID, exerTopic) => {
-    router.push({
-      pathname: `exercises/grammar/${exerID}`,
-    });
-  }
+  const handleExerciseEvent = (exerID, exerTopic, eventType) => {
+    {
+      /*Edit to enum later?? This is garbage*/
+    }
+    if (eventType == "START") {
+      router.push({
+        pathname: `exercises/grammar/${exerID}`,
+      });
+    } else if (eventType == "EDIT") {
+      router.push({
+        pathname: `exercises/grammar/${exerID}/edit`,
+      });
+    }
+  };
 
   const changeExerFocus = (exerID, exerTopic, index) => {
     setExerIndexOnFocus(index);
     setExerIDOnFocus(exerID);
     setExerTopicOnFocus(exerTopic);
     setModalVisible(true);
-  }
+  };
 
   if (isLoading) {
     return (
@@ -94,63 +112,89 @@ export default function GrammarExercises({ session }: { session: Session }) {
           <View style={styles.contentContainer}>
             <Text style={styles.headerTitle}>Grammar</Text>
             <Text style={styles.headerSubtitle}>
-              It's time to piece together these words we've learned together into something more meaningful! 
+              It's time to piece together these words we've learned together
+              into something more meaningful!
             </Text>
           </View>
         </ImageBackground>
 
         <View style={styles.exerciseCategoryContainerLoading}>
-          <Image
-            source={LoadingAnim} 
-            style={{ width: 100, height: 100 }}
-          />
-          <Text style={styles.loadingText}>Please wait a moment while{"\n"} we prepare things around here...</Text>
+          <Image source={LoadingAnim} style={{ width: 100, height: 100 }} />
+          <Text style={styles.loadingText}>
+            Please wait a moment while{"\n"} we prepare things around here...
+          </Text>
           <ActivityIndicator size="large" color="dodgerblue" />
         </View>
       </>
-    )
+    );
   }
 
   return (
     <>
-    <ImageBackground
-      source={PHCeb3}
-      style={styles.headerTitleContainer}
-      resizeMode="cover"
-    >
-      {/* Overlay View */}
-      <View style={styles.overlay} />
+      <ImageBackground
+        source={PHCeb3}
+        style={styles.headerTitleContainer}
+        resizeMode="cover"
+      >
+        {/* Overlay View */}
+        <View style={styles.overlay} />
 
-      <View style={styles.contentContainer}>
-        <Text style={styles.headerTitle}>Grammar</Text>
-        <Text style={styles.headerSubtitle}>
-          It's time to piece together these words we've learned together into something more meaningful! 
-        </Text>
-      </View>
-    </ImageBackground>
-
-    <ScrollView style={styles.exerciseCategoryContainer}>
-      <View style={styles.barContainer}>
-        <View style={styles.randomHorizontalBar}>
-          <Text>{" " /* Please do not ask why this is here. */ }</Text>
+        <View style={styles.contentContainer}>
+          <Text style={styles.headerTitle}>Grammar</Text>
+          <Text style={styles.headerSubtitle}>
+            It's time to piece together these words we've learned together into
+            something more meaningful!
+          </Text>
+          {isContributor && (
+            <TouchableOpacity
+              onPress={() =>
+                router.push({ pathname: "/exercises/grammar/create" })
+              }
+            >
+              <Text
+                style={{
+                  color: "aqua",
+                  marginTop: 15,
+                  fontSize: 18,
+                  fontWeight: "900",
+                }}
+              >
+                CREATE EXERCISE
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
-      </View>
+      </ImageBackground>
 
-      {results.map((result, index) => (
-        <ExerciseCard
-          key={result.id}
-          title={result.topic}
-          subtitle={result.description}
-          onPress={() => changeExerFocus(result.id, result.topic, index)}
-        />
-      ))}
-    </ScrollView>
+      <ScrollView style={styles.exerciseCategoryContainer}>
+        <View style={styles.barContainer}>
+          <View style={styles.randomHorizontalBar}>
+            <Text>{" " /* Please do not ask why this is here. */}</Text>
+          </View>
+        </View>
 
-    <ExerciseModal 
-      exerciseTitle={`Grammar ${exerIndexOnFocus + 1} - ${exerTopicOnFocus}`} 
-      modalVisible={modalVisible} 
-      setModalVisible={setModalVisible} 
-      handleRedirect={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus)}/>
+        {results.map((result, index) => (
+          <ExerciseCard
+            key={result.id}
+            title={result.topic}
+            subtitle={result.description}
+            onPress={() => changeExerFocus(result.id, result.topic, index)}
+          />
+        ))}
+      </ScrollView>
+
+      <ExerciseModal
+        userIsContributor={isContributor}
+        exerciseTitle={`Grammar ${exerIndexOnFocus + 1} - ${exerTopicOnFocus}`}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        handleRedirect={() =>
+          handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "START")
+        }
+        handleRedirectEdit={() =>
+          handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "EDIT")
+        }
+      />
     </>
   );
 }
@@ -163,7 +207,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'dodgerblue',
+    backgroundColor: "dodgerblue",
     opacity: 0.65,
   },
   contentContainer: {
@@ -199,7 +243,7 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 18,
     fontWeight: "400",
-    color: 'gray',
+    color: "gray",
     textAlign: "center",
     marginBottom: 25,
   },

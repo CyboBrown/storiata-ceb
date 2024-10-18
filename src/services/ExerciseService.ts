@@ -268,8 +268,8 @@ export class ExerciseService {
     }
     const wordpairs = exercise.item_sets?.map((item) => {
       return {
-        exercise_id: data1?.at(0)?.id ?? Number.MIN_SAFE_INTEGER,
-        word_id: item.id ?? Number.MIN_SAFE_INTEGER,
+        exercise_id: data1?.at(0)?.id ?? Number.MAX_SAFE_INTEGER,
+        word_id: item.id ?? Number.MAX_SAFE_INTEGER,
       };
     });
     if (wordpairs) {
@@ -283,10 +283,71 @@ export class ExerciseService {
     }
   };
 
-  // ***
   public static createGrammarExercise = async (exercise: GrammarExercise) => {
     console.log("CREATED_GRAMMAR_EXERCISE");
-    return null;
+    const { data: data1, error: error1 } = await supabase
+      .from("exercises")
+      .insert([
+        {
+          topic: exercise.topic,
+          type: 2,
+          description: exercise.description,
+          added_by: exercise.added_by,
+        },
+      ])
+      .select();
+    if (error1) {
+      console.log(error1);
+    }
+    const wordpairs = exercise.exercise_words?.map((item) => {
+      return {
+        exercise_id: data1?.at(0)?.id ?? Number.MAX_SAFE_INTEGER,
+        word_id: item.id ?? Number.MAX_SAFE_INTEGER,
+        role: item.role ?? "",
+      };
+    });
+    if (wordpairs) {
+      const { data: data2, error: error2 } = await supabase
+        .from("exercise_words")
+        .insert(wordpairs)
+        .select();
+      if (error1) {
+        console.log(error1);
+      }
+    }
+    const sentencepairs = exercise.item_sets?.map((item) => {
+      return {
+        sentence: item.sentence,
+        translated_sentence: item.translated_sentence,
+      };
+    });
+    console.log("Sentences: ");
+    console.log(sentencepairs);
+    if (sentencepairs) {
+      const { data: data3, error: error3 } = await supabase
+        .from("sentence_pairs")
+        .insert(sentencepairs)
+        .select();
+      if (error3) {
+        console.log(error3);
+      } else {
+        const sentenceids =
+          data3?.map((item) => {
+            return {
+              exercise_id: data1?.at(0)?.id ?? Number.MAX_SAFE_INTEGER,
+              sentence_id: item.id,
+            };
+          }) ?? [];
+        const { data: data4, error: error4 } = await supabase
+          .from("exercise_sentences")
+          .insert(sentenceids)
+          .select();
+        console.log("Data4: ");
+        console.log(data4);
+      }
+      console.log("Data3: ");
+      console.log(data3);
+    }
   };
 
   public static updateVocabularyExercise = async (
@@ -319,8 +380,8 @@ export class ExerciseService {
       )
       .map((item) => {
         return {
-          exercise_id: data1?.at(0)?.id ?? Number.MIN_SAFE_INTEGER,
-          word_id: item.id ?? Number.MIN_SAFE_INTEGER,
+          exercise_id: data1?.at(0)?.id ?? Number.MAX_SAFE_INTEGER,
+          word_id: item.id ?? Number.MAX_SAFE_INTEGER,
         };
       });
     if (wordpairs) {

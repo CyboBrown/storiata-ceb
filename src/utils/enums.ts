@@ -53,8 +53,8 @@ export enum RevEngPartsOfSpeech {
 export enum ExerciseTypes {
   Uncategorized,
   Vocabulary,
-  Listening,
   Grammar,
+  Listening,
   Speaking,
 }
 

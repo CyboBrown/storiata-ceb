@@ -1,5 +1,16 @@
 import { useEffect, useState } from "react";
-import { Alert, useColorScheme, View, Text, StyleSheet, ImageBackground, ScrollView, ActivityIndicator, Image, TouchableOpacity } from "react-native";
+import {
+  Alert,
+  useColorScheme,
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  ScrollView,
+  ActivityIndicator,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from "../../../src/services/ExerciseService";
 import { ExerciseTypes } from "../../../src/utils/enums";
@@ -13,7 +24,13 @@ import { useRouter } from "expo-router";
 import { useContributorContext } from "../../../src/contexts/ContributorContext";
 
 export default function VocabularyExercises() {
+  // DO NOT DELETE: FOR TESTING AND INITIALIZATION
+  useEffect(() => {
+    console.log("VOCABULARY_EXERCISES page loaded.");
+  }, []);
+
   const colorScheme = useColorScheme();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<Exercise[]>([]);
   const [progress, setProgress] = useState<UserExercise[]>([]);
@@ -23,8 +40,6 @@ export default function VocabularyExercises() {
   const [exerTopicOnFocus, setExerTopicOnFocus] = useState("");
   const { getUserUUID } = useSession();
   const { isContributor } = useContributorContext();
-
-  const router = useRouter();
 
   useEffect(() => {
     loadExercises();
@@ -62,7 +77,9 @@ export default function VocabularyExercises() {
   };
 
   const handleExerciseEvent = (exerID, exerTopic, eventType) => {
-    {/*Edit to enum later?? This is garbage*/}
+    {
+      /*Edit to enum later?? This is garbage*/
+    }
     if (eventType == "START") {
       router.push({
         pathname: `exercises/vocabulary/${exerID}`,
@@ -72,15 +89,14 @@ export default function VocabularyExercises() {
         pathname: `exercises/vocabulary/${exerID}/edit`,
       });
     }
-
-  }
+  };
 
   const changeExerFocus = (exerID, exerTopic, index) => {
-    setExerIndexOnFocus(index)
+    setExerIndexOnFocus(index);
     setExerIDOnFocus(exerID);
     setExerTopicOnFocus(exerTopic);
     setModalVisible(true);
-  }
+  };
 
   if (isLoading) {
     return (
@@ -96,75 +112,91 @@ export default function VocabularyExercises() {
           <View style={styles.contentContainer}>
             <Text style={styles.headerTitle}>Vocabulary</Text>
             <Text style={styles.headerSubtitle}>
-              Let's get to know basic everyday things in the Cebuano language! 
+              Let's get to know basic everyday things in the Cebuano language!
               What good is comprehension when you don't know what words mean?
             </Text>
           </View>
         </ImageBackground>
 
         <View style={styles.exerciseCategoryContainerLoading}>
-          <Image
-            source={LoadingAnim} 
-            style={{ width: 100, height: 100 }}
-          />
-          <Text style={styles.loadingText}>Please wait a moment while{"\n"} we prepare things around here...</Text>
+          <Image source={LoadingAnim} style={{ width: 100, height: 100 }} />
+          <Text style={styles.loadingText}>
+            Please wait a moment while{"\n"} we prepare things around here...
+          </Text>
           <ActivityIndicator size="large" color="dodgerblue" />
         </View>
       </>
-    )
+    );
   }
 
   return (
     <>
-    <ImageBackground
-      source={PHCeb4}
-      style={styles.headerTitleContainer}
-      resizeMode="cover"
-    >
-      {/* Overlay View */}
-      <View style={styles.overlay} />
+      <ImageBackground
+        source={PHCeb4}
+        style={styles.headerTitleContainer}
+        resizeMode="cover"
+      >
+        {/* Overlay View */}
+        <View style={styles.overlay} />
 
-      <View style={styles.contentContainer}>
-        <Text style={styles.headerTitle}>Vocabulary</Text>
-        <Text style={styles.headerSubtitle}>
-          Let's get to know basic everyday things in the Cebuano language! 
-          What good is comprehension when you don't know what words mean?
-        </Text>
-        { isContributor && 
-        (<TouchableOpacity onPress={() => router.push({pathname: "/exercises/vocabulary/create"})}>
-          <Text style={{color: "aqua", marginTop: 15, fontSize: 18, fontWeight: "900"}}>
-            CREATE EXERCISE
+        <View style={styles.contentContainer}>
+          <Text style={styles.headerTitle}>Vocabulary</Text>
+          <Text style={styles.headerSubtitle}>
+            Let's get to know basic everyday things in the Cebuano language!
+            What good is comprehension when you don't know what words mean?
           </Text>
-        </TouchableOpacity>
-        )}
-      </View>
-    </ImageBackground>
-
-    <ScrollView style={styles.exerciseCategoryContainer}>
-      <View style={styles.barContainer}>
-        <View style={styles.randomHorizontalBar}>
-          <Text>{" " /* Please do not ask why this is here. */ }</Text>
+          {isContributor && (
+            <TouchableOpacity
+              onPress={() =>
+                router.push({ pathname: "/exercises/vocabulary/create" })
+              }
+            >
+              <Text
+                style={{
+                  color: "aqua",
+                  marginTop: 15,
+                  fontSize: 18,
+                  fontWeight: "900",
+                }}
+              >
+                CREATE EXERCISE
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
-      </View>
+      </ImageBackground>
 
-      {results.map((result, index) => (
-        <ExerciseCard
-          key={result.id}
-          title={result.topic}
-          subtitle={result.description}
-          onPress={() => changeExerFocus(result.id, result.topic, index)}
-        />
-      ))}
-    </ScrollView>
+      <ScrollView style={styles.exerciseCategoryContainer}>
+        <View style={styles.barContainer}>
+          <View style={styles.randomHorizontalBar}>
+            <Text>{" " /* Please do not ask why this is here. */}</Text>
+          </View>
+        </View>
 
-    <ExerciseModal 
-      userIsContributor={isContributor}
-      exerciseTitle={`Vocabulary ${exerIndexOnFocus + 1} - ${exerTopicOnFocus}`} 
-      modalVisible={modalVisible} 
-      setModalVisible={setModalVisible} 
-      handleRedirect={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "START")}
-      handleRedirectEdit={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "EDIT")}
-    />
+        {results.map((result, index) => (
+          <ExerciseCard
+            key={result.id}
+            title={result.topic}
+            subtitle={result.description}
+            onPress={() => changeExerFocus(result.id, result.topic, index)}
+          />
+        ))}
+      </ScrollView>
+
+      <ExerciseModal
+        userIsContributor={isContributor}
+        exerciseTitle={`Vocabulary ${
+          exerIndexOnFocus + 1
+        } - ${exerTopicOnFocus}`}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        handleRedirect={() =>
+          handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "START")
+        }
+        handleRedirectEdit={() =>
+          handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "EDIT")
+        }
+      />
     </>
   );
 }
@@ -177,7 +209,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'dodgerblue',
+    backgroundColor: "dodgerblue",
     opacity: 0.65,
   },
   contentContainer: {
@@ -213,7 +245,7 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 18,
     fontWeight: "400",
-    color: 'gray',
+    color: "gray",
     textAlign: "center",
     marginBottom: 25,
   },

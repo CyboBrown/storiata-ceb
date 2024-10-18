@@ -138,6 +138,7 @@ export const structurizeGrammarExercise = (
   });
 
   const exercise_words: Array<{
+    id: number;
     role: string;
     ceb_word: string;
     suffix_form: string;
@@ -146,6 +147,7 @@ export const structurizeGrammarExercise = (
   }> | null = words
     ? words.map((word) => {
         return {
+          id: word.id,
           role: word.role || "error",
           ceb_word: word.word_translations?.words?.normal_form || "error",
           suffix_form: word.word_translations?.words?.suffix_form || "error",
