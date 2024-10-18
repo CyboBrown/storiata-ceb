@@ -59,7 +59,7 @@ export default function Exercises() {
         <ExerciseTypeCard 
           imageUrl={PHCeb1} 
           title="Listening Exercises" 
-          subtitle="To be natural at something, you have to simply observe and listen. The same way as learning Cebuano!"
+          subtitle="To be natural at something, sometimes, you have to simply observe and listen."
           onTextPress={() => router.push({
             pathname: "/exercises/listening",
           })}
