@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert, useColorScheme, View, Text, StyleSheet, ImageBackground, ScrollView, ActivityIndicator, Image, TouchableOpacity } from "react-native";
 import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from "../../../src/services/ExerciseService";
@@ -9,7 +9,7 @@ import LoadingAnim from "../../../src/assets/walking.gif";
 import PHCeb4 from "../../../src/assets/ph_cebu_4.png";
 import ExerciseCard from "../../../src/components/ExerciseCard";
 import ExerciseModal from "../../../src/components/ExerciseModal";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { useContributorContext } from "../../../src/contexts/ContributorContext";
 
 export default function VocabularyExercises() {
@@ -26,9 +26,11 @@ export default function VocabularyExercises() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    loadExercises();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadExercises();
+    }, [])
+  );
 
   const loadExercises = async () => {
     try {
@@ -39,6 +41,8 @@ export default function VocabularyExercises() {
       if (progress) {
         setProgress(progress);
       }
+      console.log(getUserUUID());
+      console.log(progress);
       let data = await ExerciseService.getAllExercisesByType(
         ExerciseTypes.Vocabulary
       );
@@ -61,7 +65,18 @@ export default function VocabularyExercises() {
     return !!level && level >= 6;
   };
 
-  const handleExerciseEvent = (exerID, exerTopic, eventType) => {
+  const getLevel = (exerID: number) => {
+    const level = progress.find((exercise) => {
+      return exercise.exercise_id == exerID;
+    })?.level;
+    
+    if (!level) return 0;
+    return level;
+  }
+
+  const handleExerciseEvent = async (exerID, exerTopic, eventType) => {
+    ExerciseService.hasUserAccessedExercise(exerID, getUserUUID() ?? "");
+
     {/*Edit to enum later?? This is garbage*/}
     if (eventType == "START") {
       router.push({
@@ -72,7 +87,7 @@ export default function VocabularyExercises() {
         pathname: `exercises/vocabulary/${exerID}/edit`,
       });
     }
-
+    setModalVisible(false);
   }
 
   const changeExerFocus = (exerID, exerTopic, index) => {
@@ -152,6 +167,7 @@ export default function VocabularyExercises() {
           key={result.id}
           title={result.topic}
           subtitle={result.description}
+          progress={getLevel(result.id)}
           onPress={() => changeExerFocus(result.id, result.topic, index)}
         />
       ))}
