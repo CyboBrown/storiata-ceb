@@ -1,10 +1,8 @@
 import { Session } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert, View, Text, Image, ImageBackground, useColorScheme, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
 import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from "../../../src/services/ExerciseService";
-import { RefreshCw } from "@tamagui/lucide-icons";
-import { ExercisePopover } from "../../../src/components/ExercisePopover";
 import { ExerciseTypes } from "../../../src/utils/enums";
 import { UserExercise } from "../../../src/models/UserExercise";
 import { useSession } from "../../../src/contexts/AuthContext";
@@ -12,7 +10,8 @@ import ExerciseCard from "../../../src/components/ExerciseCard";
 import ExerciseModal from "../../../src/components/ExerciseModal";
 import LoadingAnim from "../../../src/assets/walking.gif";
 import PHCeb3 from "../../../src/assets/ph_cebu_3.png";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useContributorContext } from "../../../src/contexts/ContributorContext";
 
 export default function GrammarExercises({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
@@ -31,10 +30,13 @@ export default function GrammarExercises({ session }: { session: Session }) {
   const [exerIDOnFocus, setExerIDOnFocus] = useState();
   const [exerTopicOnFocus, setExerTopicOnFocus] = useState("");
   const { getUserUUID } = useSession();
+  const { isContributor } = useContributorContext();
 
-  useEffect(() => {
-    loadExercises();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadExercises();
+    }, [])
+  );
 
   const loadExercises = async () => {
     try {
@@ -67,14 +69,33 @@ export default function GrammarExercises({ session }: { session: Session }) {
     return !!level && level >= 6;
   };
 
-  const handleExerciseEvent = (exerID, exerTopic) => {
-    router.push({
-      pathname: `exercises/grammar/${exerID}`,
-    });
+  const getLevel = (exerID: number) => {
+    const level = progress.find((exercise) => {
+      return exercise.exercise_id == exerID;
+    })?.level;
+    
+    if (!level) return 0;
+    return level;
+  }
+
+  const handleExerciseEvent = async (exerID, exerTopic, eventType) => {
+    ExerciseService.hasUserAccessedExercise(exerID, getUserUUID() ?? "");
+
+    {/*Edit to enum later?? This is garbage*/}
+    if (eventType == "START") {
+      router.push({
+        pathname: `exercises/grammar/${exerID}`,
+      });
+    } else if (eventType == "EDIT") {
+      router.push({
+        pathname: `exercises/grammar/${exerID}/edit`,
+      });
+    }
+    setModalVisible(false);
   }
 
   const changeExerFocus = (exerID, exerTopic, index) => {
-    setExerIndexOnFocus(index);
+    setExerIndexOnFocus(index)
     setExerIDOnFocus(exerID);
     setExerTopicOnFocus(exerTopic);
     setModalVisible(true);
@@ -141,16 +162,20 @@ export default function GrammarExercises({ session }: { session: Session }) {
           key={result.id}
           title={result.topic}
           subtitle={result.description}
+          progress={getLevel(result.id)}
           onPress={() => changeExerFocus(result.id, result.topic, index)}
         />
       ))}
     </ScrollView>
 
     <ExerciseModal 
+      userIsContributor={isContributor}
       exerciseTitle={`Grammar ${exerIndexOnFocus + 1} - ${exerTopicOnFocus}`} 
       modalVisible={modalVisible} 
       setModalVisible={setModalVisible} 
-      handleRedirect={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus)}/>
+      handleRedirect={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "START")}
+      handleRedirectEdit={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "EDIT")}
+    />
     </>
   );
 }

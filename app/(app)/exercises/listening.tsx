@@ -1,12 +1,12 @@
 import { Session } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Alert, View, Text, Image, StyleSheet, ImageBackground, ScrollView, useColorScheme } from "react-native";
 import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from "../../../src/services/ExerciseService";
 import { ExerciseTypes } from "../../../src/utils/enums";
 import { UserExercise } from "../../../src/models/UserExercise";
 import { useSession } from "../../../src/contexts/AuthContext";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import LoadingAnim from "../../../src/assets/walking.gif";
 import PHCeb1 from "../../../src/assets/ph_cebu_1.png";
 import ExerciseCard from "../../../src/components/ExerciseCard";
@@ -31,9 +31,11 @@ export default function ListeningExercises({ session }: { session: Session }) {
 
   const router = useRouter();
 
-  useEffect(() => {
-    loadExercises();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadExercises();
+    }, [])
+  );
 
   const loadExercises = async () => {
     try {
@@ -66,10 +68,29 @@ export default function ListeningExercises({ session }: { session: Session }) {
     return !!level && level >= 6;
   };
 
-  const handleExerciseEvent = (exerID, exerTopic) => {
-    router.push({
-      pathname: `exercises/listening/${exerID}`,
-    });
+  const getLevel = (exerID: number) => {
+    const level = progress.find((exercise) => {
+      return exercise.exercise_id == exerID;
+    })?.level;
+    
+    if (!level) return 0;
+    return level;
+  }
+
+  const handleExerciseEvent = async (exerID, exerTopic, eventType) => {
+    ExerciseService.hasUserAccessedExercise(exerID, getUserUUID() ?? "");
+
+    {/*Edit to enum later?? This is garbage*/}
+    if (eventType == "START") {
+      router.push({
+        pathname: `exercises/listening/${exerID}`,
+      });
+    } else if (eventType == "EDIT") {
+      router.push({
+        pathname: `exercises/listening/${exerID}/edit`,
+      });
+    }
+    setModalVisible(false);
   }
 
   const changeExerFocus = (exerID, exerTopic, index) => {
@@ -142,16 +163,20 @@ export default function ListeningExercises({ session }: { session: Session }) {
           key={result.id}
           title={result.topic}
           subtitle={result.description}
+          progress={getLevel(result.id)}
           onPress={() => changeExerFocus(result.id, result.topic, index)}
         />
       ))}
     </ScrollView>
 
     <ExerciseModal 
+      userIsContributor={isContributor}
       exerciseTitle={`Listening ${exerIndexOnFocus + 1} - ${exerTopicOnFocus}`} 
       modalVisible={modalVisible} 
       setModalVisible={setModalVisible} 
-      handleRedirect={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus)}/>
+      handleRedirect={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "START")}
+      handleRedirectEdit={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "EDIT")}
+    />
     </>
   );
 }

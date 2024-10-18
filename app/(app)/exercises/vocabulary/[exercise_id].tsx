@@ -78,7 +78,7 @@ export default function VocabularyExercises({
 
   return (
     <TamaguiProvider>
-      <Theme name={colorScheme === "dark" ? "dark" : "light"}>
+      <Theme name={colorScheme === "dark" ? "light" : "light"}>
         <YStack f={1} jc="center" ai="stretch" backgroundColor={"$background"}>
           {loading && exercise ? (
             <YStack jc="flex-start" ai="center" padding="$5">

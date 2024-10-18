@@ -3,9 +3,12 @@ import { Modal, View, Text, Image, Pressable, StyleSheet, TouchableOpacity } fro
 import ExerStartAnim from "../assets/exercise_start.gif";
 
 interface ComponentProps {
+  userIsContributor: boolean;
+  exerciseTitle: string;
   modalVisible: boolean;
   setModalVisible: any;
   handleRedirect: any;
+  handleRedirectEdit: any;
 }
 
 export default function ExerciseModal({ userIsContributor, exerciseTitle, modalVisible, setModalVisible, handleRedirect, handleRedirectEdit }: ComponentProps) {

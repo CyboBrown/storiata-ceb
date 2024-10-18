@@ -1,258 +1,134 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
-import { useNavigation } from '@react-navigation/native';
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
-import { useSession } from "../../../src/contexts/AuthContext";
-import NavAvatarIcon from "../../../src/components/NavAvatarIcon";
-import { AccountService } from "../../../src/services/AccountService";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import WordStatIcon from "../../../src/assets/contr_stat_word_icon.png";
 import ExerStatIcon from "../../../src/assets/contr_stat_exercises_icon.png";
 import FavStatIcon from "../../../src/assets/contr_stat_favs_icon.png";
+import StatCard from "../../../src/components/StatCard";
+import ExerciseCard from "../../../src/components/ExerciseCard";
 
 export default function ContributorDashboard() {
-  const { session, getUserUUID } = useSession();
-  const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState("USER#0000");
-  const userUUID = getUserUUID();
-
-  const navigation = useNavigation();
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: 'Home',  // Custom header title
-      headerStyle: { backgroundColor: 'dodgerblue' },
-      headerTintColor: 'white',
-      headerTitleStyle: { fontWeight: 'bold' },
-    });
-  }, [navigation]);
-
-  useEffect(() => {
-    if (session) getUsername();
-  }, [session]);
-
-  async function getUsername() {
-    try {
-      setLoading(true);
-
-      let data = await AccountService.getProfile(getUserUUID());
-      if (data?.username) {
-        setUsername(data.username);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
-    <>
-    <View style={styles.container}>
-      <View style={styles.leftColumn}>
-        <NavAvatarIcon userID={userUUID} size={90} />
+    <ScrollView>
+      <View style={{marginTop: "2.5%", marginBottom: "1.5%", paddingLeft: "4.5%", paddingRight: "4.5%"}}>
+        <Text style={{fontSize: 21, fontWeight: "800", color: "gray"}}>Statistics</Text>
       </View>
-      <View style={styles.rightColumn}>
-        <View style={styles.textContainer}>
-          <Text style={styles.headerText}>{username}</Text>
-          <Text style={styles.text}>CONTRIBUTOR</Text>
+      <View style={styles.statisticsContainer}>
+        <View style={styles.leftColumn}>
+          <StatCard image={WordStatIcon} title="Words Contributed" value="0"/>
+          <StatCard image={ExerStatIcon} title="Exercises Contributed" value="99"/>
+        </View>
+        <View style={styles.rightColumn}>
+          <StatCard image={FavStatIcon} title="Future Stats" value="99"/>
+          <StatCard image={FavStatIcon} title="Future Stats" value="99"/>
         </View>
       </View>
-    </View>
 
-    <View style={styles.statsContainer}>
-      <View style={styles.statColumn}>
-        <View style={styles.statCountContainer}><Text style={styles.statCount}>18</Text></View>
-        <View style={styles.statLabelContainer}>
-          <Image source={WordStatIcon} style={styles.flagIcon} />
-          <Text style={styles.statLabel}>WORDS CONTRIBUTED</Text>
-        </View>
+      <View style={{marginTop: "2.5%", paddingLeft: "4.5%", paddingRight: "4.5%"}}>
+        <Text style={{fontSize: 21, fontWeight: "800", color: "gray"}}>Recently Contributed Words</Text>
       </View>
-      <View style={styles.statColumn}>
-        <View style={styles.statCountContainer}><Text style={styles.statCount}>4</Text></View>
-        <View style={styles.statLabelContainer}>
-          <Image source={ExerStatIcon} style={styles.flagIcon} />
-          <Text style={styles.statLabel}>EXERCISES CONTRIBUTED</Text>
-        </View>
+      <View style={styles.scrollContainerWrapper}>
+        <ScrollView 
+          horizontal={true} 
+          showsHorizontalScrollIndicator={false} 
+          contentContainerStyle={styles.recentWordsScrollContainer}
+        >
+          <View style={styles.wordItem}>
+            <Text style={{fontSize: 64, marginBottom: 20}}>🧨</Text>
+            <Text style={{fontSize: 24, color: "gray", fontWeight: "900"}}>Pabuto</Text>
+          </View>
+          <View style={styles.wordItem}>
+            <Text style={{fontSize: 64, marginBottom: 20}}>🧨</Text>
+            <Text style={{fontSize: 24, color: "gray", fontWeight: "900"}}>Pabuto</Text>
+          </View>
+          <View style={styles.wordItem}>
+            <Text style={{fontSize: 64, marginBottom: 20}}>🧨</Text>
+            <Text style={{fontSize: 24, color: "gray", fontWeight: "900"}}>Pabuto</Text>
+          </View>
+          <View style={styles.wordItem}>
+            <Text style={{fontSize: 64, marginBottom: 20}}>🧨</Text>
+            <Text style={{fontSize: 24, color: "gray", fontWeight: "900"}}>Pabuto</Text>
+          </View>
+          <View style={styles.wordItem}>
+            <Text style={{fontSize: 64, marginBottom: 20}}>🧨</Text>
+            <Text style={{fontSize: 24, color: "gray", fontWeight: "900"}}>Pabuto</Text>
+          </View>
+        </ScrollView>
       </View>
-      <View style={styles.statColumn}>
-        <View style={styles.statCountContainer}><Text style={styles.statCount}>0</Text></View>
-        <View style={styles.statLabelContainer}>
-          <Image source={FavStatIcon} style={styles.flagIcon} />
-          <Text style={styles.statLabel}>LEARNER FAVOURITES</Text>
-        </View>
-      </View>
-    </View>
 
-    <View style={styles.recentWordsHeader}>
-      <Text style={styles.recentWordsHeaderText}>
-        RECENT CONTRIBUTED WORDS
-      </Text>
-    </View>
-
-    <View style={styles.scrollContainerWrapper}>
-      <ScrollView 
-        horizontal={true} 
-        showsHorizontalScrollIndicator={false} 
-        contentContainerStyle={styles.recentWordsScrollContainer}
-      >
-        <View style={styles.item}>
-          <Text style={styles.ctext}>Item 1</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.ctext}>Item 2</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.ctext}>Item 3</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.ctext}>Item 4</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.ctext}>Item 5</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.ctext}>Item 6</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.ctext}>Item 7</Text>
-        </View>
+      <View style={{marginTop: "2.5%", marginBottom: "1.5%", paddingLeft: "4.5%", paddingRight: "4.5%"}}>
+        <Text style={{fontSize: 21, fontWeight: "800", color: "gray"}}>Recently Contributed Exercises</Text>
+      </View>
+      <ScrollView style={styles.recentExercisesContainer}>
+        <ExerciseCard
+          title="SAMPLE EXERCISE"
+          subtitle="I don't know, I just got here."
+          progress={5}
+        />
+        <ExerciseCard
+          title="SAMPLE EXERCISE"
+          subtitle="I don't know, I just got here."
+          progress={4}
+        />
+        <ExerciseCard
+          title="SAMPLE EXERCISE"
+          subtitle="I don't know, I just got here."
+          progress={3}
+        />
+        <ExerciseCard
+          title="SAMPLE EXERCISE"
+          subtitle="I don't know, I just got here."
+          progress={2}
+        />
+        <ExerciseCard
+          title="SAMPLE EXERCISE"
+          subtitle="I don't know, I just got here."
+          progress={1}
+        />
       </ScrollView>
-    </View>
-
-    <View style={styles.recentWordsHeader}>
-      <Text style={styles.recentWordsHeaderText}>
-        RECENT CONTRIBUTED EXERCISES
-      </Text>
-    </View>
-    </>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  headerProfileTab: {
+    padding: "4.5%",
     flexDirection: "row",
-    width: "95%",
-    height: 100,
-    alignSelf: "center",
-    marginTop: 15,
-    marginBottom: 15,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 10,
+    alignItems: "center",
+    backgroundColor: "dodgerblue",
+    borderBottomLeftRadius: 35,
+    borderBottomRightRadius: 35,
+  },
+  statisticsContainer: {
+    flexDirection: "row",
+    paddingLeft: "3%",
+    paddingRight: "3%",
   },
   leftColumn: {
-    flex: 0.3,
-    marginRight: 10,
-    justifyContent: "center",
+    flex: 0.5,
   },
   rightColumn: {
-    flex: 0.7,
-  },
-  textContainer: {
-    justifyContent: "center",
-  },
-  headerText: {
-    marginTop: 20,
-    color: "black",
-    fontWeight: "bold",
-    fontSize: 24,
-    lineHeight: 24,
-  },
-  text: {
-    color: "gray",
-    fontWeight: "bold",
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    width: "95%",
-    alignSelf: "center",
-    justifyContent: 'space-between',
-    backgroundColor: 'dodgerblue',
-    marginBottom: 15,
-    borderRadius: 25,
-    padding: 5,
-    paddingBottom: 25,
-    height: 160,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 10,
-  },
-  statColumn: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginHorizontal: 5,
-  },
-  statCountContainer: {
-    flex: 1,
-    marginVertical: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  statLabelContainer: {
-    flex: 1,
-    marginVertical: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  statCount: {
-    textAlign: "center",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 32,
-  },
-  statLabel: {
-    textAlign: "center",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 14,
-  },
-  recentWordsHeader: {
-    width: "95%",
-    marginLeft: 15,
-    marginTop: 15,
-    marginBottom: 15,
-  },
-  recentWordsHeaderText: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  flagIcon: {
-    width: 35,
-    height: 35,
+    flex: 0.5,
   },
   scrollContainerWrapper: {
     height: 215,
     alignSelf: "center", 
   },
   recentWordsScrollContainer: {
-    backgroundColor: 'white',
     alignSelf: "center",
     padding: 15,
     paddingLeft: 8,
-    justifyContent: 'center',  // Center the content vertically within the height
+    justifyContent: 'center',
   },
-  item: {
-    width: 150,  // Set a fixed width for each item to enable horizontal scroll
-    height: 200,
+  wordItem: {
+    width: 150,
+    height: 175,
     borderRadius: 15,
-    backgroundColor: 'dodgerblue',
+    elevation: 3,
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 10,  // Adds space between the items
+    marginHorizontal: 10,
   },
-  ctext: {
-    color: 'white',
-    fontSize: 18,
-  },
+  recentExercisesContainer: {
+    padding: "3.5%"
+  }
 });

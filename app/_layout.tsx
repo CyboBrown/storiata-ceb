@@ -9,7 +9,7 @@ export default function Root() {
   return (
     <SessionProvider>
       <TamaguiProvider config={config}>
-        <Theme name={colorScheme === "dark" ? "dark" : "light"}>
+        <Theme name={colorScheme === "dark" ? "light" : "light"}>
           <Slot />
         </Theme>
       </TamaguiProvider>
