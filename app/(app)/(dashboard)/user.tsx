@@ -50,22 +50,27 @@ export default function Dashboard() {
         <ExerciseCard
           title="SAMPLE EXERCISE"
           subtitle="I don't know, I just got here."
+          progress={5}
         />
         <ExerciseCard
           title="SAMPLE EXERCISE"
           subtitle="I don't know, I just got here."
+          progress={5}
         />
         <ExerciseCard
           title="SAMPLE EXERCISE"
           subtitle="I don't know, I just got here."
+          progress={3}
         />
         <ExerciseCard
           title="SAMPLE EXERCISE"
           subtitle="I don't know, I just got here."
+          progress={2}
         />
         <ExerciseCard
           title="SAMPLE EXERCISE"
           subtitle="I don't know, I just got here."
+          progress={1}
         />
       </View>
     </ScrollView>
