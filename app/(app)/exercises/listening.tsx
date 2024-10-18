@@ -1,16 +1,28 @@
 import { Session } from "@supabase/supabase-js";
 import { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, View, Text, Image, StyleSheet, ImageBackground, ScrollView, useColorScheme } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ImageBackground,
+  ScrollView,
+  useColorScheme,
+  TouchableOpacity,
+} from "react-native";
 import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from "../../../src/services/ExerciseService";
 import { ExerciseTypes } from "../../../src/utils/enums";
 import { UserExercise } from "../../../src/models/UserExercise";
 import { useSession } from "../../../src/contexts/AuthContext";
-import { useFocusEffect, useRouter } from "expo-router";
-import LoadingAnim from "../../../src/assets/walking.gif";
-import PHCeb1 from "../../../src/assets/ph_cebu_1.png";
 import ExerciseCard from "../../../src/components/ExerciseCard";
 import ExerciseModal from "../../../src/components/ExerciseModal";
+import LoadingAnim from "../../../src/assets/walking.gif";
+import PHCeb1 from "../../../src/assets/ph_cebu_1.png";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useContributorContext } from "../../../src/contexts/ContributorContext";
 
 export default function ListeningExercises({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
@@ -19,7 +31,7 @@ export default function ListeningExercises({ session }: { session: Session }) {
   }, []);
 
   const colorScheme = useColorScheme();
-
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<Exercise[]>([]);
   const [progress, setProgress] = useState<UserExercise[]>([]);
@@ -28,8 +40,7 @@ export default function ListeningExercises({ session }: { session: Session }) {
   const [exerIDOnFocus, setExerIDOnFocus] = useState();
   const [exerTopicOnFocus, setExerTopicOnFocus] = useState("");
   const { getUserUUID } = useSession();
-
-  const router = useRouter();
+  const { isContributor } = useContributorContext();
 
   useFocusEffect(
     useCallback(() => {
@@ -72,15 +83,17 @@ export default function ListeningExercises({ session }: { session: Session }) {
     const level = progress.find((exercise) => {
       return exercise.exercise_id == exerID;
     })?.level;
-    
+
     if (!level) return 0;
     return level;
-  }
+  };
 
   const handleExerciseEvent = async (exerID, exerTopic, eventType) => {
     ExerciseService.hasUserAccessedExercise(exerID, getUserUUID() ?? "");
 
-    {/*Edit to enum later?? This is garbage*/}
+    {
+      /*Edit to enum later?? This is garbage*/
+    }
     if (eventType == "START") {
       router.push({
         pathname: `exercises/listening/${exerID}`,
@@ -91,14 +104,14 @@ export default function ListeningExercises({ session }: { session: Session }) {
       });
     }
     setModalVisible(false);
-  }
+  };
 
   const changeExerFocus = (exerID, exerTopic, index) => {
-    setExerIndexOnFocus(index)
+    setExerIndexOnFocus(index);
     setExerIDOnFocus(exerID);
     setExerTopicOnFocus(exerTopic);
     setModalVisible(true);
-  }
+  };
 
   if (isLoading) {
     return (
@@ -114,69 +127,92 @@ export default function ListeningExercises({ session }: { session: Session }) {
           <View style={styles.contentContainer}>
             <Text style={styles.headerTitle}>Listening</Text>
             <Text style={styles.headerSubtitle}>
-              To be natural at something, you have to simply observe and listen. 
-              It's just the same as learning Cebuano! 
+              To be natural at something, you have to simply observe and listen.
+              It's just the same as learning Cebuano!
             </Text>
           </View>
         </ImageBackground>
 
         <View style={styles.exerciseCategoryContainerLoading}>
-          <Image
-            source={LoadingAnim} 
-            style={{ width: 100, height: 100 }}
-          />
-          <Text style={styles.loadingText}>Please wait a moment while{"\n"} we prepare things around here...</Text>
+          <Image source={LoadingAnim} style={{ width: 100, height: 100 }} />
+          <Text style={styles.loadingText}>
+            Please wait a moment while{"\n"} we prepare things around here...
+          </Text>
           <ActivityIndicator size="large" color="dodgerblue" />
         </View>
       </>
-    )
+    );
   }
 
   return (
     <>
-    <ImageBackground
-      source={PHCeb1}
-      style={styles.headerTitleContainer}
-      resizeMode="cover"
-    >
-      {/* Overlay View */}
-      <View style={styles.overlay} />
+      <ImageBackground
+        source={PHCeb1}
+        style={styles.headerTitleContainer}
+        resizeMode="cover"
+      >
+        {/* Overlay View */}
+        <View style={styles.overlay} />
 
-      <View style={styles.contentContainer}>
-        <Text style={styles.headerTitle}>Listening</Text>
-        <Text style={styles.headerSubtitle}>
-          To be natural at something, you have to simply observe and listen. 
-          It's just the same as learning Cebuano! 
-        </Text>
-      </View>
-    </ImageBackground>
-
-    <ScrollView style={styles.exerciseCategoryContainer}>
-      <View style={styles.barContainer}>
-        <View style={styles.randomHorizontalBar}>
-          <Text>{" " /* Please do not ask why this is here. */ }</Text>
+        <View style={styles.contentContainer}>
+          <Text style={styles.headerTitle}>Listening</Text>
+          <Text style={styles.headerSubtitle}>
+            To be natural at something, you have to simply observe and listen.
+            It's just the same as learning Cebuano!
+          </Text>
+          {isContributor && (
+            <TouchableOpacity
+              onPress={() =>
+                router.push({ pathname: "/exercises/listening/create" })
+              }
+            >
+              <Text
+                style={{
+                  color: "aqua",
+                  marginTop: 15,
+                  fontSize: 18,
+                  fontWeight: "900",
+                }}
+              >
+                CREATE EXERCISE
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
-      </View>
+      </ImageBackground>
 
-      {results.map((result, index) => (
-        <ExerciseCard
-          key={result.id}
-          title={result.topic}
-          subtitle={result.description}
-          progress={getLevel(result.id)}
-          onPress={() => changeExerFocus(result.id, result.topic, index)}
-        />
-      ))}
-    </ScrollView>
+      <ScrollView style={styles.exerciseCategoryContainer}>
+        <View style={styles.barContainer}>
+          <View style={styles.randomHorizontalBar}>
+            <Text>{" " /* Please do not ask why this is here. */}</Text>
+          </View>
+        </View>
 
-    <ExerciseModal 
-      userIsContributor={isContributor}
-      exerciseTitle={`Listening ${exerIndexOnFocus + 1} - ${exerTopicOnFocus}`} 
-      modalVisible={modalVisible} 
-      setModalVisible={setModalVisible} 
-      handleRedirect={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "START")}
-      handleRedirectEdit={() => handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "EDIT")}
-    />
+        {results.map((result, index) => (
+          <ExerciseCard
+            key={result.id}
+            title={result.topic}
+            subtitle={result.description}
+            progress={getLevel(result.id)}
+            onPress={() => changeExerFocus(result.id, result.topic, index)}
+          />
+        ))}
+      </ScrollView>
+
+      <ExerciseModal
+        userIsContributor={isContributor}
+        exerciseTitle={`Listening ${
+          exerIndexOnFocus + 1
+        } - ${exerTopicOnFocus}`}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        handleRedirect={() =>
+          handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "START")
+        }
+        handleRedirectEdit={() =>
+          handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "EDIT")
+        }
+      />
     </>
   );
 }
@@ -189,7 +225,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'dodgerblue',
+    backgroundColor: "dodgerblue",
     opacity: 0.65,
   },
   contentContainer: {
@@ -225,7 +261,7 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 18,
     fontWeight: "400",
-    color: 'gray',
+    color: "gray",
     textAlign: "center",
     marginBottom: 25,
   },

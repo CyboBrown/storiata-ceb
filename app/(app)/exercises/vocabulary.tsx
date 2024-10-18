@@ -41,8 +41,6 @@ export default function VocabularyExercises() {
   const { getUserUUID } = useSession();
   const { isContributor } = useContributorContext();
 
-  const router = useRouter();
-
   useFocusEffect(
     useCallback(() => {
       loadExercises();
