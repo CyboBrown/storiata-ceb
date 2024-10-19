@@ -523,10 +523,11 @@ export const GrammarExerciseUI = ({
   const [options, setOptions] = useState<Array<string>>([]);
   const [wordPairs, setWordPairs] = useState<{ [k: string]: Array<any> }>({
     name: [
-      { en: "Juan", ceb: "Juan" },
-      { en: "Maria", ceb: "Maria" },
-      { en: "Carlos", ceb: "Carlos" },
-      { en: "Anna", ceb: "Anna" },
+      { en: "Agipo", ceb: "Agipo" },
+      { en: "Itmon", ceb: "Itmon" },
+      { en: "Lisuga", ceb: "Lisuga" },
+      { en: "Maya", ceb: "Maya" },
+      { en: "Tupas", ceb: "Tupas" },
     ],
   });
   const [removeIndex, setRemoveIndex] = useState(0); // Sets the index of removed word for fill the blank questions
@@ -1095,10 +1096,11 @@ export const ListeningExerciseUI = ({
   const [options, setOptions] = useState<Array<string>>([]);
   const [wordPairs, setWordPairs] = useState<{ [k: string]: Array<any> }>({
     name: [
-      { en: "Juan", ceb: "Juan" },
-      { en: "Maria", ceb: "Maria" },
-      { en: "Carlos", ceb: "Carlos" },
-      { en: "Anna", ceb: "Anna" },
+      { en: "Agipo", ceb: "Agipo" },
+      { en: "Itmon", ceb: "Itmon" },
+      { en: "Lisuga", ceb: "Lisuga" },
+      { en: "Maya", ceb: "Maya" },
+      { en: "Tupas", ceb: "Tupas" },
     ],
   });
   const [removeIndex, setRemoveIndex] = useState(0); // Sets the index of removed word for fill the blank questions
@@ -1219,7 +1221,7 @@ export const ListeningExerciseUI = ({
 
   useEffect(() => {
     console.log("Question changed...");
-    if (exercise) playAudio();
+    if (exercise && questionDisplay != "") playAudio();
   }, [questionDisplay]);
 
   const playAudio = async () => {

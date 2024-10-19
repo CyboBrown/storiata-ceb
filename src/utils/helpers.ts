@@ -58,7 +58,11 @@ export function replacePlaceholders(
   console.log("CEB: " + sentence_ceb);
 
   return {
-    en: sentence_en,
-    ceb: sentence_ceb,
+    en: capitalizeFirst(sentence_en),
+    ceb: capitalizeFirst(sentence_ceb),
   };
+}
+
+function capitalizeFirst(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }

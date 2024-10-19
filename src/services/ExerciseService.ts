@@ -783,37 +783,4 @@ export class ExerciseService {
       return [];
     }
   };
-
-  public static getExercisesCompleted = async (user_uuid: string) => {
-    const { data: completed, error: mistakesError } = await supabase
-      .from("user_exercises")
-      .select("level")
-      .eq("user_id", user_uuid);
-
-    if (mistakesError) {
-      console.error("Error fetching exercises:", mistakesError.message);
-      return [];
-    }
-
-    const curr_count = completed.reduce(
-      (acc, record) => acc + (record.level || 0),
-      0
-    );
-
-    return curr_count;
-  };
-
-  public static getTotalMistakesCount = async (user_uuid: string) => {
-    const { count, error: mistakesError } = await supabase
-      .from("word_mistakes")
-      .select("*", { count: "exact" })
-      .eq("user_id", user_uuid);
-
-    if (mistakesError) {
-      console.error("Error fetching mistakes count:", mistakesError.message);
-      return 0;
-    }
-
-    return count || 0;
-  };
 }

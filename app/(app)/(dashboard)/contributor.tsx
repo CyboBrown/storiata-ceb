@@ -4,58 +4,122 @@ import ExerStatIcon from "../../../src/assets/contr_stat_exercises_icon.png";
 import FavStatIcon from "../../../src/assets/contr_stat_favs_icon.png";
 import StatCard from "../../../src/components/StatCard";
 import ExerciseCard from "../../../src/components/ExerciseCard";
+import { DashboardService } from "../../../src/services/DashboardService";
+import { useEffect, useState } from "react";
+import { useSession } from "../../../src/contexts/AuthContext";
 
 export default function ContributorDashboard() {
+  const [wordContrib, setWordContrib] = useState(0);
+  const [exerContrib, SetExerContrib] = useState(0);
+  const { getUserUUID } = useSession();
+
+  // DO NOT DELETE: FOR TESTING AND INITIALIZATION
+  useEffect(() => {
+    console.log("CONTRIBUTOR_DASHBOARD page loaded.");
+    loadStatistics();
+  }, []);
+
+  const loadStatistics = async () => {
+    const stat1 = await DashboardService.getTotalWordsContributed(
+      getUserUUID() ?? ""
+    );
+    setWordContrib(stat1);
+    const stat2 = await DashboardService.getTotalExercisesContributed(
+      getUserUUID() ?? ""
+    );
+    SetExerContrib(stat2);
+  };
+
   return (
     <ScrollView>
-      <View style={{marginTop: "2.5%", marginBottom: "1.5%", paddingLeft: "4.5%", paddingRight: "4.5%"}}>
-        <Text style={{fontSize: 21, fontWeight: "800", color: "gray"}}>Statistics</Text>
+      <View
+        style={{
+          marginTop: "2.5%",
+          marginBottom: "1.5%",
+          paddingLeft: "4.5%",
+          paddingRight: "4.5%",
+        }}
+      >
+        <Text style={{ fontSize: 21, fontWeight: "800", color: "gray" }}>
+          Statistics
+        </Text>
       </View>
       <View style={styles.statisticsContainer}>
         <View style={styles.leftColumn}>
-          <StatCard image={WordStatIcon} title="Words Contributed" value="0"/>
-          <StatCard image={ExerStatIcon} title="Exercises Contributed" value="99"/>
+          <StatCard
+            image={WordStatIcon}
+            title="Words Contributed"
+            value={wordContrib.toString()}
+          />
+          {/* <StatCard image={FavStatIcon} title="Future Stats" value="99" /> */}
         </View>
         <View style={styles.rightColumn}>
-          <StatCard image={FavStatIcon} title="Future Stats" value="99"/>
-          <StatCard image={FavStatIcon} title="Future Stats" value="99"/>
+          <StatCard
+            image={ExerStatIcon}
+            title="Exercises Contributed"
+            value={exerContrib.toString()}
+          />
+          {/* <StatCard image={FavStatIcon} title="Future Stats" value="99" /> */}
         </View>
       </View>
 
-      <View style={{marginTop: "2.5%", paddingLeft: "4.5%", paddingRight: "4.5%"}}>
-        <Text style={{fontSize: 21, fontWeight: "800", color: "gray"}}>Recently Contributed Words</Text>
+      <View
+        style={{ marginTop: "2.5%", paddingLeft: "4.5%", paddingRight: "4.5%" }}
+      >
+        <Text style={{ fontSize: 21, fontWeight: "800", color: "gray" }}>
+          Recently Contributed Words
+        </Text>
       </View>
       <View style={styles.scrollContainerWrapper}>
-        <ScrollView 
-          horizontal={true} 
-          showsHorizontalScrollIndicator={false} 
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.recentWordsScrollContainer}
         >
           <View style={styles.wordItem}>
-            <Text style={{fontSize: 64, marginBottom: 20}}>🧨</Text>
-            <Text style={{fontSize: 24, color: "gray", fontWeight: "900"}}>Pabuto</Text>
+            <Text style={{ fontSize: 64, marginBottom: 20 }}>🧨</Text>
+            <Text style={{ fontSize: 24, color: "gray", fontWeight: "900" }}>
+              Pabuto
+            </Text>
           </View>
           <View style={styles.wordItem}>
-            <Text style={{fontSize: 64, marginBottom: 20}}>🧨</Text>
-            <Text style={{fontSize: 24, color: "gray", fontWeight: "900"}}>Pabuto</Text>
+            <Text style={{ fontSize: 64, marginBottom: 20 }}>🧨</Text>
+            <Text style={{ fontSize: 24, color: "gray", fontWeight: "900" }}>
+              Pabuto
+            </Text>
           </View>
           <View style={styles.wordItem}>
-            <Text style={{fontSize: 64, marginBottom: 20}}>🧨</Text>
-            <Text style={{fontSize: 24, color: "gray", fontWeight: "900"}}>Pabuto</Text>
+            <Text style={{ fontSize: 64, marginBottom: 20 }}>🧨</Text>
+            <Text style={{ fontSize: 24, color: "gray", fontWeight: "900" }}>
+              Pabuto
+            </Text>
           </View>
           <View style={styles.wordItem}>
-            <Text style={{fontSize: 64, marginBottom: 20}}>🧨</Text>
-            <Text style={{fontSize: 24, color: "gray", fontWeight: "900"}}>Pabuto</Text>
+            <Text style={{ fontSize: 64, marginBottom: 20 }}>🧨</Text>
+            <Text style={{ fontSize: 24, color: "gray", fontWeight: "900" }}>
+              Pabuto
+            </Text>
           </View>
           <View style={styles.wordItem}>
-            <Text style={{fontSize: 64, marginBottom: 20}}>🧨</Text>
-            <Text style={{fontSize: 24, color: "gray", fontWeight: "900"}}>Pabuto</Text>
+            <Text style={{ fontSize: 64, marginBottom: 20 }}>🧨</Text>
+            <Text style={{ fontSize: 24, color: "gray", fontWeight: "900" }}>
+              Pabuto
+            </Text>
           </View>
         </ScrollView>
       </View>
 
-      <View style={{marginTop: "2.5%", marginBottom: "1.5%", paddingLeft: "4.5%", paddingRight: "4.5%"}}>
-        <Text style={{fontSize: 21, fontWeight: "800", color: "gray"}}>Recently Contributed Exercises</Text>
+      <View
+        style={{
+          marginTop: "2.5%",
+          marginBottom: "1.5%",
+          paddingLeft: "4.5%",
+          paddingRight: "4.5%",
+        }}
+      >
+        <Text style={{ fontSize: 21, fontWeight: "800", color: "gray" }}>
+          Recently Contributed Exercises
+        </Text>
       </View>
       <ScrollView style={styles.recentExercisesContainer}>
         <ExerciseCard
@@ -110,25 +174,25 @@ const styles = StyleSheet.create({
   },
   scrollContainerWrapper: {
     height: 215,
-    alignSelf: "center", 
+    alignSelf: "center",
   },
   recentWordsScrollContainer: {
     alignSelf: "center",
     padding: 15,
     paddingLeft: 8,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   wordItem: {
     width: 150,
     height: 175,
     borderRadius: 15,
     elevation: 3,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
     marginHorizontal: 10,
   },
   recentExercisesContainer: {
-    padding: "3.5%"
-  }
+    padding: "3.5%",
+  },
 });

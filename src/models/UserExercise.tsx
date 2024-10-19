@@ -4,4 +4,6 @@ export interface UserExercise {
   id: number;
   level: number;
   user_id: string | null;
+  topic?: string;
+  description?: string;
 }
