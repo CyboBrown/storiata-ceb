@@ -51,9 +51,9 @@ export default function Dictionary() {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: () => <CustomHeader pageTitle="Dictionary" />,  // Use Custom Header
-      headerStyle: { backgroundColor: 'dodgerblue' },
-      headerTintColor: 'white',
+      headerTitle: () => <CustomHeader pageTitle="Dictionary" />, // Use Custom Header
+      headerStyle: { backgroundColor: "dodgerblue" },
+      headerTintColor: "white",
     });
   }, [navigation]);
 
@@ -213,6 +213,11 @@ export default function Dictionary() {
               <Tabs.Tab flex={1} value="tab2">
                 <SizableText fontFamily="$body">Conjugations</SizableText>
               </Tabs.Tab>
+              {isContributor && (
+                <Tabs.Tab flex={1} value="tab3">
+                  <SizableText fontFamily="$body">Edit</SizableText>
+                </Tabs.Tab>
+              )}
             </Tabs.List>
             <Separator />
             {/* Details */}
@@ -270,63 +275,6 @@ export default function Dictionary() {
                         .slice(0, -2)
                     : null}
                 </Text>
-                {isContributor && (
-                  <XStack gap="$4">
-                    {/* <Link
-                  href={{
-                    pathname: "/add_translation/[id]",
-                    params: {
-                      id: results[selected] ? results[selected].id : "",
-                    },
-                  }}
-                >
-                  <Text
-                    fontSize="$2"
-                    color={"$color10"}
-                    fontFamily={"$body"}
-                    fontWeight={"bold"}
-                  >
-                    + Edit Translations
-                  </Text>
-                </Link> */}
-                    <EditTranslationDialog
-                      selected_word={
-                        results[selected]
-                          ? results[selected]
-                          : {
-                              added_by: null,
-                              created_at: "",
-                              description: null,
-                              id: -1,
-                              normal_form: "",
-                              part_of_speech: "",
-                              phonetic_form: "",
-                              representation: null,
-                              suffix_form: null,
-                              translations: null,
-                            }
-                      }
-                    />
-                    <EditWordDialog
-                      selected_word={
-                        results[selected]
-                          ? results[selected]
-                          : {
-                              added_by: null,
-                              created_at: "",
-                              description: null,
-                              id: -1,
-                              normal_form: "",
-                              part_of_speech: "",
-                              phonetic_form: "",
-                              representation: null,
-                              suffix_form: null,
-                              translations: null,
-                            }
-                      }
-                    />
-                  </XStack>
-                )}
               </YStack>
             </Tabs.Content>
             {/* Conjugations */}
@@ -342,6 +290,58 @@ export default function Dictionary() {
             >
               <ConjugationTable word={results[selected]}></ConjugationTable>
             </Tabs.Content>
+            {/* Edit */}
+            {isContributor && (
+              <Tabs.Content
+                value="tab3"
+                backgroundColor="$background"
+                key="tab3"
+                padding="$2"
+                alignItems="stretch"
+                justifyContent="flex-start"
+                flex={1}
+                p="$2"
+              >
+                <YStack ai="stretch" gap="$2">
+                  <EditTranslationDialog
+                    selected_word={
+                      results[selected]
+                        ? results[selected]
+                        : {
+                            added_by: null,
+                            created_at: "",
+                            description: null,
+                            id: -1,
+                            normal_form: "",
+                            part_of_speech: "",
+                            phonetic_form: "",
+                            representation: null,
+                            suffix_form: null,
+                            translations: null,
+                          }
+                    }
+                  />
+                  <EditWordDialog
+                    selected_word={
+                      results[selected]
+                        ? results[selected]
+                        : {
+                            added_by: null,
+                            created_at: "",
+                            description: null,
+                            id: -1,
+                            normal_form: "",
+                            part_of_speech: "",
+                            phonetic_form: "",
+                            representation: null,
+                            suffix_form: null,
+                            translations: null,
+                          }
+                    }
+                  />
+                </YStack>
+              </Tabs.Content>
+            )}
           </Tabs>
         </Sheet.Frame>
       </Sheet>

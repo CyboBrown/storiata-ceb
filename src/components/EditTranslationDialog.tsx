@@ -96,7 +96,8 @@ export default function EditTranslationDialog({
   return (
     <Dialog>
       <Dialog.Trigger asChild>
-        <Pressable onPress={() => setClicked(!clicked)}>
+        <Button onPress={() => setClicked(!clicked)}>Edit Translation</Button>
+        {/* <Pressable onPress={() => setClicked(!clicked)}>
           <Text
             fontSize="$2"
             color={"$color10"}
@@ -105,7 +106,7 @@ export default function EditTranslationDialog({
           >
             + Edit Translation
           </Text>
-        </Pressable>
+        </Pressable> */}
       </Dialog.Trigger>
       <Adapt when="sm" platform="touch">
         <Sheet animation="medium" zIndex={200000} modal dismissOnSnapToBottom>

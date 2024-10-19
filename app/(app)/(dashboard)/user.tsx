@@ -168,14 +168,16 @@ export default function Dashboard() {
           </Text>
         </View>
         <View style={{ padding: "3.5%" }}>
-          {ongoingExercises ? (
+          {ongoingExercises &&
             ongoingExercises.map((exer, index) => (
               <ExerciseCard
                 key={index}
                 title={exer.topic ?? ""}
                 subtitle={exer.description ?? ""}
                 progress={exer.level}
-                onPress={() => changeExerFocus(exer.exercise_id, exer.topic, index)}
+                onPress={() =>
+                  changeExerFocus(exer.exercise_id, exer.topic, index)
+                }
               />
             ))}
         </View>
@@ -187,9 +189,7 @@ export default function Dashboard() {
         } - ${exerTopicOnFocus}`}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        handleRedirect={() =>
-          handleExerciseEvent(exerIDOnFocus)
-        }
+        handleRedirect={() => handleExerciseEvent(exerIDOnFocus)}
       />
     </>
   );

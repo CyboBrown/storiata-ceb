@@ -4,7 +4,7 @@
     "description": "A language learning app dedicated to learning and practicing Cebuano.",
     "slug": "storiata-ceb",
     "scheme": "storiata",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "userInterfaceStyle": "automatic",
