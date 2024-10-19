@@ -10,6 +10,7 @@ interface ComponentProps {
   progress: number;
   onPress: any;
   hideProgress?: boolean;
+  isAdd?: boolean;
 }
 
 export default function ExerciseCard({
@@ -18,13 +19,14 @@ export default function ExerciseCard({
   progress,
   onPress,
   hideProgress,
+  isAdd,
 }: ComponentProps) {
   return (
     <>
       <TouchableOpacity onPress={onPress} style={styles.cardContainer}>
         <View style={styles.detailsContainer}>
           <View style={styles.iconContainer}>
-            <Icon name="book" size={50} color="gray" />
+            <Icon name={isAdd ? "plus" : "book"} size={50} color="gray" />
           </View>
 
           <View style={styles.rightContainer}>

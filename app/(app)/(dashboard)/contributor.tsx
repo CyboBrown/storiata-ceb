@@ -181,7 +181,7 @@ export default function ContributorDashboard() {
         </Text>
       </View>
       <ScrollView style={styles.recentExercisesContainer}>
-        {contribExercises ? (
+        {contribExercises &&
           contribExercises.map((exer, index) => (
             <ExerciseCard
               key={exer.id}
@@ -200,14 +200,31 @@ export default function ContributorDashboard() {
               }}
               hideProgress
             />
-          ))
-        ) : (
-          <ExerciseCard
-            title="Add New Exercises"
-            subtitle="Start adding exercies now!"
-            progress={0}
-          />
-        )}
+          ))}
+        <ExerciseCard
+          title="Add New Vocabulary Exercise"
+          subtitle="Add words from the same category"
+          progress={0}
+          onPress={() => {
+            router.push({
+              pathname: `exercises/vocabulary/create`,
+            });
+          }}
+          hideProgress
+          isAdd
+        />
+        <ExerciseCard
+          title="Add New Grammar Exercise"
+          subtitle="Auto-generate sentences by adding placeholders in sentences"
+          progress={0}
+          onPress={() => {
+            router.push({
+              pathname: `exercises/grammar/create`,
+            });
+          }}
+          hideProgress
+          isAdd
+        />
       </ScrollView>
     </ScrollView>
   );
