@@ -2,9 +2,9 @@ import "react-native-url-polyfill/auto";
 import { useContributorContext } from "../../../src/contexts/ContributorContext";
 import Dashboard from "../(dashboard)/user";
 import ContributorDashboard from "../(dashboard)/contributor";
-import { useNavigation, useRouter } from "expo-router";
+import { useFocusEffect, useNavigation, useRouter } from "expo-router";
 import CustomHeader from "../../../src/components/HeaderTitle";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useSession } from "../../../src/contexts/AuthContext";
 import { AccountService } from "../../../src/services/AccountService";
 import { View, Text, StyleSheet } from "react-native";
@@ -30,9 +30,11 @@ export default function Homepage() {
     });
   }, [navigation]);
 
-  useEffect(() => {
-    if (session) { getSessionUserInfo(); }
-  }, [session]);
+  useFocusEffect(
+    useCallback(() => {
+      getSessionUserInfo();
+    }, [])
+  );
 
   async function getSessionUserInfo() {
     try {

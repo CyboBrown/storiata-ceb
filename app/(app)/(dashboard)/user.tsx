@@ -3,8 +3,10 @@ import {
   ScrollView,
   Text,
   View,
+  Image,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { Exercise } from "../../../src/models/Exercise";
 import { ExerciseService } from "../../../src/services/ExerciseService";
@@ -19,8 +21,10 @@ import { UserExercise } from "../../../src/models/UserExercise";
 import ExerciseModal from "../../../src/components/ExerciseModal";
 import { useContributorContext } from "../../../src/contexts/ContributorContext";
 import { router, useFocusEffect } from "expo-router";
+import LoadingAnim from "../../../src/assets/walking.gif";
 
 export default function Dashboard() {
+  const [isLoading, setIsLoading] = useState(false);
   const [exerCompleted, setExerCompleted] = useState(0);
   const [wordsMistaken, setWordsMistaken] = useState(0);
   const [ongoingExercises, setOngoingExercises] = useState<UserExercise[]>();
@@ -28,6 +32,7 @@ export default function Dashboard() {
   const [exerIndexOnFocus, setExerIndexOnFocus] = useState();
   const [exerIDOnFocus, setExerIDOnFocus] = useState();
   const [exerTopicOnFocus, setExerTopicOnFocus] = useState("");
+  const [exerOnFocus, setExerOnFocus] = useState<Exercise>();
   const { getUserUUID } = useSession();
   const { isContributor } = useContributorContext();
 
@@ -43,39 +48,52 @@ export default function Dashboard() {
   );
 
   const loadStatistics = async () => {
-    const stat1 = await DashboardService.getTotalMistakenWords(
-      getUserUUID() ?? ""
-    );
-    setWordsMistaken(stat1);
-    const stat2 = await DashboardService.getTotalExercisesCompleted(
-      getUserUUID() ?? ""
-    );
-    setExerCompleted(stat2);
-    const exers = await DashboardService.getOngoingExercises(
-      getUserUUID() ?? "",
-      5
-    );
-    console.log(exers);
-    exers && setOngoingExercises(exers);
+    try {
+      setIsLoading(true);
+      const stat1 = await DashboardService.getTotalMistakenWords(
+        getUserUUID() ?? ""
+      );
+      setWordsMistaken(stat1);
+      const stat2 = await DashboardService.getTotalExercisesCompleted(
+        getUserUUID() ?? ""
+      );
+      setExerCompleted(stat2);
+      const exers = await DashboardService.getOngoingExercises(
+        getUserUUID() ?? "",
+        5
+      );
+      console.log(exers);
+      exers && setOngoingExercises(exers);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleExerciseEvent = async (exerID, exerTopic, eventType) => {
+  // fuck me mate, where in Hoshino's fucking dream did you pull this horror from
+  const handleExerciseEvent = async (exerID) => {
+    let exerType = "UNKNOWN";
+    const exerDetails = await ExerciseService.getExerciseDetails(exerID);
     ExerciseService.hasUserAccessedExercise(exerID, getUserUUID() ?? "");
-    {
-      /*Edit to enum later?? This is garbage*/
+
+    switch (exerDetails?.type) {
+      case 1:
+        exerType = "vocabulary";
+        break;
+      case 2:
+        exerType = "grammar";
+        break;
+      case 3:
+        exerType = "listening";
+        break;
+      default:
+        console.log("oh nyo");
+        break;
     }
-    console.log(typeof exerID + exerID);
-    if (eventType == "START") {
-      router.push({
-        // pathname: `exercises/vocabulary/${exerID}`,
-        pathname: `exercises/vocabulary/`,
-      });
-    } else if (eventType == "EDIT") {
-      router.push({
-        // pathname: `exercises/vocabulary/${exerID}/edit`,
-        pathname: `exercises/vocabulary/`,
-      });
-    }
+
+    setModalVisible(false);
+    router.navigate({
+      pathname: `exercises/${exerType}/${exerID}`,
+    });
   };
 
   const changeExerFocus = (exerID, exerTopic, index) => {
@@ -84,6 +102,18 @@ export default function Dashboard() {
     setExerTopicOnFocus(exerTopic);
     setModalVisible(true);
   };
+
+  if (isLoading) {
+    return (
+      <View style={styles.exerciseCategoryContainerLoading}>
+        <Image source={LoadingAnim} style={{ width: 100, height: 100 }} />
+        <Text style={styles.loadingText}>
+          Please wait a moment while{"\n"} we prepare things around here...
+        </Text>
+        <ActivityIndicator size="large" color="dodgerblue" />
+      </View>
+    );
+  }
 
   return (
     <>
@@ -141,34 +171,24 @@ export default function Dashboard() {
           {ongoingExercises ? (
             ongoingExercises.map((exer, index) => (
               <ExerciseCard
-                key={exer.id}
+                key={index}
                 title={exer.topic ?? ""}
                 subtitle={exer.description ?? ""}
                 progress={exer.level}
-                onPress={() => changeExerFocus(exer.id, exer.topic, index)}
+                onPress={() => changeExerFocus(exer.exercise_id, exer.topic, index)}
               />
-            ))
-          ) : (
-            <ExerciseCard
-              title="Start Doing Exercises"
-              // subtitle="I don't know, I just got here."
-              progress={0}
-            />
-          )}
+            ))}
         </View>
       </ScrollView>
       <ExerciseModal
         userIsContributor={isContributor}
-        exerciseTitle={`Vocabulary ${
+        exerciseTitle={`Ongoing Exercise ${
           exerIndexOnFocus + 1
         } - ${exerTopicOnFocus}`}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         handleRedirect={() =>
-          handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "START")
-        }
-        handleRedirectEdit={() =>
-          handleExerciseEvent(exerIDOnFocus, exerTopicOnFocus, "EDIT")
+          handleExerciseEvent(exerIDOnFocus)
         }
       />
     </>
@@ -198,5 +218,17 @@ const styles = StyleSheet.create({
     marginTop: "3%",
     marginBottom: "3%",
     borderRadius: 30,
+  },
+  exerciseCategoryContainerLoading: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loadingText: {
+    fontSize: 18,
+    fontWeight: "400",
+    color: "gray",
+    textAlign: "center",
+    marginBottom: 25,
   },
 });
