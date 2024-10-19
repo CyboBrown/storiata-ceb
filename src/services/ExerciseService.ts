@@ -1,5 +1,6 @@
 import { Exercise } from "../models/Exercise";
 import { GrammarExercise } from "../models/GrammarExercise";
+import { ListeningExercise } from "../models/ListeningExercise";
 import { VocabularyExercise } from "../models/VocabularyExercise";
 import {
   structurizeGrammarExercise,
@@ -277,8 +278,8 @@ export class ExerciseService {
         .from("exercise_words")
         .insert(wordpairs)
         .select();
-      if (error1) {
-        console.log(error1);
+      if (error2) {
+        console.log(error2);
       }
     }
   };
@@ -311,8 +312,8 @@ export class ExerciseService {
         .from("exercise_words")
         .insert(wordpairs)
         .select();
-      if (error1) {
-        console.log(error1);
+      if (error2) {
+        console.log(error2);
       }
     }
     const sentencepairs = exercise.item_sets?.map((item) => {
@@ -342,6 +343,81 @@ export class ExerciseService {
           .from("exercise_sentences")
           .insert(sentenceids)
           .select();
+        if (error4) {
+          console.log(error4);
+        }
+        console.log("Data4: ");
+        console.log(data4);
+      }
+      console.log("Data3: ");
+      console.log(data3);
+    }
+  };
+
+  public static createListeningExercise = async (
+    exercise: ListeningExercise
+  ) => {
+    console.log("CREATED_LISTENING_EXERCISE");
+    const { data: data1, error: error1 } = await supabase
+      .from("exercises")
+      .insert([
+        {
+          topic: exercise.topic,
+          type: 3,
+          description: exercise.description,
+          added_by: exercise.added_by,
+        },
+      ])
+      .select();
+    if (error1) {
+      console.log(error1);
+    }
+    const wordpairs = exercise.exercise_words?.map((item) => {
+      return {
+        exercise_id: data1?.at(0)?.id ?? Number.MAX_SAFE_INTEGER,
+        word_id: item.id ?? Number.MAX_SAFE_INTEGER,
+        role: item.role ?? "",
+      };
+    });
+    if (wordpairs) {
+      const { data: data2, error: error2 } = await supabase
+        .from("exercise_words")
+        .insert(wordpairs)
+        .select();
+      if (error2) {
+        console.log(error2);
+      }
+    }
+    const sentencepairs = exercise.item_sets?.map((item) => {
+      return {
+        sentence: item.sentence,
+        translated_sentence: item.translated_sentence,
+      };
+    });
+    console.log("Sentences: ");
+    console.log(sentencepairs);
+    if (sentencepairs) {
+      const { data: data3, error: error3 } = await supabase
+        .from("sentence_pairs")
+        .insert(sentencepairs)
+        .select();
+      if (error3) {
+        console.log(error3);
+      } else {
+        const sentenceids =
+          data3?.map((item) => {
+            return {
+              exercise_id: data1?.at(0)?.id ?? Number.MAX_SAFE_INTEGER,
+              sentence_id: item.id,
+            };
+          }) ?? [];
+        const { data: data4, error: error4 } = await supabase
+          .from("exercise_sentences")
+          .insert(sentenceids)
+          .select();
+        if (error4) {
+          console.log(error4);
+        }
         console.log("Data4: ");
         console.log(data4);
       }
@@ -390,7 +466,7 @@ export class ExerciseService {
         .insert(wordpairs)
         .select();
       if (error2) {
-        console.log(error1);
+        console.log(error2);
       }
     }
     // Delete removed words
@@ -408,15 +484,221 @@ export class ExerciseService {
         .in("word_id", deletedids)
         .select();
       if (error3) {
-        console.log(error1);
+        console.log(error3);
       }
     }
   };
 
-  // ***
   public static updateGrammarExercise = async (exercise: GrammarExercise) => {
     console.log("UPDATED_GRAMMAR_EXERCISE");
-    return null;
+    const { data: data1, error: error1 } = await supabase
+      .from("exercises")
+      .update({
+        topic: exercise.topic,
+        type: 2,
+        description: exercise.description,
+        added_by: exercise.added_by,
+      })
+      .eq("id", exercise.id)
+      .select();
+    if (error1) {
+      console.log(error1);
+    }
+    const current_exercise = await this.getGrammarExerciseProblems(exercise.id);
+    // Add new words
+    const wordpairs = exercise.exercise_words
+      ?.filter(
+        (item) =>
+          !current_exercise?.item_sets?.some(
+            (current_item) => current_item.id == item.id
+          )
+      )
+      .map((item) => {
+        return {
+          exercise_id: data1?.at(0)?.id ?? Number.MAX_SAFE_INTEGER,
+          word_id: item.id ?? Number.MAX_SAFE_INTEGER,
+          role: item.role ?? "",
+        };
+      });
+    if (wordpairs) {
+      const { data: data2, error: error2 } = await supabase
+        .from("exercise_words")
+        .insert(wordpairs)
+        .select();
+      if (error2) {
+        console.log(error2);
+      }
+    }
+    // Delete removed words
+    const deletedids = current_exercise?.item_sets
+      ?.filter(
+        (current_item) =>
+          !exercise?.item_sets?.some((item) => current_item.id == item.id)
+      )
+      .map((item) => item.id);
+    if (deletedids) {
+      const { data: data3, error: error3 } = await supabase
+        .from("exercise_words")
+        .delete()
+        .eq("exercise_id", exercise.id)
+        .in("word_id", deletedids)
+        .select();
+      if (error3) {
+        console.log(error3);
+      }
+    }
+    // Update sentence
+    const sentencepairs = exercise.item_sets
+      ?.filter(
+        (item) =>
+          !current_exercise?.item_sets?.some(
+            (current_item) => current_item.id == item.id
+          )
+      )
+      .map((item) => {
+        return {
+          sentence: item.sentence,
+          translated_sentence: item.translated_sentence,
+        };
+      });
+    console.log("Sentences: ");
+    console.log(sentencepairs);
+    if (sentencepairs) {
+      const { data: data3, error: error3 } = await supabase
+        .from("sentence_pairs")
+        .upsert(sentencepairs)
+        .select();
+      if (error3) {
+        console.log(error3);
+      } else {
+        const sentenceids =
+          data3?.map((item) => {
+            return {
+              exercise_id: data1?.at(0)?.id ?? Number.MAX_SAFE_INTEGER,
+              sentence_id: item.id,
+            };
+          }) ?? [];
+        const { data: data4, error: error4 } = await supabase
+          .from("exercise_sentences")
+          .upsert(sentenceids)
+          .select();
+        if (error4) {
+          console.log(error4);
+        }
+        console.log("Data4: ");
+        console.log(data4);
+      }
+      console.log("Data3: ");
+      console.log(data3);
+    }
+  };
+
+  public static updateListeningExercise = async (
+    exercise: ListeningExercise
+  ) => {
+    console.log("UPDATED_LISTENING_EXERCISE");
+    const { data: data1, error: error1 } = await supabase
+      .from("exercises")
+      .update({
+        topic: exercise.topic,
+        type: 3,
+        description: exercise.description,
+        added_by: exercise.added_by,
+      })
+      .eq("id", exercise.id)
+      .select();
+    if (error1) {
+      console.log(error1);
+    }
+    const current_exercise = await this.getListeningExerciseProblems(
+      exercise.id
+    );
+    // Add new words
+    const wordpairs = exercise.exercise_words
+      ?.filter(
+        (item) =>
+          !current_exercise?.item_sets?.some(
+            (current_item) => current_item.id == item.id
+          )
+      )
+      .map((item) => {
+        return {
+          exercise_id: data1?.at(0)?.id ?? Number.MAX_SAFE_INTEGER,
+          word_id: item.id ?? Number.MAX_SAFE_INTEGER,
+          role: item.role ?? "",
+        };
+      });
+    if (wordpairs) {
+      const { data: data2, error: error2 } = await supabase
+        .from("exercise_words")
+        .insert(wordpairs)
+        .select();
+      if (error2) {
+        console.log(error2);
+      }
+    }
+    // Delete removed words
+    const deletedids = current_exercise?.item_sets
+      ?.filter(
+        (current_item) =>
+          !exercise?.item_sets?.some((item) => current_item.id == item.id)
+      )
+      .map((item) => item.id);
+    if (deletedids) {
+      const { data: data3, error: error3 } = await supabase
+        .from("exercise_words")
+        .delete()
+        .eq("exercise_id", exercise.id)
+        .in("word_id", deletedids)
+        .select();
+      if (error3) {
+        console.log(error3);
+      }
+    }
+    // Update sentence
+    const sentencepairs = exercise.item_sets
+      ?.filter(
+        (item) =>
+          !current_exercise?.item_sets?.some(
+            (current_item) => current_item.id == item.id
+          )
+      )
+      .map((item) => {
+        return {
+          sentence: item.sentence,
+          translated_sentence: item.translated_sentence,
+        };
+      });
+    console.log("Sentences: ");
+    console.log(sentencepairs);
+    if (sentencepairs) {
+      const { data: data3, error: error3 } = await supabase
+        .from("sentence_pairs")
+        .upsert(sentencepairs)
+        .select();
+      if (error3) {
+        console.log(error3);
+      } else {
+        const sentenceids =
+          data3?.map((item) => {
+            return {
+              exercise_id: data1?.at(0)?.id ?? Number.MAX_SAFE_INTEGER,
+              sentence_id: item.id,
+            };
+          }) ?? [];
+        const { data: data4, error: error4 } = await supabase
+          .from("exercise_sentences")
+          .upsert(sentenceids)
+          .select();
+        if (error4) {
+          console.log(error4);
+        }
+        console.log("Data4: ");
+        console.log(data4);
+      }
+      console.log("Data3: ");
+      console.log(data3);
+    }
   };
 
   public static deleteExercise = async (id: number) => {

@@ -225,6 +225,18 @@ export default function ContributorDashboard() {
           hideProgress
           isAdd
         />
+        <ExerciseCard
+          title="Add New Listening Exercise"
+          subtitle="Add sentences for auto-generated speech"
+          progress={0}
+          onPress={() => {
+            router.push({
+              pathname: `exercises/listening/create`,
+            });
+          }}
+          hideProgress
+          isAdd
+        />
       </ScrollView>
     </ScrollView>
   );
