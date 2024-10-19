@@ -67,11 +67,13 @@ export default function Dashboard() {
     console.log(typeof exerID + exerID);
     if (eventType == "START") {
       router.push({
-        pathname: `exercises/vocabulary/${exerID}`,
+        // pathname: `exercises/vocabulary/${exerID}`,
+        pathname: `exercises/vocabulary/`,
       });
     } else if (eventType == "EDIT") {
       router.push({
-        pathname: `exercises/vocabulary/${exerID}/edit`,
+        // pathname: `exercises/vocabulary/${exerID}/edit`,
+        pathname: `exercises/vocabulary/`,
       });
     }
   };
@@ -115,14 +117,14 @@ export default function Dashboard() {
             />
           </View>
         </View>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <View style={styles.mistakenWordsButton}>
             <Icon name="clipboard-text-search-outline" size={24} color="gray" />
             <Text style={{ color: "gray", fontWeight: "700" }}>
               {"  "}View All Mistaken Words
             </Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <View
           style={{
@@ -136,7 +138,7 @@ export default function Dashboard() {
           </Text>
         </View>
         <View style={{ padding: "3.5%" }}>
-          {ongoingExercises &&
+          {ongoingExercises ? (
             ongoingExercises.map((exer, index) => (
               <ExerciseCard
                 key={exer.id}
@@ -145,12 +147,14 @@ export default function Dashboard() {
                 progress={exer.level}
                 onPress={() => changeExerFocus(exer.id, exer.topic, index)}
               />
-            ))}
-          <ExerciseCard
-            title="SAMPLE EXERCISE"
-            subtitle="I don't know, I just got here."
-            progress={5}
-          />
+            ))
+          ) : (
+            <ExerciseCard
+              title="Start Doing Exercises"
+              // subtitle="I don't know, I just got here."
+              progress={0}
+            />
+          )}
         </View>
       </ScrollView>
       <ExerciseModal

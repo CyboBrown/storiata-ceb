@@ -1258,7 +1258,7 @@ export const ListeningExerciseUI = ({
         console.error("Error playing audio:", error);
       }
     } else {
-      console.log("Generating Speech");
+      console.log("Generating Speech: " + text);
       const response = await fetch(
         "https://storiatatts.agreeableground-aec2017e.australiaeast.azurecontainerapps.io/generate-audio",
         {
@@ -1272,6 +1272,7 @@ export const ListeningExerciseUI = ({
           }),
         }
       );
+      console.log("Finished Generating Speech");
       const json = await response.json();
       console.log(json);
 

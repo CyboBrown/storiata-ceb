@@ -18,9 +18,9 @@ export default function Exercises() {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: () => <CustomHeader pageTitle="Exercises" />,  // Use Custom Header
-      headerStyle: { backgroundColor: 'dodgerblue' },
-      headerTintColor: 'white',
+      headerTitle: () => <CustomHeader pageTitle="Exercises" />, // Use Custom Header
+      headerStyle: { backgroundColor: "dodgerblue" },
+      headerTintColor: "white",
     });
   }, [navigation]);
 
@@ -29,47 +29,53 @@ export default function Exercises() {
       <View style={styles.headerTitleContainer}>
         <Text style={styles.headerTitle}>Ready for a language challenge?</Text>
         <Text style={styles.headerSubtitle}>
-          Take on the various exercises and challenges 
-          on the fundamental areas of Cebuano. Practice makes perfect, is it not?
+          Take on the various exercises and challenges on the fundamental areas
+          of Cebuano. Practice makes perfect, is it not?
         </Text>
       </View>
 
       <ScrollView style={styles.exerciseCategoryContainer}>
         <View style={styles.barContainer}>
           <View style={styles.randomHorizontalBar}>
-            <Text>{" " /* Please do not ask why this is here. */ }</Text>
+            <Text>{" " /* Please do not ask why this is here. */}</Text>
           </View>
         </View>
-        <ExerciseTypeCard 
-          imageUrl={PHCeb4} 
-          title="Vocabulary Exercises" 
+        <ExerciseTypeCard
+          imageUrl={PHCeb4}
+          title="Vocabulary Exercises"
           subtitle="Let's get to know basic everyday things in the Cebuano language!"
-          onTextPress={() => router.push({
-            pathname: "/exercises/vocabulary",
-          })}
+          onTextPress={() =>
+            router.push({
+              pathname: "/exercises/vocabulary",
+            })
+          }
         />
-        <ExerciseTypeCard 
-          imageUrl={PHCeb3} 
-          title="Grammar Exercises" 
+        <ExerciseTypeCard
+          imageUrl={PHCeb3}
+          title="Grammar Exercises"
           subtitle="It's time to piece together these words we've learned together into something more meaningful!"
-          onTextPress={() => router.push({
-            pathname: "/exercises/grammar",
-          })}
+          onTextPress={() =>
+            router.push({
+              pathname: "/exercises/grammar",
+            })
+          }
         />
-        <ExerciseTypeCard 
-          imageUrl={PHCeb1} 
-          title="Listening Exercises" 
+        <ExerciseTypeCard
+          imageUrl={PHCeb1}
+          title="Listening Exercises"
           subtitle="To be natural at something, sometimes, you have to simply observe and listen."
-          onTextPress={() => router.push({
-            pathname: "/exercises/listening",
-          })}
+          onTextPress={() =>
+            router.push({
+              pathname: "/exercises/listening",
+            })
+          }
         />
-        <ExerciseTypeCard 
+        {/* <ExerciseTypeCard 
           imageUrl={PHCeb2} 
           title="Speaking Exercises" 
           subtitle="Coming soon..."
           onTextPress={() => alert('Speaking exercises coming soon...')}
-        />
+        /> */}
       </ScrollView>
     </>
   );

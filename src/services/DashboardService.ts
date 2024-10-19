@@ -99,13 +99,31 @@ export class DashboardService {
     user_id: string,
     range: number
   ) => {
-    return null;
+    const { data, error } = await supabase
+      .from("words")
+      .select("*")
+      .eq("added_by", user_id)
+      .order("created_at", { ascending: false })
+      .limit(range ?? 10);
+    if (error) {
+      console.log(error);
+    }
+    return data;
   };
 
   public static getNewestExercisesContributed = async (
     user_id: string,
     range: number
   ) => {
-    return null;
+    const { data, error } = await supabase
+      .from("exercises")
+      .select("*")
+      .eq("added_by", user_id)
+      .order("created_at", { ascending: false })
+      .limit(range ?? 20);
+    if (error) {
+      console.log(error);
+    }
+    return data;
   };
 }

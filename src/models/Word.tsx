@@ -8,5 +8,5 @@ export interface Word {
   phonetic_form: string;
   representation: string | null;
   suffix_form: string | null;
-  translations: Array<{ word: string }> | null;
+  translations?: Array<{ word: string }> | null;
 }
