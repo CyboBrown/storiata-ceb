@@ -31,11 +31,11 @@ export default function ExerciseCard({ title, subtitle, progress, onPress }: Com
       <View style={styles.progressContainer}>
         <View style={{flex: 0.2, flexDirection: "row", alignItems: "center"}}>
           <Icon name="star-circle" size={15} color="dodgerblue" />
-          <Text style={{color: "gray", fontWeight: "700"}}> {progress.toString()}/6 </Text>
+          <Text style={{color: "gray", fontWeight: "700"}}> {progress >= 6 ? "6" : progress.toString()}/6 </Text>
         </View>
 
         <View style={{flex: 0.8}}>
-          <Progress size="$1.5" value={(100 / 6) * progress} width="100%" alignSelf='center'>
+          <Progress size="$1.5" value={progress > 100 ? 100 : (100 / 6) * progress} width="100%" alignSelf='center'>
               <Progress.Indicator backgroundColor={'$blue8'} animation="bouncy" />
           </Progress>
         </View>
