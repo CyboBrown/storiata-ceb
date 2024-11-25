@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useCallback } from "react";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import { useNavigation, useRouter } from "expo-router";
+import { useFocusEffect, useNavigation, useRouter } from "expo-router";
 import { AccountService } from "../../../src/services/AccountService";
 import { useSession } from "../../../src/contexts/AuthContext";
 import AvatarDisplay from "../../../src/components/AvatarDisplay";
@@ -36,6 +36,12 @@ export default function Account() {
   useEffect(() => {
     if (session) loadUserDetails();
   }, [session]);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadUserDetails();
+    }, [])
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
