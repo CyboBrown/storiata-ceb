@@ -4,7 +4,6 @@ import { supabase } from "../utils/supabase";
 
 export class AccountService {
   public static getProfile = async (userID: String) => {
-    console.log("GOT_PROFILE");
     const { data, error, status } = await supabase
       .from("profiles")
       .select(`username, website, avatar_url, full_name, is_contributor`)
@@ -25,7 +24,6 @@ export class AccountService {
     }
   
     if (data?.user) {
-      console.log('User email:', data.user.email);
       return data.user.email; // Correct access to email
     }
   }
