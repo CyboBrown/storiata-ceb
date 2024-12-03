@@ -30,6 +30,7 @@ import { RevPartsOfSpeech } from "../../../src/utils/enums";
 import ConjugationTable from "../../../src/components/ConjugationTable";
 import CustomHeader from "../../../src/components/HeaderTitle";
 import { useContributorContext } from "../../../src/contexts/ContributorContext";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function Dictionary() {
   const [loading, setLoading] = useState(false);
@@ -81,6 +82,7 @@ export default function Dictionary() {
     <>
       <ZStack
         f={1}
+        m={10}
         jc="flex-start"
         ai="stretch"
         gap="$2"
@@ -100,7 +102,12 @@ export default function Dictionary() {
               placeholder={`Enter Word...`}
               onChangeText={(input) => setInput(input)}
             />
-            <Button size="$4" onPress={() => search(input)}>
+            <Button
+              size="$4"
+              backgroundColor={"$backgroundFocus"}
+              onPress={() => search(input)}
+            >
+              <Icon name={"magnify"} size={20} color="black" />
               Search
             </Button>
           </XStack>
