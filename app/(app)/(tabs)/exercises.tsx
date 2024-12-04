@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   exerciseCategoryContainer: {
-    padding: "3%",
     marginTop: "-5%",
     backgroundColor: "white",
     borderTopLeftRadius: 20,

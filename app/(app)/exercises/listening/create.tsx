@@ -23,6 +23,7 @@ import { ExerciseTypes } from "../../../../src/utils/enums";
 import { useSession } from "../../../../src/contexts/AuthContext";
 import AddWordToExerciseDialog from "../../../../src/components/AddWordToExerciseDialog";
 import { ListeningExercise } from "../../../../src/models/ListeningExercise";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function CreateListeningExercise({
   session,
@@ -148,7 +149,12 @@ export default function CreateListeningExercise({
                           fontSize={"$5"}
                           flexBasis={"100%"}
                         >
-                          {item.role}
+                          <Icon
+                            name={"format-list-group"}
+                            size={16}
+                            color="black"
+                          />
+                          {" " + item.role + " "}
                         </Text>
                       )}
                       <Text
@@ -163,7 +169,8 @@ export default function CreateListeningExercise({
                           setExercise(updated_exercise);
                         }}
                       >
-                        {item.ceb_word + " → " + item.eng_word}
+                        <Icon name={"delete-forever"} size={16} color="red" />
+                        {" " + item.ceb_word + " → " + item.eng_word + " "}
                       </Text>
                     </>
                   ))}
@@ -239,7 +246,8 @@ export default function CreateListeningExercise({
                     setExercise(...[updated_exercise]);
                   }}
                 >
-                  {"+ New Sentence"}
+                  <Icon name={"plus"} size={16} color="lightgreen" />
+                  {" New Sentence"}
                 </Text>
               </View>
             </Fieldset>
@@ -251,6 +259,7 @@ export default function CreateListeningExercise({
                   onPress={save}
                   disabled={disabled}
                 >
+                  <Icon name={"content-save"} size={20} color="black" />
                   Save
                 </Button>
               </Link>

@@ -19,6 +19,7 @@ import { VocabularyExercise } from "../../../../src/models/VocabularyExercise";
 import { ExerciseTypes } from "../../../../src/utils/enums";
 import { useSession } from "../../../../src/contexts/AuthContext";
 import AddWordToExerciseDialog from "../../../../src/components/AddWordToExerciseDialog";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function CreateVocabularyExercise({
   session,
@@ -136,14 +137,15 @@ export default function CreateVocabularyExercise({
                     borderRadius={"$8"}
                     py="$1"
                     px="$2"
-                    fontSize={"$5"}
+                    fontSize={18}
                     onPress={() => {
                       let updated_exercise = { ...exercise };
                       updated_exercise.item_sets?.splice(index, 1);
                       setExercise(updated_exercise);
                     }}
                   >
-                    {item.ceb_word + " → " + item.eng_word}
+                    <Icon name={"delete-forever"} size={16} color="red" />
+                    {item.ceb_word + " → " + item.eng_word + " "}
                   </Text>
                 ))}
               <AddWordToExerciseDialog
@@ -161,6 +163,7 @@ export default function CreateVocabularyExercise({
                 onPress={save}
                 disabled={disabled}
               >
+                <Icon name={"content-save"} size={20} color="black" />
                 Save
               </Button>
             </Link>
