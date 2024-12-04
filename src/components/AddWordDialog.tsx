@@ -69,7 +69,7 @@ export default function AddWordDialog() {
   return (
     <Dialog>
       <Dialog.Trigger asChild>
-        <Button icon={Plus} size="$6" circular></Button>
+        <Button icon={Plus} borderColor={"$color8"} size="$6" circular></Button>
       </Dialog.Trigger>
       <Adapt when="sm" platform="touch">
         <Sheet animation="medium" zIndex={200000} modal dismissOnSnapToBottom>
