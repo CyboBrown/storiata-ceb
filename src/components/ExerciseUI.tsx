@@ -1214,8 +1214,8 @@ export const ListeningExerciseUI = ({
       );
     } else if (exercise_type < 6) {
       setCorrect(-1);
-      setCorrectAnswer(exercise_type == 2 ? sentences.ceb : sentences.en);
-      setQuestionDisplay(exercise_type == 2 ? sentences.en : sentences.ceb);
+      setCorrectAnswer(exercise_type == 4 ? sentences.ceb : sentences.en);
+      setQuestionDisplay(exercise_type == 4 ? sentences.en : sentences.ceb);
     }
   }, [itemIndex]);
 
@@ -1226,6 +1226,7 @@ export const ListeningExerciseUI = ({
 
   const playAudio = async () => {
     setIsLoadingAudio(true);
+    console.log(exercise_type);
     const text: string =
       exercise_type % 2 == 0 ? correctAnswer : questionDisplay;
     const fileName = text.trim().replace(/ /g, "_");
@@ -1448,10 +1449,14 @@ export const ListeningExerciseUI = ({
         width="90%"
         backgroundColor={reveal ? "$blue7" : "unset"}
       >
-        <Text fontSize={20} alignSelf="stretch" m="$5">
-          {questionDisplay}
-        </Text>
-        <Separator alignSelf="stretch" m="$0"></Separator>
+        {exercise_type == 3 && (
+          <>
+            <Text fontSize={20} alignSelf="stretch" m="$5">
+              {questionDisplay}
+            </Text>
+            <Separator alignSelf="stretch" m="$0"></Separator>
+          </>
+        )}
         <Text fontSize={20} alignSelf="stretch" m="$5">
           {reveal ? (
             correctAnswer.split(" ").map((word, index) => (
