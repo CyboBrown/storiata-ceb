@@ -185,4 +185,17 @@ export class DictionaryService {
     }
     return data;
   };
+
+  public static searchWordByTranslation = async (word: string) => {
+    console.log("SEARCHED_WORD");
+    const { data, error, status } = await supabase
+      .from("words")
+      .select(`*, translations!inner(word)`)
+      .ilike("translations.word", word + "%")
+      .limit(20);
+    if (error && status !== 406) {
+      console.log(error);
+    }
+    return data;
+  };
 }

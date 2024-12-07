@@ -40,6 +40,7 @@ export default function Dictionary() {
   const [selected, setSelected] = useState(-1);
   const [position, setPosition] = useState(0);
   const [searched, setSearched] = useState(false);
+  const [englishSearch, setEnglishSearch] = useState(false);
   const { isContributor } = useContributorContext();
 
   const navigation = useNavigation();
@@ -64,10 +65,13 @@ export default function Dictionary() {
       setLoading(true);
       setSearched(true);
       // setInput(text);
-      let data = await DictionaryService.searchWord(text);
+      let data = englishSearch
+        ? await DictionaryService.searchWordByTranslation(text)
+        : await DictionaryService.searchWord(text);
       if (data) {
         setResults(data);
         console.log(results);
+        // console.log(results[0].translations);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -99,9 +103,17 @@ export default function Dictionary() {
             <Input
               flex={1}
               size="$4"
-              placeholder={`Enter Word...`}
+              placeholder={`Enter word...`}
               onChangeText={(input) => setInput(input)}
             />
+            <Button
+              size="$4"
+              borderColor={"$color8"}
+              onPress={() => setEnglishSearch(!englishSearch)}
+            >
+              <Icon name={"translate"} size={20} color="black" />
+              {englishSearch ? "EN" : "CEB"}
+            </Button>
             <Button
               size="$4"
               borderColor={"$color8"}
