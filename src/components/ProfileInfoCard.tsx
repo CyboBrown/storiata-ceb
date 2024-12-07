@@ -14,7 +14,7 @@ export default function ProfileTabItem({ iconName, title, description }: Compone
       <Icon name={iconName} size={24} color="dodgerblue" style={{marginRight: 10}} />
       <View style={styles.textContainer}>
         <Text style={{fontSize: 16}}>{title}</Text>
-        <Text style={{fontSize: 12, color: "gray", marginLeft: "auto"}}>{description}</Text>
+        <Text numberOfLines={1} ellipsizeMode="tail" style={{fontSize: 12, color: "gray", marginLeft: "auto",}}>{description}</Text>
       </View>
     </View>
   );
