@@ -30,6 +30,7 @@ import { RevPartsOfSpeech } from "../../../src/utils/enums";
 import ConjugationTable from "../../../src/components/ConjugationTable";
 import CustomHeader from "../../../src/components/HeaderTitle";
 import { useContributorContext } from "../../../src/contexts/ContributorContext";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function Dictionary() {
   const [loading, setLoading] = useState(false);
@@ -81,6 +82,7 @@ export default function Dictionary() {
     <>
       <ZStack
         f={1}
+        m={10}
         jc="flex-start"
         ai="stretch"
         gap="$2"
@@ -100,7 +102,12 @@ export default function Dictionary() {
               placeholder={`Enter Word...`}
               onChangeText={(input) => setInput(input)}
             />
-            <Button size="$4" onPress={() => search(input)}>
+            <Button
+              size="$4"
+              borderColor={"$color8"}
+              onPress={() => search(input)}
+            >
+              <Icon name={"magnify"} size={20} color="black" />
               Search
             </Button>
           </XStack>
@@ -140,12 +147,17 @@ export default function Dictionary() {
               {results.map((result, index) => (
                 <WordSearchResult
                   title={result.normal_form}
-                  subTitle={result.translations
-                    .reduce(
-                      (acc, translation) => acc + translation.word + ", ",
-                      ""
-                    )
-                    .slice(0, -2)}
+                  subTitle={
+                    result.translations
+                      .reduce(
+                        (acc, translation) => acc + translation.word + ", ",
+                        ""
+                      )
+                      .slice(0, -2) +
+                    " (" +
+                    result.part_of_speech +
+                    ".) "
+                  }
                   index={index}
                   key={index}
                   setSelected={setSelected}

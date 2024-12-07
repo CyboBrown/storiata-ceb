@@ -4,9 +4,9 @@ import {
   View,
   Text,
   Image,
-  Pressable,
   StyleSheet,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import ExerStartAnim from "../assets/exercise_start.gif";
 
@@ -34,51 +34,56 @@ export default function ExerciseModal({
       visible={modalVisible}
       onRequestClose={() => setModalVisible(false)}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalHeaderText}>{exerciseTitle}</Text>
-          <View style={{ alignItems: "center" }}>
-            <Image source={ExerStartAnim} style={{ height: 100, width: 100 }} />
-          </View>
-          <Text style={styles.modalText}>
-            Do you wish to begin the exercise?
-          </Text>
+      <Pressable style={styles.modalOverlay} onPress={() => setModalVisible(false)}>
+        <View style={styles.modalContentWrapper} onStartShouldSetResponder={() => true}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalHeaderText}>{exerciseTitle}</Text>
+            <View style={{ alignItems: "center" }}>
+              <Image source={ExerStartAnim} style={{ height: 100, width: 100 }} />
+            </View>
+            <Text style={styles.modalText}>
+              Do you wish to begin the exercise?
+            </Text>
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[styles.button, styles.buttonConfirm]}
-              onPress={handleRedirect}
-            >
-              <Text style={styles.buttonText}>BEGIN EXERCISE</Text>
-            </TouchableOpacity>
-            {userIsContributor && (
+            <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonConfirm]}
-                onPress={handleRedirectEdit}
+                onPress={handleRedirect}
               >
-                <Text style={styles.buttonText}>EDIT EXERCISE</Text>
+                <Text style={styles.buttonText}>BEGIN EXERCISE</Text>
               </TouchableOpacity>
-            )}
+              {userIsContributor && (
+                <TouchableOpacity
+                  style={[styles.button, styles.buttonConfirm]}
+                  onPress={handleRedirectEdit}
+                >
+                  <Text style={styles.buttonText}>EDIT EXERCISE</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
         </View>
-      </View>
+      </Pressable>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  modalContainer: {
+  modalOverlay: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
+  modalContentWrapper: {
+    width: "90%",
+    alignSelf: "center",
+  },
   modalContent: {
-    marginLeft: "3%",
-    marginRight: "3%",
     padding: "7%",
     backgroundColor: "white",
     borderRadius: 10,
+    alignItems: "center",
   },
   modalHeaderText: {
     textAlign: "center",

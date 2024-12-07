@@ -146,13 +146,13 @@ export default function UserDetails() {
               placeholder="Website"
               enabled={true}
             />
+            <Button
+              onPress={() => handleUpdateProfile()}
+              title="Save"
+              color="dodgerblue"
+              accessibilityLabel="Learn more about this purple button"
+            />
           </View>
-          <Button
-            onPress={() => handleUpdateProfile()}
-            title="Save"
-            color="#841584"
-            accessibilityLabel="Learn more about this purple button"
-          />
         </ScrollView>
       </KeyboardAvoidingView>
     </>

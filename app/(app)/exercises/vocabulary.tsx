@@ -22,6 +22,7 @@ import ExerciseCard from "../../../src/components/ExerciseCard";
 import ExerciseModal from "../../../src/components/ExerciseModal";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useContributorContext } from "../../../src/contexts/ContributorContext";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function VocabularyExercises() {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
@@ -163,6 +164,10 @@ export default function VocabularyExercises() {
           </Text>
           {isContributor && (
             <TouchableOpacity
+              style={{
+                width: "auto",
+                marginRight: "auto",
+              }}
               onPress={() =>
                 router.push({ pathname: "/exercises/vocabulary/create" })
               }
@@ -173,9 +178,15 @@ export default function VocabularyExercises() {
                   marginTop: 15,
                   fontSize: 18,
                   fontWeight: "900",
+                  borderWidth: 2,
+                  borderColor: "aqua",
+                  borderRadius: 10,
+                  padding: 5,
+                  paddingBottom: 0,
                 }}
               >
-                CREATE EXERCISE
+                <Icon name={"plus"} size={20} color="aqua" />
+                &nbsp;CREATE EXERCISE
               </Text>
             </TouchableOpacity>
           )}

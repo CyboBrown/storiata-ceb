@@ -26,6 +26,7 @@ import { ExerciseService } from "../services/ExerciseService";
 import { WordTranslation } from "../models/WordTranslation";
 import { VocabularyExercise } from "../models/VocabularyExercise";
 import { GrammarExercise, isGrammarExercise } from "../models/GrammarExercise";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function AddWordToExerciseDialog({
   exercise,
@@ -80,7 +81,8 @@ export default function AddWordToExerciseDialog({
             px="$2"
             fontSize={"$5"}
           >
-            {"+ Add Word"}
+            <Icon name={"plus"} size={16} color="lightgreen" />
+            {" Add Word "}
           </Text>
         </Pressable>
       </Dialog.Trigger>

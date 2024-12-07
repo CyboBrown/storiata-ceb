@@ -23,6 +23,7 @@ import LoadingAnim from "../../../src/assets/walking.gif";
 import PHCeb3 from "../../../src/assets/ph_cebu_3.png";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useContributorContext } from "../../../src/contexts/ContributorContext";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function GrammarExercises({ session }: { session: Session }) {
   // DO NOT DELETE: FOR TESTING AND INITIALIZATION
@@ -162,6 +163,10 @@ export default function GrammarExercises({ session }: { session: Session }) {
           </Text>
           {isContributor && (
             <TouchableOpacity
+              style={{
+                width: "auto",
+                marginRight: "auto",
+              }}
               onPress={() =>
                 router.push({ pathname: "/exercises/grammar/create" })
               }
@@ -172,9 +177,15 @@ export default function GrammarExercises({ session }: { session: Session }) {
                   marginTop: 15,
                   fontSize: 18,
                   fontWeight: "900",
+                  borderWidth: 2,
+                  borderColor: "aqua",
+                  borderRadius: 10,
+                  padding: 5,
+                  paddingBottom: 0,
                 }}
               >
-                CREATE EXERCISE
+                <Icon name={"plus"} size={20} color="aqua" />
+                &nbsp;CREATE EXERCISE
               </Text>
             </TouchableOpacity>
           )}

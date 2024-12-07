@@ -8,53 +8,65 @@ export default function TabsLayout() {
 
   return (
     <Tabs
-    screenOptions={{
-      tabBarActiveTintColor: "dodgerblue",
-      tabBarInactiveTintColor: "gray",
-      headerShown: true,
-      headerStyle: { backgroundColor: 'dodgerblue' },
-      headerTintColor: 'white',
-      headerTitleStyle: { fontWeight: 'bold' },
-    }}
+      screenOptions={{
+        tabBarActiveTintColor: "dodgerblue",
+        tabBarInactiveTintColor: "gray",
+        headerShown: true,
+        headerStyle: { backgroundColor: "dodgerblue" },
+        headerTintColor: "white",
+        headerTitleStyle: { fontWeight: "bold" },
+      }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: " Home ",
           tabBarIcon: ({ focused, color, size }) => {
-            return focused
-              ? <Icon name="home-circle" size={size} color={color} />
-              : <Icon name="home-circle-outline" size={size} color={color} />;
+            return focused ? (
+              <Icon name="home-circle" size={size} color={color} />
+            ) : (
+              <Icon name="home-circle-outline" size={size} color={color} />
+            );
           },
         }}
       />
       <Tabs.Screen
         name="exercises"
         options={{
-          title: "Exercises",
+          title: " Exercises ",
           tabBarIcon: ({ focused, color, size }) => {
-            return focused
-              ? <Icon name="bullseye-arrow" size={size} color={color} />
-              : <Icon name="bullseye" size={size} color={color} />;
+            return focused ? (
+              <Icon name="bullseye-arrow" size={size} color={color} />
+            ) : (
+              <Icon name="bullseye" size={size} color={color} />
+            );
           },
         }}
       />
       <Tabs.Screen
         name="dictionary"
         options={{
-          title: "Dictionary",
+          title: " Dictionary ",
           tabBarIcon: ({ focused, color, size }) => {
-            return focused
-              ? <Icon name="book-open-page-variant" size={size} color={color} />
-              : <Icon name="book-open-page-variant-outline" size={size} color={color} />;
+            return focused ? (
+              <Icon name="book-open-page-variant" size={size} color={color} />
+            ) : (
+              <Icon
+                name="book-open-page-variant-outline"
+                size={size}
+                color={color}
+              />
+            );
           },
         }}
       />
       <Tabs.Screen
         name="account"
         options={{
-          title: "My Account",
-          tabBarIcon: ({ size }) => <NavAvatarIcon userID={getUserUUID()} size={size} />,
+          title: " My Account ",
+          tabBarIcon: ({ size }) => (
+            <NavAvatarIcon userID={getUserUUID()} size={size} />
+          ),
         }}
       />
     </Tabs>
