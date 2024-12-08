@@ -18,9 +18,9 @@ import {
   ButtonIcon,
   Spinner,
 } from "tamagui";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Alert, useColorScheme } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { ExerciseService } from "../../../../src/services/ExerciseService";
 import { ListeningExercise } from "../../../../src/models/ListeningExercise";
 import { ListeningExerciseUI } from "../../../../src/components/ExerciseUI";
@@ -45,12 +45,19 @@ export default function ListeningExercises({
   const [loadingText, setLoadingText] = useState("Loading...");
   const [exercise, setExercise] = useState<ListeningExercise | null>();
   const [exerciseLevel, setExerciseLevel] = useState(0);
+  const navigation = useNavigation();
 
   const { getUserUUID } = useSession();
 
   useEffect(() => {
     loadExercise();
   }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, [navigation]);
 
   const loadExercise = async () => {
     try {

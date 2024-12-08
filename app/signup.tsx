@@ -148,7 +148,6 @@ export default function SignUp() {
             />
           </View>
         </View>
-
         <View>
           <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 2, color: "gray", }}>PASSWORD</Text>
           <View style={styles.inputContainer}>
