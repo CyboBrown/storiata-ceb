@@ -92,9 +92,9 @@ export default function SignUp() {
           </Text>
         </View>
         
-        <BackgroundCircle size={200} color="white" top={280} left={-45} />
-        <BackgroundCircle size={200} color="white" top={310} left={95} />
-        <BackgroundCircle size={350} color="white" top={280} left={215} />
+        <BackgroundCircle size={200} color="white" top={290} left={-45} />
+        <BackgroundCircle size={200} color="white" top={320} left={95} />
+        <BackgroundCircle size={350} color="white" top={290} left={215} />
 
         <View style={styles.formsContainer}>
 
@@ -156,7 +156,7 @@ export default function SignUp() {
               style={{ flex: 1, height: 45, paddingLeft: 5, color: "gray" }}
               value={password}
               onChangeText={setPassword}
-              placeholder="Enter your email address..."
+              placeholder="Enter your password..."
               editable={true}
               autoCorrect={false}
               spellCheck={false}
