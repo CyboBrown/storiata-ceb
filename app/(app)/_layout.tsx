@@ -29,14 +29,11 @@ export default function AppLayout() {
 
   return (
     <ContributorContextProvider>
-      <SafeAreaView style={{ flex: 1 }}>
-        <StatusBar backgroundColor="dodgerblue" />
-          <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        />
-      </SafeAreaView>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
     </ContributorContextProvider>
   );
 }

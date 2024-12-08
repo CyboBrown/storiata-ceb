@@ -1,42 +1,69 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Checkbox,
-  Input,
-  SizableText,
-  TamaguiProvider,
-  Text,
-  XStack,
-  View,
-  Image,
-  ScrollView,
-  Theme,
-} from "tamagui";
 import { UserAuthentication } from "../src/services/UserAuthentication";
-import config from "../tamagui.config";
 import { Session, User } from "@supabase/supabase-js";
-import logo from "../src/assets/StoriaTa-Logo.png";
+import logo from "../src/assets/icon-backgroundless.png";
 
-import { useColorScheme } from "react-native";
+import { useColorScheme, StyleSheet, View, Text, Image, TextInput, TouchableOpacity } from "react-native";
 import { Check } from "@tamagui/lucide-icons";
 import { Link, router } from "expo-router";
+import BackgroundCircle from "../src/components/BackgroundCircle";
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Checkbox } from "tamagui";
+
+const greetingTexts = [
+  "Welcome to StoriaTa!",
+  "Tara bay, storya na ta!",
+  "Andam ka na ba, bay?"
+];
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
+  const [fullname, setFullname] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [isContributor, setIsContributor] = useState(false);
   const [userID, setUserID] = useState("");
   const [user, setUser] = useState<User>();
   const [session, setSession] = useState<Session>();
 
-  // DO NOT DELETE: FOR TESTING AND INITIALIZATION
-  useEffect(() => {
-    console.log("SIGNUP page loaded.");
-  }, []);
+  const [currentText, setCurrentText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [typingIndex, setTypingIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showCursor, setShowCursor] = useState(true);
 
-  const colorScheme = useColorScheme();
+  useEffect(() => {
+    const handleTyping = () => {
+      const fullText = greetingTexts[currentIndex];
+
+      if (isDeleting) {
+        setCurrentText((prev) => prev.slice(0, -1));
+      } else {
+        setCurrentText(fullText.slice(0, typingIndex + 1));
+      }
+
+      setTypingIndex((prev) => (isDeleting ? prev - 1 : prev + 1));
+
+      if (!isDeleting && typingIndex === fullText.length) {
+        setTimeout(() => setIsDeleting(true), 750);
+      } else if (isDeleting && typingIndex === 0) {
+        setIsDeleting(false);
+        setCurrentIndex((prev) => (prev + 1) % greetingTexts.length);
+      }
+    };
+
+    const typingInterval = setInterval(handleTyping, 75);
+    return () => clearInterval(typingInterval);
+  }, [typingIndex, isDeleting, currentIndex]);
+
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setShowCursor((prev) => !prev);
+    }, 500);
+
+    return () => clearInterval(cursorInterval);
+  }, []);
 
   const signup = async () => {
     setLoading(true);
@@ -55,120 +82,164 @@ export default function SignUp() {
   };
 
   return (
-    // <TamaguiProvider config={config}>
-    //   <Theme name={colorScheme === "dark" ? "dark" : "light"}>
-    <ScrollView backgroundColor={"$background"}>
-      <View flex={1} padding="$4" marginTop="$10">
-        <View justifyContent="center" alignItems="center">
-          <Image source={logo} width="$15" height="$15" borderRadius={"$10"} />
-        </View>
-        <View justifyContent="center" alignItems="center">
-          <Text color={"$color"} fontFamily={"$heading"} fontSize={30}>
-            {" "}
-            Create your Account{" "}
+    <>
+      <View style={styles.defaultContainer}>
+        <View style={styles.motdContainer}>
+          <Image source={logo} style={styles.image}/>
+          <Text style={styles.typewriterText}>
+            {currentText}
+            {showCursor && <Text style={styles.cursor}>|</Text>}
           </Text>
         </View>
-        <View
-          justifyContent="center"
-          alignContent="center"
-          gap={2}
-          marginTop={15}
-        >
-          <Text fontFamily="$body" color="$color">
-            {" "}
-            Email
-          </Text>
-          <Input
-            size="$4"
-            placeholder="name@email.com"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-          />
+        
+        <BackgroundCircle size={200} color="white" top={280} left={-45} />
+        <BackgroundCircle size={200} color="white" top={310} left={95} />
+        <BackgroundCircle size={350} color="white" top={280} left={215} />
+
+        <View style={styles.formsContainer}>
+
+          <View>
+            <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 2, color: "gray", }}>FULL NAME</Text>
+            <View style={styles.inputContainer}>
+              <Icon name="account-circle" size={24} color="gray" style={{marginRight: 8}} />
+              <TextInput
+                style={{ flex: 1, height: 45, paddingLeft: 5, color: "gray" }}
+                value={fullname}
+                onChangeText={setFullname}
+                placeholder="Enter your full name.."
+                editable={true}
+                autoCorrect={false}
+                spellCheck={false}
+                autoCapitalize="none"
+              />
+            </View>
+          </View>
+
+          <View>
+            <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 2, color: "gray", }}>USERNAME</Text>
+            <View style={styles.inputContainer}>
+              <Icon name="alternate-email" size={24} color="gray" style={{marginRight: 8}} />
+              <TextInput
+                style={{ flex: 1, height: 45, paddingLeft: 5, color: "gray" }}
+                value={username}
+                onChangeText={setUsername}
+                placeholder="Enter your username..."
+                editable={true}
+                autoCorrect={false}
+                spellCheck={false}
+                autoCapitalize="none"
+              />
+            </View>
+          </View>
+
+          <View>
+          <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 2, color: "gray", }}>EMAIL</Text>
+          <View style={styles.inputContainer}>
+            <Icon name="email" size={24} color="gray" style={{marginRight: 8}} />
+            <TextInput
+              style={{ flex: 1, height: 45, paddingLeft: 5, color: "gray" }}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Enter your email address..."
+              editable={true}
+              autoCorrect={false}
+              spellCheck={false}
+              autoCapitalize="none"
+            />
+          </View>
         </View>
-        <View marginTop={10} gap={2}>
-          <SizableText fontFamily="$body" color="$color">
-            {" "}
-            Password
-          </SizableText>
-          <Input
-            size="$4"
-            placeholder="Enter 8 characters or more"
-            autoCapitalize="none"
-            secureTextEntry
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          />
+        <View>
+          <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 2, color: "gray", }}>PASSWORD</Text>
+          <View style={styles.inputContainer}>
+            <Icon name="password" size={24} color="gray" style={{marginRight: 8}} />
+            <TextInput
+              style={{ flex: 1, height: 45, paddingLeft: 5, color: "gray" }}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Enter your email address..."
+              editable={true}
+              autoCorrect={false}
+              spellCheck={false}
+              autoCapitalize="none"
+              secureTextEntry
+            />
+          </View>
         </View>
-        <View marginTop={10} gap={2}>
-          <SizableText fontFamily="$body" color="$color">
-            {" "}
-            Confirm Password
-          </SizableText>
-          <Input
-            size="$4"
-            placeholder="Enter password again"
-            autoCapitalize="none"
-            secureTextEntry
-            value={confirmPassword}
-            onChangeText={(text) => setConfirmPassword(text)}
-          />
-        </View>
-        <View
-          marginTop="$5"
-          flexDirection="row"
-          gap={2}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <XStack
-            width={300}
-            alignItems="center"
-            justifyContent="center"
-            gap={20}
+
+        <View style={{display:"flex", flexDirection: "row", alignItems: "center", justifyContent: "center", paddingVertical: 10, gap: 10}}>
+          <Checkbox
+            size="$5"
+            checked={isContributor}
+            onPress={() => handleContributorChange()}
+            backgroundColor={"white"}
           >
-            <Checkbox
-              size="$5"
-              checked={isContributor}
-              onPress={() => handleContributorChange()}
-            >
-              <Checkbox.Indicator>
-                <Check />
-              </Checkbox.Indicator>
-            </Checkbox>
-            <Text color="$color" fontFamily={"$body"}>
-              Register as a Contributor?
-            </Text>
-          </XStack>
+            <Checkbox.Indicator>
+              <Check color={"black"}/>
+            </Checkbox.Indicator>
+          </Checkbox>
+          <Text style={{color: "gray", fontWeight: "bold"}}>Register as contributor</Text>
         </View>
-        <View marginTop={15}>
-          <Button size="$4" disabled={loading} onPress={signup}>
-            Sign up
-          </Button>
-        </View>
-        <View
-          marginTop={20}
-          flexDirection="row"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Text color="$color" fontFamily={"$body"}>
-            Already have an account?{" "}
-          </Text>
+
+        <TouchableOpacity style={{backgroundColor: "dodgerblue", paddingVertical: 10, paddingHorizontal: 20, borderRadius: 15, elevation: 5 }} onPress={signup}>
+          <Text style={{ color: "white", fontSize: 16, fontWeight: "bold", textAlign: "center" }}>Sign Up</Text>
+        </TouchableOpacity>
+
+        <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
+          <Text style={{color: "gray"}}>Already have an account? </Text>
           <Link href="/">
-            <Text
-              color="$color"
-              fontFamily={"$body"}
-              fontSize={16}
-              fontWeight="bold"
-            >
-              Sign In
+            <Text style={{ color:"dodgerblue", fontWeight: "bold"}}>
+              Log in now!
             </Text>
           </Link>
         </View>
+
+        </View>
       </View>
-    </ScrollView>
-    //   </Theme>
-    // </TamaguiProvider>
+    </>
   );
 }
+
+const styles = StyleSheet.create({
+  defaultContainer: {
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+  },
+  motdContainer: {
+    height: "45%",
+    display: "flex",
+    gap: 25,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "dodgerblue",
+  },
+  formsContainer: {
+    height: "55%",
+    width: "100%",
+    display: "flex",
+    paddingHorizontal: "7.5%",
+    gap: 5,
+  },
+  image: {
+    width: "40%",
+    height: "40%",
+  },
+  typewriterText: {
+    fontSize: 24,
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  cursor: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    borderRadius: 10,
+    paddingLeft: 8,
+  },
+});
