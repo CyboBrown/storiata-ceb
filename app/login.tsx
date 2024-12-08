@@ -85,9 +85,9 @@ export default function Login() {
         </Text>
       </View>
       
-      <BackgroundCircle size={200} color="white" top={290} left={-45} />
-      <BackgroundCircle size={200} color="white" top={320} left={95} />
-      <BackgroundCircle size={350} color="white" top={290} left={215} />
+      <BackgroundCircle size={200} color="white" top={280} left={-45} />
+      <BackgroundCircle size={200} color="white" top={310} left={95} />
+      <BackgroundCircle size={350} color="white" top={280} left={215} />
  
       <View style={styles.formsContainer}>
 
@@ -160,7 +160,8 @@ const styles = StyleSheet.create({
   motdContainer: {
     height: "45%",
     display: "flex",
-    gap: 25,
+    paddingBottom: "6%",
+    gap: 5,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "dodgerblue",
@@ -174,8 +175,8 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   image: {
-    width: "40%",
-    height: "40%",
+    width: "30%",
+    height: "30%",
   },
   typewriterText: {
     fontSize: 24,

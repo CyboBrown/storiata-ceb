@@ -92,9 +92,9 @@ export default function SignUp() {
           </Text>
         </View>
         
-        <BackgroundCircle size={200} color="white" top={290} left={-45} />
-        <BackgroundCircle size={200} color="white" top={320} left={95} />
-        <BackgroundCircle size={350} color="white" top={290} left={215} />
+        <BackgroundCircle size={200} color="white" top={220} left={-45} />
+        <BackgroundCircle size={200} color="white" top={250} left={95} />
+        <BackgroundCircle size={350} color="white" top={220} left={215} />
 
         <View style={styles.formsContainer}>
 
@@ -132,7 +132,7 @@ export default function SignUp() {
             </View>
           </View>
 
-          <View>
+        <View>
           <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 2, color: "gray", }}>EMAIL</Text>
           <View style={styles.inputContainer}>
             <Icon name="email" size={24} color="gray" style={{marginRight: 8}} />
@@ -148,6 +148,7 @@ export default function SignUp() {
             />
           </View>
         </View>
+
         <View>
           <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 2, color: "gray", }}>PASSWORD</Text>
           <View style={styles.inputContainer}>
@@ -157,6 +158,24 @@ export default function SignUp() {
               value={password}
               onChangeText={setPassword}
               placeholder="Enter your password..."
+              editable={true}
+              autoCorrect={false}
+              spellCheck={false}
+              autoCapitalize="none"
+              secureTextEntry
+            />
+          </View>
+        </View>
+
+        <View>
+          <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 2, color: "gray", }}>CONFIRM PASSWORD</Text>
+          <View style={styles.inputContainer}>
+            <Icon name="password" size={24} color="gray" style={{marginRight: 8}} />
+            <TextInput
+              style={{ flex: 1, height: 45, paddingLeft: 5, color: "gray" }}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Enter your password again to confirm..."
               editable={true}
               autoCorrect={false}
               spellCheck={false}
@@ -206,15 +225,16 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   motdContainer: {
-    height: "45%",
+    height: "35%",
     display: "flex",
-    gap: 25,
+    paddingBottom: "5%",
+    gap: 5,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "dodgerblue",
   },
   formsContainer: {
-    height: "55%",
+    height: "65%",
     width: "100%",
     display: "flex",
     paddingHorizontal: "7.5%",
@@ -223,6 +243,7 @@ const styles = StyleSheet.create({
   image: {
     width: "40%",
     height: "40%",
+    resizeMode: "contain"
   },
   typewriterText: {
     fontSize: 24,
