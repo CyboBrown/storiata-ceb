@@ -1,10 +1,47 @@
-import { Separator, SizableText, XStack, YStack } from "tamagui";
+import {
+  Separator,
+  SizableText,
+  View,
+  XStack,
+  YStack,
+  getThemes,
+} from "tamagui";
 import { Word } from "../models/Word";
-import { ScrollView } from "react-native";
+import { ScrollView, Text } from "react-native";
 import { nasalize, startsWithVowel } from "../utils/conjugate";
+import { useEffect, useState } from "react";
+import { Image } from "react-native";
+import LoadingAnim from "../../src/assets/walking.gif";
 
 export default function ConjugationTable({ word }: { word: Word }) {
-  if ((word ? word.part_of_speech ?? " " : " ") == "num") {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return (
+      <>
+        <YStack p="$0" h={"$20"}>
+          <View alignItems="center" margin="auto">
+            <Image
+              source={LoadingAnim}
+              style={{ width: 100, height: 100, marginHorizontal: "auto" }}
+            />
+            <Text
+              style={{
+                fontSize: 18,
+                color: "black",
+                textAlign: "center",
+              }}
+            >
+              Generating conjugations...{" "}
+            </Text>
+          </View>
+        </YStack>
+      </>
+    );
+  } else if ((word ? word.part_of_speech ?? " " : " ") == "num") {
     return (
       <>
         <XStack p="$0">

@@ -23,7 +23,11 @@ export default function ProfileTabItem({
       />
       <View style={styles.textContainer}>
         <Text style={{ fontSize: 16 }}>{title + " "}</Text>
-        <Text numberOfLines={1} ellipsizeMode="tail" style={{fontSize: 12, color: "gray", marginLeft: "auto",}}>{description}</Text>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          style={{ fontSize: 12, color: "gray", marginLeft: "auto" }}
+        >
           {description + " "}
         </Text>
       </View>

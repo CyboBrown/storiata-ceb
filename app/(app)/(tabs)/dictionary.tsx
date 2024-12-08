@@ -242,9 +242,12 @@ export default function Dictionary() {
               <Tabs.Tab flex={1} value="tab1">
                 <SizableText fontFamily="$body">Details</SizableText>
               </Tabs.Tab>
-              <Tabs.Tab flex={1} value="tab2">
-                <SizableText fontFamily="$body">Conjugations</SizableText>
-              </Tabs.Tab>
+              {results[selected] &&
+                results[selected].translations?.length != 0 && (
+                  <Tabs.Tab flex={1} value="tab2">
+                    <SizableText fontFamily="$body">Conjugations</SizableText>
+                  </Tabs.Tab>
+                )}
               {isContributor && (
                 <Tabs.Tab flex={1} value="tab3">
                   <SizableText fontFamily="$body">Edit</SizableText>
@@ -310,18 +313,22 @@ export default function Dictionary() {
               </YStack>
             </Tabs.Content>
             {/* Conjugations */}
-            <Tabs.Content
-              value="tab2"
-              backgroundColor="$background"
-              key="tab2"
-              padding="$2"
-              alignItems="stretch"
-              justifyContent="flex-start"
-              flex={1}
-              p="$2"
-            >
-              <ConjugationTable word={results[selected]}></ConjugationTable>
-            </Tabs.Content>
+            {results[selected] &&
+              results[selected].translations?.length != 0 && (
+                <Tabs.Content
+                  value="tab2"
+                  backgroundColor="$background"
+                  key="tab2"
+                  padding="$2"
+                  alignItems="stretch"
+                  justifyContent="flex-start"
+                  flex={1}
+                  p="$2"
+                  h={"100%"}
+                >
+                  <ConjugationTable word={results[selected]}></ConjugationTable>
+                </Tabs.Content>
+              )}
             {/* Edit */}
             {isContributor && (
               <Tabs.Content
