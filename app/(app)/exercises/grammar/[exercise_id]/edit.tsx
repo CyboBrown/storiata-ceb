@@ -13,9 +13,9 @@ import {
   ScrollView,
   Separator,
 } from "tamagui";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useColorScheme } from "react-native";
-import { Link, useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams, useNavigation } from "expo-router";
 import { ExerciseService } from "../../../../../src/services/ExerciseService";
 import { VocabularyExercise } from "../../../../../src/models/VocabularyExercise";
 import { ExerciseTypes } from "../../../../../src/utils/enums";
@@ -47,6 +47,7 @@ export default function EditGrammarExercise({ session }: { session: Session }) {
   });
   const [disabled, setDisabled] = useState(true);
   const [saved, setSaved] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (
@@ -57,6 +58,12 @@ export default function EditGrammarExercise({ session }: { session: Session }) {
       setDisabled(false);
     }
   }, [exercise]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Edit Grammar Exercise"
+    });
+  }, [navigation]);
 
   const displayDetails = async () => {
     let exercise_details = await ExerciseService.getGrammarExerciseProblems(
