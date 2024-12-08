@@ -150,6 +150,7 @@ export default function AddWordToExerciseDialog({
                   id="role_input"
                   defaultValue=""
                   placeholder="Specify the word's role in the sentence"
+                  autoCapitalize="none"
                   value={role}
                   onChangeText={(text) => {
                     setRole(text);
@@ -166,6 +167,7 @@ export default function AddWordToExerciseDialog({
                 flex={1}
                 size="$4"
                 ai="stretch"
+                autoCapitalize="none"
                 placeholder={`Enter Word...`}
                 onChangeText={(input) => setInput(input)}
               />

@@ -54,12 +54,13 @@ export default function EditTranslationDialog({
   const [input, setInput] = useState("");
 
   useEffect(() => {
+    setResults([]);
     // setWord(selected_word);
     console.log("Initial Selected:");
-    console.log(selected_word);
+    console.log(selected_word.normal_form);
     setWord(selected_word);
     console.log("Initial Set:");
-    console.log(word);
+    console.log(word.normal_form);
   }, [clicked]);
 
   async function search(text: string) {
@@ -69,7 +70,7 @@ export default function EditTranslationDialog({
       let data = await DictionaryService.searchTranslation(text);
       if (data) {
         setResults(data);
-        console.log(results);
+        // console.log(results);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -149,7 +150,8 @@ export default function EditTranslationDialog({
         >
           <Dialog.Title>Edit Translations</Dialog.Title>
           <Dialog.Description>
-            Add and remove translations here. Click save when you're done.
+            Add and remove translations here. Click save when you're done and
+            manually reload.
           </Dialog.Description>
           <YStack
             f={1}

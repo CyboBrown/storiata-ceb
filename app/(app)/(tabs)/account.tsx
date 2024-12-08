@@ -203,7 +203,7 @@ export default function Account() {
           <ProfileInfoCard
             iconName="cellphone"
             title="App Version"
-            description="Alpha-build 1.1.1 "
+            description="Alpha-build 1.1.2 "
           />
         </View>
       </ScrollView>
