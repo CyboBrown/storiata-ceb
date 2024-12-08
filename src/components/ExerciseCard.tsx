@@ -26,7 +26,11 @@ export default function ExerciseCard({
       <TouchableOpacity onPress={onPress} style={styles.cardContainer}>
         <View style={styles.detailsContainer}>
           <View style={styles.iconContainer}>
-            <Icon name={isAdd ? "plus" : "book"} size={50} color="gray" />
+            <Icon
+              name={isAdd ? "plus" : progress >= 6 ? "book-check" : "book"}
+              size={50}
+              color="dodgerblue"
+            />
           </View>
 
           <View style={styles.rightContainer}>
@@ -50,19 +54,20 @@ export default function ExerciseCard({
               <Icon name="star-circle" size={15} color="dodgerblue" />
               <Text style={{ color: "gray", fontWeight: "700" }}>
                 {" "}
-                {progress >= 6 ? "6" : progress.toString()}/6{" "}
+                {progress.toString()}/6{" "}
               </Text>
             </View>
 
             <View style={{ flex: 0.8 }}>
               <Progress
                 size="$1.5"
-                value={progress > 100 ? 100 : (100 / 6) * progress}
+                value={(progress % 6) * (100 / 6)}
                 width="100%"
                 alignSelf="center"
+                backgroundColor={progress >= 6 ? "$blue8" : "unset"}
               >
                 <Progress.Indicator
-                  backgroundColor={"$blue8"}
+                  backgroundColor={progress >= 6 ? "$blue11" : "$blue8"}
                   animation="bouncy"
                 />
               </Progress>

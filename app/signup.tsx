@@ -108,6 +108,7 @@ export default function SignUp() {
           <Input
             size="$4"
             placeholder="Enter password again"
+            autoCapitalize="none"
             secureTextEntry
             value={confirmPassword}
             onChangeText={(text) => setConfirmPassword(text)}
