@@ -61,7 +61,7 @@ export default function EditGrammarExercise({ session }: { session: Session }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Edit Grammar Exercise"
+      headerTitle: "Edit Grammar Exercise",
     });
   }, [navigation]);
 
@@ -169,7 +169,7 @@ export default function EditGrammarExercise({ session }: { session: Session }) {
                             size={16}
                             color="black"
                           />
-                          {" " + item.role}
+                          {" " + item.role + " "}
                         </Text>
                       )}
                       <Text
@@ -180,8 +180,9 @@ export default function EditGrammarExercise({ session }: { session: Session }) {
                         fontSize={"$5"}
                         onPress={() => {
                           let updated_exercise = { ...exercise };
-                          updated_exercise.item_sets?.splice(index, 1);
+                          updated_exercise.exercise_words?.splice(index, 1);
                           setExercise(updated_exercise);
+                          console.log(updated_exercise.exercise_words);
                         }}
                       >
                         <Icon name={"delete-forever"} size={16} color="red" />

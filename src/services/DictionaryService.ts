@@ -48,6 +48,7 @@ export class DictionaryService {
           suffix_form: word.suffix_form,
           representation: word.representation,
           description: word.description,
+          added_by: word.added_by,
         },
       ])
       .select();

@@ -65,7 +65,7 @@ export default function CreateGrammarExercise({
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Create Grammar Exercise"
+      headerTitle: "Create Grammar Exercise",
     });
   }, [navigation]);
 
@@ -161,7 +161,7 @@ export default function CreateGrammarExercise({
                             size={16}
                             color="black"
                           />
-                          {" " + item.role}
+                          {" " + item.role + " "}
                         </Text>
                       )}
                       <Text
@@ -172,12 +172,12 @@ export default function CreateGrammarExercise({
                         fontSize={"$5"}
                         onPress={() => {
                           let updated_exercise = { ...exercise };
-                          updated_exercise.item_sets?.splice(index, 1);
+                          updated_exercise.exercise_words?.splice(index, 1);
                           setExercise(updated_exercise);
                         }}
                       >
                         <Icon name={"delete-forever"} size={16} color="red" />
-                        {" " + item.ceb_word + " → " + item.eng_word}
+                        {" " + item.ceb_word + " → " + item.eng_word + " "}
                       </Text>
                     </>
                   ))}

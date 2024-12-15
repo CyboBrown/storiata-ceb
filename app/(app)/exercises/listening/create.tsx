@@ -65,7 +65,7 @@ export default function CreateListeningExercise({
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Create Listening Exercise"
+      headerTitle: "Create Listening Exercise",
     });
   }, [navigation]);
 
@@ -172,7 +172,7 @@ export default function CreateListeningExercise({
                         fontSize={"$5"}
                         onPress={() => {
                           let updated_exercise = { ...exercise };
-                          updated_exercise.item_sets?.splice(index, 1);
+                          updated_exercise.exercise_words?.splice(index, 1);
                           setExercise(updated_exercise);
                         }}
                       >

@@ -29,6 +29,7 @@ export default function SignUp() {
   const [fullname, setFullname] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isContributor, setIsContributor] = useState(false);
   const [userID, setUserID] = useState("");
@@ -250,8 +251,8 @@ export default function SignUp() {
               />
               <TextInput
                 style={{ flex: 1, height: 45, paddingLeft: 5, color: "gray" }}
-                value={password}
-                onChangeText={setPassword}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
                 placeholder="Enter your password again to confirm..."
                 editable={true}
                 autoCorrect={false}

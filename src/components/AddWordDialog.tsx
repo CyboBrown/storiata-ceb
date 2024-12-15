@@ -18,6 +18,7 @@ import { useState } from "react";
 import { Word } from "../models/Word";
 import { DictionaryService } from "../services/DictionaryService";
 import { PartsOfSpeech } from "../utils/enums";
+import { useSession } from "../contexts/AuthContext";
 
 export default function AddWordDialog() {
   const parts_of_speech = [
@@ -28,6 +29,7 @@ export default function AddWordDialog() {
     { name: "verb" },
   ];
 
+  const { getUserUUID } = useSession();
   const [word, setWord] = useState<Word>({
     added_by: null,
     created_at: "",
@@ -46,7 +48,9 @@ export default function AddWordDialog() {
     console.log(word);
     setLoading(true);
     if (word) {
-      let data = await DictionaryService.createWord(word);
+      let temp = { ...word };
+      temp.added_by = getUserUUID();
+      let data = await DictionaryService.createWord(temp);
       if (data) {
         console.log(data);
       }

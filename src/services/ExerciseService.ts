@@ -509,7 +509,7 @@ export class ExerciseService {
     const wordpairs = exercise.exercise_words
       ?.filter(
         (item) =>
-          !current_exercise?.item_sets?.some(
+          !current_exercise?.exercise_words?.some(
             (current_item) => current_item.id == item.id
           )
       )
@@ -529,23 +529,27 @@ export class ExerciseService {
         console.log(error2);
       }
     }
+    console.log("success here");
+
     // Delete removed words
-    const deletedids = current_exercise?.item_sets
+    const deletedids = current_exercise?.exercise_words
       ?.filter(
         (current_item) =>
-          !exercise?.item_sets?.some((item) => current_item.id == item.id)
+          !exercise?.exercise_words?.some((item) => current_item.id == item.id)
       )
       .map((item) => item.id);
+    console.log("Delete IDs:" + deletedids);
     if (deletedids) {
       const { data: data3, error: error3 } = await supabase
         .from("exercise_words")
         .delete()
         .eq("exercise_id", exercise.id)
-        .in("word_id", deletedids)
+        .in("id", deletedids)
         .select();
       if (error3) {
         console.log(error3);
       }
+      console.log(data3);
     }
     // Update sentence
     const sentencepairs = exercise.item_sets
@@ -617,7 +621,7 @@ export class ExerciseService {
     const wordpairs = exercise.exercise_words
       ?.filter(
         (item) =>
-          !current_exercise?.item_sets?.some(
+          !current_exercise?.exercise_words?.some(
             (current_item) => current_item.id == item.id
           )
       )
@@ -638,10 +642,10 @@ export class ExerciseService {
       }
     }
     // Delete removed words
-    const deletedids = current_exercise?.item_sets
+    const deletedids = current_exercise?.exercise_words
       ?.filter(
         (current_item) =>
-          !exercise?.item_sets?.some((item) => current_item.id == item.id)
+          !exercise?.exercise_words?.some((item) => current_item.id == item.id)
       )
       .map((item) => item.id);
     if (deletedids) {
@@ -649,7 +653,7 @@ export class ExerciseService {
         .from("exercise_words")
         .delete()
         .eq("exercise_id", exercise.id)
-        .in("word_id", deletedids)
+        .in("id", deletedids)
         .select();
       if (error3) {
         console.log(error3);
