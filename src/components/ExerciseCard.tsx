@@ -61,11 +61,12 @@ export default function ExerciseCard({
             <View style={{ flex: 0.8 }}>
               <Progress
                 size="$1.5"
-                value={(progress % 6) * (100 / 6)}
+                value={Math.round((progress % 6) * (100 / 6))}
                 width="100%"
                 alignSelf="center"
                 backgroundColor={progress >= 6 ? "$blue8" : "unset"}
               >
+              
                 <Progress.Indicator
                   backgroundColor={progress >= 6 ? "$blue11" : "$blue8"}
                   animation="bouncy"
